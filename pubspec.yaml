@@ -30,3 +30,6 @@ flutter:
   assets:
     - images/bell.png
     - images/question.png
+    - images/seller.png
+    - images/motorbike.png
+    - images/people.png
