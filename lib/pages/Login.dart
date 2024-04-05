@@ -1,3 +1,4 @@
+import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +34,30 @@ class _LoginState extends State<Login> {
                 child: Container(
                   width: 90,
                   child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+                    },
+                    child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Color(0xFF256F46)), ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFFFFFF),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(color: Color(0xFF256F46))
+                      ),
+                      shadowColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 13, top: 35, left: 11),
+                child: Container(
+                  width: 90,
+                  child: ElevatedButton(
                     onPressed: () {},
-                    child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
+                    child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF256F46),
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -43,25 +66,6 @@ class _LoginState extends State<Login> {
                       ),
                       shadowColor: Colors.transparent,
 
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 13, left: 11, top: 35),
-                child: Container(
-                  width: 90,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Color(0xFF256F46)), ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFFFFFF),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(color: Color(0xFF256F46))
-                      ),
-                      shadowColor: Colors.transparent,
                     ),
                   ),
                 ),
@@ -87,48 +91,74 @@ class _LoginState extends State<Login> {
                         color: Color(0xFFBDD2C6),
                       ),
                     ),
-                    Container(child: Material(
+                    Container(
+                      width: 300,
+                      child: const Material(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        padding: EdgeInsets.only(bottom: 15, right: 10),
                         child: TextField(
-                          decoration: InputDecoration(
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'نام کاربری',
+                            hintStyle: TextStyle(
+                              height: 2.7,
+                              fontFamily: 'shabnam',
+                                fontSize: 25,
+                                color: Colors.grey,
+                            ),
                             filled: true,
                             fillColor: Color(0xFFEAF3EE),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(17)),
                                 borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
                           ),
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'shabnam',
+                          ),
                         ),
                       ),
-                    ), width: 300, height: 100,),
+                    ),),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 20),
                       child: ImageIcon(
                         AssetImage('images/key.png'),
                         size: 40,
                         color: Color(0xFFBDD2C6),
                       ),
                     ),
-                    Container(child: Material(
+                    Container(width: 300, height: 100,child: const Material(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
-                          decoration: InputDecoration(
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'رمز عبور',
+                            hintStyle: TextStyle(
+                              height: 2.7,
+                              fontFamily: 'shabnam',
+                              fontSize: 25,
+                              color: Colors.grey,
+                            ),
                             filled: true,
                             fillColor: Color(0xFFEAF3EE),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(17)),
                                 borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
                           ),
+                         style: TextStyle(
+                           fontSize: 25,
+                           fontFamily: 'shabnam'
+                         ),
                         ),
                       ),
-                    ), width: 300, height: 100,),
+                    ),),
                   ],
                 ),
                 TextButton(onPressed: (){}, child: Text("رمز خود را فراموش کردم",

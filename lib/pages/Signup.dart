@@ -1,3 +1,4 @@
+import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,10 @@ class _SignupState extends State<Signup> {
                 child: Container(
                   width: 90,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                    },
                     child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Color(0xFF256F46)), ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFFFFFFF),
@@ -154,19 +158,31 @@ class _SignupState extends State<Signup> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 20),
                       child: ImageIcon(
                         AssetImage('images/user.png'),
                         size: 40,
                         color: Color(0xFFBDD2C6),
                       ),
                     ),
-                    Container(child: Material(
+                    Container(width: 300, height: 100,child: const Material(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
-                          decoration: InputDecoration(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'shabnam',
+                          ),
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'نام کاربری',
+                            hintStyle: TextStyle(
+                              height: 2.7,
+                              fontFamily: 'shabnam',
+                              fontSize: 25,
+                              color: Colors.grey,
+                            ),
                             filled: true,
                             fillColor: Color(0xFFEAF3EE),
                             border: OutlineInputBorder(
@@ -175,35 +191,85 @@ class _SignupState extends State<Signup> {
                           ),
                         ),
                       ),
-                    ), width: 300, height: 100,),
+                    ),),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 20),
                       child: ImageIcon(
                         AssetImage('images/key.png'),
                         size: 40,
                         color: Color(0xFFBDD2C6),
                       ),
                     ),
-                    Container(child: Material(
+                    Container(width: 300, height: 100,child: const Material(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
-                          decoration: InputDecoration(
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'shabnam',
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'رمز عبور',
+                            hintStyle: TextStyle(
+                              height: 2.7,
+                              fontFamily: 'shabnam',
+                              fontSize: 25,
+                              color: Colors.grey,
+                            ),
                             filled: true,
                             fillColor: Color(0xFFEAF3EE),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(17)),
                                 borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
                           ),
+
                         ),
                       ),
-                    ), width: 300, height: 100,),
+                    ),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Icon(Icons.check, size: 40, color: Color(0xFFbec6c2),)
+                    ),
+                    Container(width: 300, height: 100,child: const Material(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 15, right: 10),
+                        child: TextField(
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'shabnam',
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'تکرار رمز عبور',
+                            hintStyle: TextStyle(
+                              height: 2.7,
+                              fontFamily: 'shabnam',
+                              fontSize: 25,
+                              color: Colors.grey,
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFEAF3EE),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(17)),
+                                borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
+                          ),
+
+                        ),
+                      ),
+                    ),),
                   ],
                 )
               ],
