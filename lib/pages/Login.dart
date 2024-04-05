@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController? username = new TextEditingController();
+    TextEditingController? password = new TextEditingController();
     return Container(
       color: Colors.white,
       child: Column(
@@ -28,118 +33,130 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     showDialog(
                         context: context,
-                        builder: (_) => AlertDialog(
-                          backgroundColor: Color(0xFFEAF3EEF2),
-                          insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 100),
-                          contentPadding: EdgeInsets.all(15),
-                          title: ImageIcon(
-                            AssetImage('images/logo.png'),
-                            size: 120,
-                            color: Color(0xFF256F46),
-                          ),
-                          content: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    "بلینک برای شما امکان خرید آسان و امن محصولات متنوع را فراهم می‌کند.",
-                                    // textAlign: TextAlign.center,
-                                    textDirection: TextDirection.rtl,
-                                    style: TextStyle(
-                                      fontFamily: 'shabnam',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    "از لباس و الکترونیک تا آرایشی و بهداشتی، همه چیز در یک مکان قابل دسترس است.",
-                                    // textAlign: TextAlign.center,
-                                    textDirection: TextDirection.rtl,
-                                    style: TextStyle(
-                                      fontFamily: 'shabnam',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                        // textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(
-                                          fontFamily: 'shabnam',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      ImageIcon(
-                                        AssetImage('images/seller.png'),
-                                        size: 40,
-                                        color: Color(0xFF256F46),
-
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                        // textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(
-                                          fontFamily: 'shabnam',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      ImageIcon(
-                                        AssetImage('images/people.png'),
-                                        size: 40,
-                                        color: Color(0xFF256F46),
-
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                        // textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(
-                                          fontFamily: 'shabnam',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      ImageIcon(
-                                        AssetImage('images/motorbike.png'),
-                                        color: Color(0xFF256F46),
-                                        size: 40,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                        builder: (_) => BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: AlertDialog(
+                            elevation: 5.0,
+                            backgroundColor: Colors.white,
+                            insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 100),
+                            contentPadding: EdgeInsets.all(20),
+                            title: ImageIcon(
+                              AssetImage('images/logo.png'),
+                              size: 120,
+                              color: Color(0xFF256F46),
                             ),
-                          ),
-                    ));
+                            content: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height *0.45,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        "بلینک برای شما امکان خرید آسان و امن محصولات متنوع را فراهم می‌کند.",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 20,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        "از لباس و الکترونیک تا آرایشی و بهداشتی، همه چیز در یک مکان قابل دسترس است.",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 20,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/seller.png'),
+                                            size: 40,
+                                            color: Color(0xFF256F46),
+
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/people.png'),
+                                            size: 40,
+                                            color: Color(0xFF256F46),
+
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/motorbike.png'),
+                                            color: Color(0xFF256F46),
+                                            size: 40,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                    ),
+                        ));
                   },
                 ),
               ),
@@ -208,10 +225,11 @@ class _LoginState extends State<Login> {
                     ),
                     Container(
                       width: 300,
-                      child: const Material(
+                      child: Material(
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 15, right: 10),
                         child: TextField(
+                          controller: username,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration.collapsed(
                             hintText: 'نام کاربری',
@@ -240,7 +258,7 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.only(right: 20),
                       child: ImageIcon(
                         AssetImage('images/key.png'),
@@ -248,10 +266,11 @@ class _LoginState extends State<Login> {
                         color: Color(0xFFBDD2C6),
                       ),
                     ),
-                    Container(width: 300, height: 100,child: const Material(
+                    Container(width: 300, height: 100,child: Material(
                       child: Padding(
                         padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
+                          controller: password,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration.collapsed(
                             hintText: 'رمز عبور',
@@ -300,8 +319,13 @@ class _LoginState extends State<Login> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
+                onPressed: () {
+                  if (username.text == 'username' && password.text == 'password') {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  }
+                },
+                child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF256F46),
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),

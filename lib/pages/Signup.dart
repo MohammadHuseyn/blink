@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,134 @@ class _SignupState extends State<Signup> {
                 child: IconButton(
                   icon: Image.asset('images/question.png', width: 48),
                   iconSize: 10,
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                          child: AlertDialog(
+                            elevation: 5.0,
+                            backgroundColor: Colors.white,
+                            insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 100),
+                            contentPadding: EdgeInsets.all(20),
+                            title: ImageIcon(
+                              AssetImage('images/logo.png'),
+                              size: 120,
+                              color: Color(0xFF256F46),
+                            ),
+                            content: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height *0.45,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        "بلینک برای شما امکان خرید آسان و امن محصولات متنوع را فراهم می‌کند.",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 20,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        "از لباس و الکترونیک تا آرایشی و بهداشتی، همه چیز در یک مکان قابل دسترس است.",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 20,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/seller.png'),
+                                            size: 40,
+                                            color: Color(0xFF256F46),
+
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/people.png'),
+                                            size: 40,
+                                            color: Color(0xFF256F46),
+
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                            // textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontFamily: 'shabnam',
+                                              fontSize: 15,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          Expanded(child: Container()),
+                                          ImageIcon(
+                                            AssetImage('images/motorbike.png'),
+                                            color: Color(0xFF256F46),
+                                            size: 40,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ));
+                  },
                 ),
               ),
               Expanded(child: Container()),
