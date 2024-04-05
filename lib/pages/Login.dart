@@ -25,7 +25,122 @@ class _LoginState extends State<Login> {
                 child: IconButton(
                   icon: Image.asset('images/question.png', width: 48),
                   iconSize: 10,
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xFFEAF3EEF2),
+                          insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 100),
+                          contentPadding: EdgeInsets.all(15),
+                          title: ImageIcon(
+                            AssetImage('images/logo.png'),
+                            size: 120,
+                            color: Color(0xFF256F46),
+                          ),
+                          content: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "بلینک برای شما امکان خرید آسان و امن محصولات متنوع را فراهم می‌کند.",
+                                    // textAlign: TextAlign.center,
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                      fontFamily: 'shabnam',
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "از لباس و الکترونیک تا آرایشی و بهداشتی، همه چیز در یک مکان قابل دسترس است.",
+                                    // textAlign: TextAlign.center,
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                      fontFamily: 'shabnam',
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Expanded(child: Container()),
+                                      ImageIcon(
+                                        AssetImage('images/seller.png'),
+                                        size: 40,
+                                        color: Color(0xFF256F46),
+
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Expanded(child: Container()),
+                                      ImageIcon(
+                                        AssetImage('images/people.png'),
+                                        size: 40,
+                                        color: Color(0xFF256F46),
+
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
+                                        // textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontFamily: 'shabnam',
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Expanded(child: Container()),
+                                      ImageIcon(
+                                        AssetImage('images/motorbike.png'),
+                                        color: Color(0xFF256F46),
+                                        size: 40,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    ));
+                  },
                 ),
               ),
               Expanded(child: Container()),
