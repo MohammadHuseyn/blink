@@ -1,3 +1,4 @@
+import 'package:blink/pages/Login.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return logged? Scaffold() : Signup();
+    return logged? Scaffold() : Login();
   }
 }
