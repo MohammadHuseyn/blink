@@ -14,9 +14,8 @@ class _SignupState extends State<Signup> {
     return Container(
       color: Colors.white,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-
+        // mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [
@@ -77,7 +76,7 @@ class _SignupState extends State<Signup> {
               width: 385,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                     ),
@@ -142,8 +141,101 @@ class _SignupState extends State<Signup> {
               ),
             ),
           ),
-          Expanded(child: Container()),
-          Container(color: Colors.red, width: 100, height: 100,),
+          // Expanded(child: Container()),
+          // Container(child: Material(child: TextField()), width: 500, height: 100,),
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ImageIcon(
+                        AssetImage('images/user.png'),
+                        size: 40,
+                        color: Color(0xFFBDD2C6),
+                      ),
+                    ),
+                    Container(child: Material(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0xFFEAF3EE),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(17)),
+                                borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
+                          ),
+                        ),
+                      ),
+                    ), width: 300, height: 100,),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ImageIcon(
+                        AssetImage('images/key.png'),
+                        size: 40,
+                        color: Color(0xFFBDD2C6),
+                      ),
+                    ),
+                    Container(child: Material(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0xFFEAF3EE),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(17)),
+                                borderSide: BorderSide(color: Color(0xFF256F46), width: 10.0)),
+                          ),
+                        ),
+                      ),
+                    ), width: 300, height: 100,),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 20,
+                    offset: Offset(1,5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF256F46),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(50),
+                  // ),
+                  shadowColor: Colors.black,
+
+                ),
+              ),
+            ),
+          ),
           Expanded(child: Container()),
         ],
       ),
