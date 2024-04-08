@@ -40,6 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return logged? Scaffold() : Home();
+    return logged? Scaffold() : Login();
   }
 }
