@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users List</title>
+</head>
+<body>
+    <h1>Users List</h1>
+    <ul>
+        {% for customer in customers %}
+            <li>{{ customer.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
