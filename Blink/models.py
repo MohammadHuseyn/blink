@@ -3,8 +3,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 class User(models.Model):
     username = models.CharField(max_length=50, unique=True)
-    name = models.CharField(max_length=100)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)  # Use CharField for phone number
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
@@ -13,6 +15,30 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+    def full_name(self):
+        return f"{self.firstname} {self.lastname}"
+
+    def update_profile(self, firstname=None, lastname=None, phone_number=None, email=None, profile_picture=None):
+        if firstname:
+            self.firstname = firstname
+        if lastname:
+            self.lastname = lastname
+        if phone_number:
+            self.phone_number = phone_number
+        if email:
+            self.email = email
+        if profile_picture:
+            self.profile_picture = profile_picture
+        self.save()
+
+    def change_password(self, new_password):
+        self.password = new_password
+        self.save()
+
+    def delete_account(self):
+        self.delete()
+
 
 class Customer(User):
     location = models.ForeignKey("Location", related_name='customers', on_delete=models.SET_NULL, null=True, blank=True)
