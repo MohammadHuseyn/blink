@@ -1,3 +1,4 @@
+import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class Home extends StatefulWidget {
@@ -18,21 +19,21 @@ class _HomeState extends State<Home> {
         child: AppBar(
           elevation: 0,
           backgroundColor: _currentIndex == 0? Color(0xFF256F46):Colors.white,
-          actions: [
+          actions: _currentIndex == 1? [
             Padding(
               padding: const EdgeInsets.only(right: 15),
               child: IconButton(
                   onPressed: (){},
                   icon: Icon(Icons.notifications, size: 50,color: Color(0xFF256F46),)),
             )
-          ],
-          leading: Padding(
+          ] : [],
+          leading: _currentIndex == 1? Padding(
             padding: const EdgeInsets.only(left: 2),
             child: IconButton(
               icon: Icon(Icons.location_on, size: 50, color: Color(0xFF256F46),),
               onPressed: () {},
             ),
-          ),
+          ): null,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
       children: [
         // Expanded(child: Container()),
         Padding(
-          padding: const EdgeInsets.only(top: 25),
+          padding: const EdgeInsets.symmetric(vertical: 25),
           child: Row(
             children: [
               IconButton(onPressed: (){
@@ -127,7 +128,111 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Divider(color: Colors.black,indent: 20,endIndent: 20,),
+        ),
+        GestureDetector(
+            behavior: HitTestBehavior.translucent,
+          onTap: (){print("tapped");},
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.03,
+            child: Center(
+              child: Text(
+                "تخفیف‌ها",
+                style: TextStyle(
+                  fontFamily: 'shabnam',
+                  fontSize: 20
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20,top: 30),
+          child: Divider(color: Colors.black,indent: 20,endIndent: 20,),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: (){print("tapped");},
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.03,
+            child: Center(
+            child: Text(
+              "تاریخچه سفارش‌ها",
+              style: TextStyle(
+                  fontFamily: 'shabnam',
+                  fontSize: 20
+              ),
+            ),
+          ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20,top: 30),
+          child: Divider(color: Colors.black,indent: 20,endIndent: 20,),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: (){print("tapped");},
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.03,
+            child: Center(
+              child: Text(
+                "ارتباط با پشتیبانی",
+                style: TextStyle(
+                    fontFamily: 'shabnam',
+                    fontSize: 20
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20,top: 30),
+          child: Divider(color: Colors.black,indent: 20,endIndent: 20,),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: (){
+            print("logged out");
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+            },
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.03,
+            child: Center(
+              child: Text(
+                "خروج",
+                style: TextStyle(
+                    fontFamily: 'shabnam',
+                    fontSize: 20
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20,top: 30),
+          child: Divider(color: Colors.black,indent: 20,endIndent: 20,),
+        ),
         // Expanded(child: Container())
+        ImageIcon(AssetImage('images/logo.png'),size: 80,color: Color(0xFF399160),),
+        Text("with blink", style: TextStyle(
+            fontFamily: 'shabnam',
+            fontSize: 20,
+          color: Color(0xFF1C5334)
+        )),
+        Text("v 1.0.0",style: TextStyle(
+            fontFamily: 'shabnam',
+            fontSize: 20,
+            color: Color(0xFF1C5334)
+
+        ),)
       ],
     ),
 
