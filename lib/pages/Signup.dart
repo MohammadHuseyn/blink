@@ -14,6 +14,7 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
+    var selectedicon = 'm';
     return Material(
       child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +203,7 @@ class _SignupState extends State<Signup> {
               ),
               Expanded(child: Container()),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 7.5),
                 child: Container(
                   height: 175,
                   width: 385,
@@ -219,57 +220,74 @@ class _SignupState extends State<Signup> {
                           offset: Offset(0,5),
                         ),
                       ]),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                  child: IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(child: Container()),
+
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+
+                            children: [
+                              IconButton(
+                                icon: Image.asset('images/motorbike.png', width: 100),
+                                iconSize: 50,
+                                onPressed: () {
+                                  selectedicon = 'p';
+                                },
+                        ),
+                              Text("پیک", style: TextStyle(fontFamily: 'shabnam', fontSize: 25, color: Color(0xFF256F46)), ),
+
+                            ],
+                          ),
+                        Expanded(child: Container()),
+                        SizedBox(
+                          height: 130,
+                          child: VerticalDivider(color: Colors.green,),
+                        ),
+                        Expanded(child: Container()),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-
                           children: [
                             IconButton(
-                              icon: Image.asset('images/motorbike.png', width: 100),
-                              iconSize: 45,
-                              onPressed: () {},
-                      ),
-                            Text("پیک", style: TextStyle(fontFamily: 'shabnam', fontSize: 25, color: Color(0xFF256F46)), ),
-
+                              icon: Image.asset('images/people.png', width: 80),
+                              iconSize: 50,
+                              onPressed: () {
+                                selectedicon = 'm';
+                              },
+                            ),
+                            Text("مشتری", style: TextStyle(fontFamily: 'shabnam', fontSize: 25, color: Color(0xFF256F46)), ),
                           ],
                         ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                        child: VerticalDivider(color: Colors.green,),
-                      ),
-                        Column(
+
+                        Expanded(child: Container()),
+                        SizedBox(
+                          height: 130,
+                          child: VerticalDivider(color: Colors.green,),
+                        ),
+                        Expanded(child: Container()),Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
                               icon: Image.asset('images/seller.png', width: 100),
-                              iconSize: 45,
-                              onPressed: () {},
+                              iconSize: 50,
+                              onPressed: () {
+                                selectedicon = 'f';
+                              },
                             ),
                             Text("فروشنده", style: TextStyle(fontFamily: 'shabnam', fontSize: 25, color: Color(0xFF256F46)), ),
                           ],
                         ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                        child: VerticalDivider(color: Colors.green,),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                            IconButton(
-                              icon: Image.asset('images/people.png', width: 80),
-                              iconSize: 45,
-                              onPressed: () {},
-                            ),
-                            Text("مشتری", style: TextStyle(fontFamily: 'shabnam', fontSize: 25, color: Color(0xFF256F46)), ),
-                          ],
-                        ),
-                    ],
+
+                        Expanded(child: Container()),
+
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -311,7 +329,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   hintText: 'نام کاربری',
                                   hintStyle: TextStyle(
-                                    height: 2.7,
+                                    height: 1.5,
                                     fontFamily: 'shabnam',
                                     fontSize: 25,
                                     color: Colors.grey,
@@ -355,7 +373,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   hintText: 'رمز عبور',
                                   hintStyle: TextStyle(
-                                    height: 2.7,
+                                    height: 1.5,
                                     fontFamily: 'shabnam',
                                     fontSize: 25,
                                     color: Colors.grey,
@@ -396,7 +414,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   hintText: 'تکرار رمز عبور',
                                   hintStyle: TextStyle(
-                                    height: 2.7,
+                                    height: 1.5,
                                     fontFamily: 'shabnam',
                                     fontSize: 25,
                                     color: Colors.grey,
