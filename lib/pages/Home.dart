@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
         preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.08), // here the desired height
         child: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: _currentIndex == 0? Color(0xFF256F46):Colors.white,
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 15),
@@ -83,7 +83,62 @@ class _HomeState extends State<Home> {
         ),
       ],
     ),
-body: _currentIndex == 0? Container(height: ,) : _currentIndex == 1? Container(height: 100,width: 100,color: Colors.green,) : Container(height: 100, width: 100, color: Colors.red,)
+  body: _currentIndex == 0?
+  Container(
+    child: Column(
+      children: [
+        // Expanded(child: Container()),
+        Padding(
+          padding: const EdgeInsets.only(top: 25),
+          child: Row(
+            children: [
+              IconButton(onPressed: (){
+
+              }, icon: Icon(Icons.arrow_back_ios_rounded,
+                color: Color(0xFF1C5334),
+                size: 35,
+              )),
+              Text("تغییرات", style: TextStyle(
+                fontFamily: 'shabnam',
+                color: Color(0xFF1C5334),
+                fontSize: 20
+              ),),
+              Expanded(child: Container()),
+              Column(
+                children: [
+                  Text("نام کاربر", style: TextStyle(
+                      fontFamily: 'shabnam',
+                      color: Color(0xFF1C5334),
+                    fontSize: 25,
+                  ),),
+                  Text("نقش", style: TextStyle(
+                      fontFamily: 'shabnam',
+                      color: Colors.grey,
+                    fontSize: 19
+                  ),),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 17),
+                child: ImageIcon(AssetImage('images/account.png'),
+                  color: Color(0xFF618771),
+                size: 80,),
+              ),
+            ],
+          ),
+        ),
+        // Expanded(child: Container())
+      ],
+    ),
+
+  )
+      : _currentIndex == 1?
+  Container(
+
+  ):
+  Container(
+
+  )
     );
   }
 
