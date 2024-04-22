@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.utils.translation import gettext_lazy as _
+
 class User(models.Model):
     username = models.CharField(max_length=50, unique=True)
     firstname = models.CharField(max_length=100)
@@ -45,6 +47,13 @@ class Customer(User):
     def __str__(self):
         return self.username
 
+class Delivery(User):
+    driving_license_number = models.CharField(max_length=20, unique=True, help_text="Unique driving license number")
+    vehicle_license_plate = models.CharField(max_length=15, unique=True, help_text="Vehicle license plate number")
+
+    def __str__(self):
+        return f"{self.username} (Driving License: {self.driving_license_number})"
+
 class Administrator(User):
     def __str__(self):
         return self.username
@@ -52,6 +61,7 @@ class Administrator(User):
 class CustomerSupport(User):
     def __str__(self):
         return self.username
+
 
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
@@ -139,3 +149,39 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message in chat between {self.chat.customer_support.user.username} and {self.chat.customer.username}"
+
+class Order(models.Model):
+    # Define order status choices
+    class OrderStatus(models.TextChoices):
+        PENDING = 'PENDING', _('Pending')
+        PROCESSING = 'PROCESSING', _('Processing')
+        DISPATCHED = 'DISPATCHED', _('Dispatched')
+        DELIVERED = 'DELIVERED', _('Delivered')
+        CANCELLED = 'CANCELLED', _('Cancelled')
+        RETURNED = 'RETURNED', _('Returned')
+        FAILED = 'FAILED', _('Failed')
+
+    customer = models.ForeignKey(Customer, related_name='orders', on_delete=models.CASCADE)
+    delivery_location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
+    delivery_person = models.ForeignKey(Delivery, related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_price = models.DecimalField(max_digits=6, decimal_places=2, help_text="Cost of delivery")
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Total price of the order, including items and delivery")
+    status = models.CharField(
+        max_length=10,
+        choices=OrderStatus.choices,
+        default=OrderStatus.PENDING,
+        help_text="Status of the order"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Order #{self.id} by {self.customer.username} - Total: {self.total_price} - Status: {self.status}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, help_text="Quantity of the product in the order")
+
+    def __str__(self):
+        return f"{self.product.name} (x{self.quantity}) in Order #{self.order.id}"
