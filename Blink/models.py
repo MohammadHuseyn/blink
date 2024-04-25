@@ -82,7 +82,6 @@ class CustomerSupport(User):
     def __str__(self):
         return self.username
 
-
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
