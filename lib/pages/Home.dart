@@ -1,3 +1,4 @@
+import 'package:blink/pages/Address.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,9 @@ class _HomeState extends State<Home> {
                         size: 50,
                         color: Color(0xFF256F46),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Address()));
+                      },
                     ),
                   )
                 : null,
