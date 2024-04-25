@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.translation import gettext_lazy as _
-
+import json
+from django.contrib.auth.hashers import check_password
 class User(models.Model):
     username = models.CharField(max_length=50, unique=True)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=20, null=True, blank=True)  # Use CharField for phone number
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
@@ -41,6 +42,25 @@ class User(models.Model):
     def delete_account(self):
         self.delete()
 
+    @staticmethod
+    def authenticate_user(json_data):
+        try:
+            data = json.loads(json_data)
+            username = data.get('username')
+            password = data.get('password')
+            if not (username and password):
+                return 0
+            user = User.objects.get(username=username)
+            if check_password(password, user.password):
+                return 1
+            else:
+                return 0
+
+        except User.DoesNotExist:
+            return 0
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return 0
 
 class Customer(User):
     location = models.ForeignKey("Location", related_name='customers', on_delete=models.SET_NULL, null=True, blank=True)
