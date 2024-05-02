@@ -98,7 +98,9 @@ class _AddressState extends State<Address> {
                       children: [
                         IconButton(
                             iconSize: 50,
-                            onPressed: () {},
+                            onPressed: () {
+                              bottomsheed('ویرایش آدرس');
+                            },
                             icon: ImageIcon(
                               AssetImage('images/pencil.png'),
                               color: Color(0xFFa7afab),
@@ -113,27 +115,35 @@ class _AddressState extends State<Address> {
                       ],
                     ),
                     Expanded(child: Container()),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 150,
-                      height: 120,
-                      // color: Colors.red,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFEAF3EE),
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ]),
-                      child: Center(
-                          child: Text(
-                        "آدرس ۲",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
-                      )),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selected = 0;
+
+                        });
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 150,
+                        height: 120,
+                        // color: Colors.red,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEAF3EE),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Center(
+                            child: Text(
+                          "آدرس ۲",
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        )),
+                      ),
                     ),
                     Expanded(child: Container())
                   ],
@@ -162,27 +172,34 @@ class _AddressState extends State<Address> {
                       ],
                     ),
                     Expanded(child: Container()),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 150,
-                      height: 120,
-                      // color: Colors.red,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFEAF3EE),
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ]),
-                      child: Center(
-                          child: Text(
-                        "آدرس ۲",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
-                      )),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selected = 1;
+                        });
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 150,
+                        height: 120,
+                        // color: Colors.red,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEAF3EE),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Center(
+                            child: Text(
+                          "آدرس ۲",
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        )),
+                      ),
                     ),
                     Expanded(child: Container())
                   ],

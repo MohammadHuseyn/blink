@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import '../global.dart';
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
@@ -190,7 +190,8 @@ class _LoginState extends State<Login> {
                   child: Container(
                     width: 90,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                      },
                       child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF256F46),
@@ -330,10 +331,14 @@ class _LoginState extends State<Login> {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (username.text == 'username' && password.text == 'password') {
-                      Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-                    }
+                    // if (username.text == 'username' && password.text == 'password') {
+                    //   Navigator.pop(context);
+                    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                    // }
+                    postRequest({
+                      'username' : username.text,
+                      'password' : password.text
+                    });
                   },
                   child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                   style: ElevatedButton.styleFrom(
