@@ -3,6 +3,8 @@ import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'ProfileEdit.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -157,18 +159,22 @@ class _HomeState extends State<Home> {
                       child: Row(
                         children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () =>
+                                profileChange(),
                               icon: Icon(
                                 Icons.arrow_back_ios_rounded,
                                 color: Color(0xFF1C5334),
                                 size: 35,
                               )),
-                          Text(
-                            "تغییرات",
-                            style: TextStyle(
-                                fontFamily: 'shabnam',
-                                color: Color(0xFF1C5334),
-                                fontSize: 20),
+                          GestureDetector(
+                            onTap: () => profileChange(),
+                            child: Text(
+                              "تغییرات",
+                              style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  color: Color(0xFF1C5334),
+                                  fontSize: 20),
+                            ),
                           ),
                           Expanded(child: Container()),
                           Column(
@@ -613,5 +619,9 @@ class _HomeState extends State<Home> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  profileChange() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit()));
   }
 }

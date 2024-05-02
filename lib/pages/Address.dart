@@ -393,7 +393,7 @@ class _AddressState extends State<Address> {
                           labelText: 'نام آدرس',
                           floatingLabelStyle: TextStyle(fontSize: 25),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelStyle: TextStyle(fontSize: 25),
+                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                         ),
                       ),
                     )),
