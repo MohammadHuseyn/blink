@@ -1,5 +1,6 @@
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Login.dart';
+import 'package:blink/pages/OrderSubmitted.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    return Home();
+    return OrderSubmitted();
   }
 }

@@ -12,6 +12,27 @@ class _OrderSubmittedState extends State<OrderSubmitted> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.085,
+          child: ElevatedButton(
+            onPressed: () {},
+            child:Text("   پیگیری سفارش   ",
+              style: TextStyle(
+                fontSize: 25,
+              ),),
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
+            ),
+          ),
+        ),
+      ),
       body: Center(
           child: Container(
         color: Colors.white,
