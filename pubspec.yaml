@@ -1,0 +1,48 @@
+name: blink
+description: An online market shopping project for software engineer course - SBU CE
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  flutter_native_splash: ^2.3.7
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: shabnam
+      fonts:
+        - asset: assets\fonts\Shabnam.ttf
+  assets:
+    - images/bell.png
+    - images/question.png
+    - images/seller.png
+    - images/motorbike.png
+    - images/people.png
+    - images/user.png
+    - images/key.png
+    - images/logo.png
+    - images/notification.png
+    - images/user2.png
+    - images/home.png
+    - images/cart.png
+    - images/account.png
+    - images/plus.png
+    - images/remove.png
+    - images/img.png
+    - images/trash.png
+    - images/pencil.png
+    - images/blink.png
