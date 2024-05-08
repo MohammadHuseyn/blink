@@ -1,16 +1,15 @@
-from django.shortcuts import render
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from rest_framework import permissions, viewsets
-from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, SellerDetailSerializer, DeliveryDetailSerializer
+from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework import permissions
-from rest_framework import filters
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from .models import Customer, Seller, Delivery
+from .models import Customer, Seller, Delivery, Store
+from rest_framework.authtoken.models import Token
+
 
 class SignupView(APIView):
     def post(self, request):
@@ -58,3 +57,35 @@ class LoginView(APIView):
             return Response({
                 "error": "Invalid credentials"
             }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class StoreListView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        longitude = request.data.get("longitude")
+        latitude = request.data.get("latitude")
+        token_key = request.data.get("token")
+
+        if not longitude or not latitude or not token_key:
+            return Response(
+                {"error": "Longitude, latitude, and token are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            token = Token.objects.get(key=token_key)
+            user = token.user
+
+            # Get all stores (you might want to filter by location or other criteria)
+            stores = Store.objects.all()
+            serializer = StoreSerializer(stores, many=True)
+            store_dict = {str(store['id']): store for store in serializer.data}
+
+            return Response(store_dict, status=status.HTTP_200_OK)
+
+        except Token.DoesNotExist:
+            return Response(
+                {"error": "Invalid token"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )

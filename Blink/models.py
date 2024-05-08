@@ -43,7 +43,7 @@ class Location(models.Model):
 
 class Seller(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    store = models.OneToOneField('Store', related_name='seller_profile', on_delete=models.CASCADE)
+    store = models.OneToOneField('Store', related_name='seller_profile', on_delete=models.CASCADE, null=True)
 
 class DiscountCode(models.Model):
     code = models.CharField(max_length=20, unique=True)
@@ -57,7 +57,6 @@ class DiscountCode(models.Model):
 class Store(models.Model):
     name = models.CharField(max_length=100)
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
-    seller = models.ForeignKey(Seller, related_name='stores_managed', on_delete=models.CASCADE)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
 
     def __str__(self):

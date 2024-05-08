@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery
+from .models import Customer, Seller, Delivery, Store, Location, Product
 
 
 class UserSignupSerializer(serializers.Serializer):
@@ -12,6 +12,11 @@ class UserSignupSerializer(serializers.Serializer):
     phone_number = serializers.CharField(required=False, allow_blank=True)
     user_type = serializers.ChoiceField(
         choices=[('customer', 'Customer'), ('seller', 'Seller'), ('delivery', 'Delivery')])
+    # Additional fields for seller store information
+    store_name = serializers.CharField(max_length=100, required=False)
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
+    location_name = serializers.CharField(max_length=20, required=False, allow_blank=True)
 
     def create(self, validated_data):
         user_type = validated_data.get('user_type')
@@ -26,8 +31,17 @@ class UserSignupSerializer(serializers.Serializer):
                 last_name=validated_data.get('last_name', ''),
                 phone_number=validated_data.get('phone_number', '')
             )
+
         elif user_type == 'seller':
-            # You might need to handle store-related fields separately
+            if 'latitude' in validated_data and 'longitude' in validated_data:
+                location = Location.objects.create(
+                    latitude=validated_data.pop('latitude'),
+                    longitude=validated_data.pop('longitude'),
+                    name=validated_data.pop('location_name', '')  # Optional name for the location
+                )
+            else:
+                location = None  # Location might be optional
+
             user = Seller.objects.create_user(
                 username=validated_data['username'],
                 email=validated_data.get('email', ''),
@@ -36,6 +50,17 @@ class UserSignupSerializer(serializers.Serializer):
                 last_name=validated_data.get('last_name', ''),
                 phone_number=validated_data.get('phone_number', '')
             )
+            store_name = validated_data.pop('store_name', None)
+            if not store_name:
+                raise serializers.ValidationError("Store name is required")
+
+            store = Store.objects.create(
+                name=store_name,
+                location=location
+            )
+            user.store = store
+            user.save()
+
         elif user_type == 'delivery':
             # Add additional fields specific to delivery if needed
             user = Delivery.objects.create_user(
@@ -72,3 +97,32 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Delivery
         fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'vehicle_license_plate', 'driving_license_number']
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'price', 'quantity']
+
+class StoreSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
+    class Meta:
+        model = Store
+        fields = ['id', 'name', 'location', 'products']  # Include necessary fields
+
+    def get_location(self, obj):
+        if obj.location:
+            return {
+                'latitude': obj.location.latitude,
+                'longitude': obj.location.longitude,
+                'name': obj.location.name,
+            }
+    def get_products(self, obj):
+        # Retrieve products related to this store and format as required
+        product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
+
+        # Create a dictionary with product_id as keys
+        product_dict = {str(p['id']): p for p in product_data}
+
+
+        return product_dict

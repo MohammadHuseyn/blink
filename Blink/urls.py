@@ -16,12 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework import routers
-from Blink import views
-from .views import SignupView, LoginView
+from .views import SignupView, LoginView, StoreListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
+    path('stores/', StoreListView.as_view(), name='store-list'),
 ]
