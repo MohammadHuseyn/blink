@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../global.dart' as global;
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -10,7 +13,8 @@ class Signup extends StatefulWidget {
   @override
   State<Signup> createState() => _SignupState();
 }
-
+var username = TextEditingController();
+var password = TextEditingController();
 class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
@@ -313,10 +317,11 @@ class _SignupState extends State<Signup> {
                               color: Color(0xFFBDD2C6),
                             ),
                           ),
-                          Container(width: 300, height: 100,child: const Material(
+                          Container(width: 300, height: 100,child:  Material(
                             child: Padding(
                               padding: EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                controller: username,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 25,
@@ -357,10 +362,11 @@ class _SignupState extends State<Signup> {
                               color: Color(0xFFBDD2C6),
                             ),
                           ),
-                          Container(width: 300, height: 100,child: const Material(
+                          Container(width: 300, height: 100,child: Material(
                             child: Padding(
                               padding: EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                controller: password,
                                 style: TextStyle(
                                   fontSize: 25,
                                   fontFamily: 'shabnam',
@@ -447,7 +453,22 @@ class _SignupState extends State<Signup> {
                     ],
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var res = global.postRequest({
+                        "username" : username.text,
+                        "password" : password.text,
+                        "first_name" : "first_name",
+                        "last_name" : "last_name",
+                        "email" : "email@gmail.com",
+                        "phone_number" : "09123456789",
+                        "user_type" : "customer",
+                      }, "/signup/");
+                      Map<String, dynamic> data = await res;
+                      global.token = data["token"];
+                      global.tokenbool = true;
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                    },
                     child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF256F46),

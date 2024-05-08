@@ -1,5 +1,5 @@
 import 'dart:ui';
-import '../global.dart';
+import '../global.dart' as global;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
@@ -330,15 +330,24 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // if (username.text == 'username' && password.text == 'password') {
                     //   Navigator.pop(context);
                     //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                     // }
-                    postRequest({
+                    var res = global.postRequest({
                       'username' : username.text,
                       'password' : password.text
-                    });
+                    }, "/login/");
+                    try {
+                      Map<String, dynamic> data = await res;
+                      global.token = data["token"];
+                      global.tokenbool = true;
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                    } catch (e) {
+                      print('Error: $e');
+                    }
                   },
                   child: Text("ورود", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                   style: ElevatedButton.styleFrom(

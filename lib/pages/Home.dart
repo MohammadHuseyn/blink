@@ -1,8 +1,11 @@
+import 'package:blink/pages/StorePage.dart';
+
+import '../classes/store.dart';
 import 'package:blink/pages/Address.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../global.dart' as global;
 import 'ProfileEdit.dart';
 
 class Home extends StatefulWidget {
@@ -13,11 +16,20 @@ class Home extends StatefulWidget {
 }
 
 var _currentIndex = 1;
-var card = [];
-
+List<Store> stores = [
+  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
+];
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    // TODO: implement initState
+    loadStores();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    stores[0].items.add(Item(sotreid: stores[0].id, id: "11", name: "golabi", price: "10000"));
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height *
@@ -63,7 +75,8 @@ class _HomeState extends State<Home> {
                         color: Color(0xFF256F46),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Address()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Address()));
                       },
                     ),
                   )
@@ -159,8 +172,7 @@ class _HomeState extends State<Home> {
                       child: Row(
                         children: [
                           IconButton(
-                              onPressed: () =>
-                                profileChange(),
+                              onPressed: () => profileChange(),
                               icon: Icon(
                                 Icons.arrow_back_ios_rounded,
                                 color: Color(0xFF1C5334),
@@ -340,7 +352,22 @@ class _HomeState extends State<Home> {
                 ),
               )
             : _currentIndex == 1
-                ? Container()
+                ? Container(
+                    child: ListView.builder(
+                        itemCount: stores.length,
+                        itemBuilder: (context, i) {
+                          return ListTile(
+                            title: Text(stores[i].name),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          StorePage(store: stores[i])));
+                            },
+                          );
+                        }),
+                  )
                 : Container(
                     child: Column(
                       children: [
@@ -355,27 +382,37 @@ class _HomeState extends State<Home> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListView.builder(
+                                  itemCount: global.card.length,
                                   itemBuilder: (context, i) {
                                     return Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 10),
                                       child: Row(children: [
                                         IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                if (global.card[i].count > 1)
+                                                  global.card[i].count -= 1;
+                                              });
+                                            },
                                             icon: ImageIcon(
                                               AssetImage('images/remove.png'),
                                               color: Color(0xFF1C5334),
                                               size: 25,
                                             )),
                                         Text(
-                                          "تعداد",
+                                          global.card[i].count.toString(),
                                           style: TextStyle(
                                               fontFamily: 'shabnam',
                                               color: Color(0xFF1C5334),
                                               fontSize: 20),
                                         ),
                                         IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                global.card[i].count += 1;
+                                              });
+                                            },
                                             icon: ImageIcon(
                                               AssetImage('images/plus.png'),
                                               color: Color(0xFF1C5334),
@@ -385,7 +422,7 @@ class _HomeState extends State<Home> {
                                         Column(
                                           children: [
                                             Text(
-                                              "نام محصول",
+                                              global.card[i].name,
                                               style: TextStyle(
                                                 fontFamily: 'shabnam',
                                                 color: Color(0xFF1C5334),
@@ -393,7 +430,7 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                             Text(
-                                              "قیمت",
+                                              global.card[i].price.toString(),
                                               style: TextStyle(
                                                   fontFamily: 'shabnam',
                                                   color: Color(0xFF1C5334),
@@ -567,7 +604,11 @@ class _HomeState extends State<Home> {
                             Container(
                               width: 100,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  global.postRequest({
+
+                                  }, "/sendcart/");
+                                },
                                 child: Text(
                                   "تکمیل",
                                   style: TextStyle(
@@ -594,14 +635,22 @@ class _HomeState extends State<Home> {
                                   // Navigator.pop(context);
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
                                 },
-                                child: Text("ادامه خرید", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Color(0xFF256F46)), textAlign: TextAlign.center,),
+                                child: Text(
+                                  "ادامه خرید",
+                                  style: TextStyle(
+                                      fontFamily: 'shabnam',
+                                      fontSize: 20,
+                                      color: Color(0xFF256F46)),
+                                  textAlign: TextAlign.center,
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Color(0xFFFFFFFF),
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
-                                      side: BorderSide(color: Color(0xFF256F46))
-                                  ),
+                                      side:
+                                          BorderSide(color: Color(0xFF256F46))),
                                   shadowColor: Colors.transparent,
                                 ),
                               ),
@@ -622,6 +671,45 @@ class _HomeState extends State<Home> {
   }
 
   profileChange() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProfileEdit()));
   }
+  loadStores() async {
+    // print("TOKEN" + global.token)
+    var res = global.postRequest(
+        {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
+        "/stores/");
+    Map<String, dynamic> data = await res;
+
+    data.forEach((storeId, storeData) {
+      // Extract store details
+      var id = storeId;
+      var name = storeData['name'];
+      var longitude = storeData['location']['longitude'];
+      var latitude = storeData['location']['latitude'];
+
+      // Extract item details
+      List<Item> items = [];
+      (storeData['products'] as Map<String, dynamic>).forEach((String itemId, itemData) {
+        var itemName = itemData['name'];
+        var itemPrice = itemData['price'];
+        var item =
+        Item(id: itemId, name: itemName, price: itemPrice, sotreid: storeId);
+        items.add(item);
+      });
+
+      // Create Store object and add it to the list
+      var store = Store(
+          id: id,
+          name: name,
+          longitude: longitude,
+          latitude: latitude,
+          items: items);
+      setState(() {
+        stores.add(store);
+      });
+    });
+  }
+
 }
+
