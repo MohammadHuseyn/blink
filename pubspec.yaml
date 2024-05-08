@@ -46,3 +46,5 @@ flutter:
     - images/trash.png
     - images/pencil.png
     - images/blink.png
+    - images/chat_background.png
+    - images/send-message.png
