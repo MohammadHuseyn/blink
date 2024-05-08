@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
 class Customer(User):
-    phone_number = models.CharField(max_length=20, null=True, blank=True)  # Use CharField for phone number
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
     location = models.ForeignKey("Location", related_name='customers', on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self):
         return self.username
@@ -47,18 +47,24 @@ class Seller(User):
 
 class DiscountCode(models.Model):
     code = models.CharField(max_length=20, unique=True)
-    discount_value = models.IntegerField(default=0, help_text="Discount value between 1 to 100")
+    discount_value = models.IntegerField(default=0, help_text="Discount value between 1 to 100 percent")
     creation_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField()
 
     def __str__(self):
         return self.code
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Store(models.Model):
     name = models.CharField(max_length=100)
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
     seller = models.ForeignKey(Seller, related_name='stores_managed', on_delete=models.CASCADE)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
+    picture = models.ImageField(upload_to='store_pictures/')
 
     def __str__(self):
         return self.name
@@ -68,7 +74,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     store = models.ForeignKey(Store, related_name='products', on_delete=models.CASCADE, null=True)
-
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name

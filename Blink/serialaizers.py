@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery
+from .models import Customer, Seller, Delivery, Order, OrderItem
 
 
 class UserSignupSerializer(serializers.Serializer):
@@ -72,3 +72,14 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Delivery
         fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'vehicle_license_plate', 'driving_license_number']
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'product', 'quantity']
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+    class Meta:
+        model = Order
+        fields = ['id', 'customer', 'delivery_location', 'delivery_person', 'delivery_price',
+                  'discount', 'discount_value', 'total_price', 'status', 'created_at', 'updated_at', 'items']
