@@ -342,6 +342,7 @@ class _LoginState extends State<Login> {
                     try {
                       Map<String, dynamic> data = await res;
                       global.token = data["token"];
+                      global.tokenbool = true;
                       Navigator.pop(context);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                     } catch (e) {

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -464,6 +465,9 @@ class _SignupState extends State<Signup> {
                       }, "/signup/");
                       Map<String, dynamic> data = await res;
                       global.token = data["token"];
+                      global.tokenbool = true;
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                     },
                     child: Text("ثبت نام", style: TextStyle(fontFamily: 'shabnam', fontSize: 20, color: Colors.white), ),
                     style: ElevatedButton.styleFrom(
