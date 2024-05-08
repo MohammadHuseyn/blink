@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
 from Blink import views
+from .views import SignupView, LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.UserList.as_view()),
-
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
