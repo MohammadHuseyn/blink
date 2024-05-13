@@ -1,4 +1,5 @@
 import 'package:blink/pages/Chat.dart';
+import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
 import 'package:blink/pages/StorePage.dart';
 
@@ -257,7 +258,9 @@ class _HomeState extends State<Home> {
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           print("tapped");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> OrderHistory()));
                         },
+                        
                         child: Container(
                           margin: EdgeInsets.only(right: 20, left: 20),
                           padding: EdgeInsets.symmetric(vertical: 40),
