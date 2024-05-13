@@ -1,3 +1,4 @@
+import 'package:blink/pages/OrderStatus.dart';
 import 'package:blink/pages/StorePage.dart';
 
 import '../classes/store.dart';
@@ -1027,7 +1028,8 @@ class _HomeState extends State<Home> {
                               width: 100,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  global.postRequest({}, "/sendcart/");
+                                  // global.postRequest({}, "/sendcart/");
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrderStatus()));
                                 },
                                 child: Text(
                                   "تکمیل",
