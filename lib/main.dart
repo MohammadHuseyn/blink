@@ -38,6 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    return Signup();
+    return Home();
   }
 }
