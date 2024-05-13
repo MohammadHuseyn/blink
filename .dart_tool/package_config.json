@@ -9,9 +9,9 @@
     },
     {
       "name": "archive",
-      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.10",
+      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.5.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "args",
@@ -46,12 +46,6 @@
     {
       "name": "collection",
       "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.18.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
-      "name": "convert",
-      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/convert-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -171,7 +165,7 @@
     },
     {
       "name": "logger",
-      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/logger-2.2.0",
+      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/logger-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -208,12 +202,6 @@
     {
       "name": "petitparser",
       "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "pointycastle",
-      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/pointycastle-3.8.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -326,7 +314,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-05-03T19:26:07.762227Z",
+  "generated": "2024-05-13T14:32:36.482778Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }
