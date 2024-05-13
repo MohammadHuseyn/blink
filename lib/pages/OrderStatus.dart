@@ -47,13 +47,13 @@ class _OrderStatusState extends State<OrderStatus> {
               ImageIcon(
                 AssetImage("images/deliverd.png"),
                 size: 50,
-                color: status == 4 ? Color(0xFF256f46) : Color(0xFFCFDED6),
+                color: status >= 4 ? Color(0xFF256f46) : Color(0xFFCFDED6),
               ),
               Text(
                 " ... ",
                 style: TextStyle(
                   fontSize: 40,
-                  color: status == 4 ? Color(0xFF256f46) : Color(0xFFCFDED6),
+                  color: status >= 4 ? Color(0xFF256f46) : Color(0xFFCFDED6),
                 ),
               ),
               ImageIcon(
