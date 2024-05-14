@@ -18,6 +18,9 @@ class UserSignupSerializer(serializers.Serializer):
     longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
     location_name = serializers.CharField(max_length=20, required=False, allow_blank=True)
 
+    vehicle_license_plate = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    driving_license_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
+
     def create(self, validated_data):
         user_type = validated_data.get('user_type')
 
@@ -69,7 +72,9 @@ class UserSignupSerializer(serializers.Serializer):
                 password=validated_data['password'],
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
-                phone_number=validated_data.get('phone_number', '')
+                phone_number=validated_data.get('phone_number', ''),
+                vehicle_license_plate=validated_data.get('plate', ''),
+                driving_license_number=validated_data.get('license', '')
             )
         else:
             raise serializers.ValidationError("Invalid user type")
@@ -96,7 +101,8 @@ class SellerDetailSerializer(GeneralUserDetailSerializer):
 class DeliveryDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Delivery
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'vehicle_license_plate', 'driving_license_number']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'vehicle_license_plate',
+                                                            'driving_license_number']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
