@@ -2,12 +2,12 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
-    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, ShoppingCartSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from .models import Customer, Seller, Delivery, Store
+from .models import Customer, Seller, Delivery, Store, ShoppingCart
 from rest_framework.authtoken.models import Token
 
 
@@ -89,3 +89,15 @@ class StoreListView(APIView):
                 {"error": "Invalid token"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+class ShoppingCartView(APIView):
+    def post(self, request):
+        serializer = ShoppingCartSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        shopping_carts = ShoppingCart.objects.all()
+        serializer = ShoppingCartSerializer(shopping_carts, many=True)
+        return Response(serializer.data)

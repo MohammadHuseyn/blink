@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product
+from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem
 
 
 class UserSignupSerializer(serializers.Serializer):
@@ -132,3 +132,17 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
         return product_dict
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()  # Nested serialization for the product
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'product', 'quantity']
+
+class ShoppingCartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)  # Nested serialization for CartItem
+
+    class Meta:
+        model = ShoppingCart
+        fields = ['id', 'user', 'created_at', 'items']
