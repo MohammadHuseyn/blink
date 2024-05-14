@@ -32,7 +32,7 @@ class _SignupState extends State<Signup> {
             onPressed: () {
 
               if (check.text == password.text) {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScndPage(userkind: selectedicon,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScndPage(userkind: selectedicon,username: username, password: password)));
 
 
               }

@@ -4,8 +4,8 @@ import 'package:blink/classes/store.dart';
 import 'package:http/http.dart' as http;
 
 
-var url ='http://10.0.2.2:8000';
-// var url ='http://192.168.1.3:8000';
+// var url ='http://10.0.2.2:8000';
+var url ='http://192.168.1.3:8000';
 var token = "";
 var tokenbool = false;
 List<Item> card = [];

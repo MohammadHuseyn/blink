@@ -21,10 +21,10 @@ class Home extends StatefulWidget {
 var _currentIndex = 1;
 List<Store> stores = [
   Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
 ];
 
 class _HomeState extends State<Home> {
@@ -1136,6 +1136,14 @@ class _HomeState extends State<Home> {
         stores.add(store);
       });
     });
+  }
+  sendcart() async {
+    // print("TOKEN" + global.token)
+    var res = global.postRequest(
+        {
+
+        }, "/sendcart/");
+    Map<String, dynamic> data = await res;
   }
 
   prodcut() {

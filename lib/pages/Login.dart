@@ -11,12 +11,12 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
+var username = TextEditingController();
+var password = TextEditingController();
 
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController? username = new TextEditingController();
-    TextEditingController? password = new TextEditingController();
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
