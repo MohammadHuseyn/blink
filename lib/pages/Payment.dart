@@ -24,6 +24,10 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
                   onPressed: (){
+                    global.postRequest({
+                      "pay" : false
+                    }, '/payment/');
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child:Text("   انصراف   ",
@@ -47,6 +51,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
                   onPressed: (){
+                    global.postRequest({
+                      "pay" : true
+                    }, '/payment/');
                     setState(() {
                       global.currentCardPayement = true;
                     });

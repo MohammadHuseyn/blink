@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:blink/classes/store.dart';
+import 'package:blink/pages/Address.dart';
 import 'package:http/http.dart' as http;
 // import 'classes/store.dart';
 
 // var url ='http://10.0.2.2:8000';
 var url ='http://192.168.1.3:8000';
+List<addres_data> addresses = [];
 var s = null;
 var token = "";
 var currentCardPayement = false;
@@ -14,6 +16,7 @@ var username;
 var first_name;
 var last_name;
 var address_name = "آدرس ۱";
+var addressIndex = null;
 List<Item> card = [];
 Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
