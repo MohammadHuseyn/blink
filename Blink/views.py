@@ -179,12 +179,12 @@ class LocationView(APIView):
     def post(self, request):
         serializer = LocationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            #serializer.save()
             Location.objects.create(
-                name=serializer.get_value('name'),
-                address=serializer.get_value('address'),
-                longitude=serializer.get_value('longitude'),
-                latitude=serializer.get_value('latitude')
+                name=request.data.get('name'),
+                address=request.data.get('address'),
+                longitude=request.data.get('longitude'),
+                latitude=request.data.get('latitude')
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
