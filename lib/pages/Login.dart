@@ -39,6 +39,7 @@ class _LoginState extends State<Login> {
                 global.username = data["user"]["username"];
                 global.first_name = data["user"]["first_name"];
                 global.last_name = data["user"]["last_name"];
+                global.email = data["user"]["email"];
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
               } catch (e) {

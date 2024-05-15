@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-var url ='http://192.168.23.31:8000';
+var url ='http://192.168.23.45:8000';
 List<addres_data> addresses = [];
 var s = null;
 var token = "";
@@ -17,6 +17,7 @@ var username;
 var order_id;
 var first_name;
 var last_name;
+var email;
 var address_name = "آدرس ۱";
 var addressIndex = null;
 List<Item> card = [];
