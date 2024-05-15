@@ -126,13 +126,13 @@ class Message(models.Model):
 
 class Order(models.Model):
     class OrderStatus(models.TextChoices):
+        CREATED = 'CREATED',_('Created')
         PENDING = 'PENDING', _('Pending')
         PROCESSING = 'PROCESSING', _('Processing')
         DISPATCHED = 'DISPATCHED', _('Dispatched')
         DELIVERED = 'DELIVERED', _('Delivered')
         CANCELLED = 'CANCELLED', _('Cancelled')
-        RETURNED = 'RETURNED', _('Returned')
-        FAILED = 'FAILED', _('Failed')
+        FAILED = 'PAYMENT', _('Failed')
 
     customer = models.ForeignKey(Customer, related_name='orders', on_delete=models.CASCADE)
     delivery_location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
@@ -141,7 +141,7 @@ class Order(models.Model):
     discount = models.ForeignKey(DiscountCode, on_delete=models.SET_NULL, null=True, blank=True, help_text="Optional discount code applied to the order")
     discount_value = models.DecimalField(max_digits=15, decimal_places=2, default=0, help_text="Amount of discount applied to the order")
     total_price = models.DecimalField(max_digits=15, decimal_places=2, help_text="Total price of the order, including items and delivery")
-    status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.PENDING, help_text="Status of the order")
+    status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.CREATED, help_text="Status of the order")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

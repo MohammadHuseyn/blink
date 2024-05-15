@@ -69,16 +69,13 @@ class StoreListView(APIView):
     def post(self, request):
         longitude = request.data.get("longitude")
         latitude = request.data.get("latitude")
-        token_key = request.data.get("token")
 
-        if not longitude or not latitude or not token_key:
+        if not longitude or not latitude:
             return Response(
                 {"error": "Longitude, latitude, and token are required"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
-            token = Token.objects.get(key=token_key)
-            user = token.user
 
             # Get all stores (you might want to filter by location or other criteria)
             stores = Store.objects.all()
@@ -119,7 +116,7 @@ class ShoppingCartView(APIView):
                     defaults={'quantity': quantity}
                 )
                 # Optionally, you can perform additional actions here, such as updating product stock
-            total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all())
+            total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all()) + 50000
 
             return Response({"message": "Shopping cart updated successfully","total_price":total_price}, status=status.HTTP_200_OK)
         else:
@@ -179,8 +176,8 @@ class PaymentView(APIView):
         is_paid = request.data.get('paid')  # Assuming you receive 'paid' parameter for payment status
         order = Order.objects.get(id=order_id)
 
-        if is_paid.lower() == 'true':
-            order.status = Order.OrderStatus.PROCESSING
+        if is_paid:
+            order.status = Order.OrderStatus.PENDING
             order.save()
 
             for item in order.items.all():
