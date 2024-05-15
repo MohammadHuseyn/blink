@@ -45,6 +45,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     stores[0].items.add(
         Item(sotreid: stores[0].id, id: "11", name: "golabi", price: 10000));
+    stores[0].items.add(
+        Item(sotreid: stores[0].id, id: "22", name: "moz", price: 10000));
+    stores[0].items.add(
+        Item(sotreid: stores[0].id, id: "33", name: "sib", price: 10000));
+
     return global.addressIndex == null
         ? Scaffold(
             bottomNavigationBar: Padding(
