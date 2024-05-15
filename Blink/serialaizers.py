@@ -143,7 +143,7 @@ class CartItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     quantity = serializers.IntegerField()
 
-class LocationSerializer(serializers.Serializer):
+class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ['name', 'latitude', 'longitude', 'address']
+        fields = ['id', 'name', 'latitude', 'longitude', 'address']

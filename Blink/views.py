@@ -170,21 +170,26 @@ class OrderFromCartView(APIView):
 
         return Response({"message": "Order placed successfully"}, status=status.HTTP_201_CREATED)
 class LocationView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
-        user = request.data.get('user_id')
-        locations = Location.objects.get(user_id=user)
+        user = request.user.id
+        locations = Location.objects.filter(customer=user)
         serializer = LocationSerializer(locations, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         serializer = LocationSerializer(data=request.data)
+        customer = Customer.objects.get(user_ptr_id=request.user.id)
         if serializer.is_valid():
-            #serializer.save()
-            Location.objects.create(
+            location = Location.objects.create(
                 name=request.data.get('name'),
                 address=request.data.get('address'),
                 longitude=request.data.get('longitude'),
-                latitude=request.data.get('latitude')
+                latitude=request.data.get('latitude'),
+                customer=customer
             )
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
