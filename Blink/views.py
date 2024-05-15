@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem
+from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem, \
+    Category
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
@@ -176,14 +177,50 @@ class PaymentView(APIView):
     def post(self, request):
         order_id = request.data.get('order_id')
         is_paid = request.data.get('paid')  # Assuming you receive 'paid' parameter for payment status
-        print(order_id)
         order = Order.objects.get(id=order_id)
 
         if is_paid.lower() == 'true':
             order.status = Order.OrderStatus.PROCESSING
             order.save()
+
+            for item in order.items.all():
+                product = item.product
+                product.quantity -= item.quantity
+                product.save()
+
             return Response({'pay': True, 'order_id': order_id})
         else:
             order.status = Order.OrderStatus.FAILED
             order.save()
             return Response({'pay': False, 'order_id': order_id})
+class AddProductView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            data = request.data
+            product_name = data.get('product_name')
+            price = data.get('price')
+            quantity = data.get('quantity')
+            category_id = data.get('category_id')
+            store_id = data.get('store_id')
+
+            if not all([product_name, price, quantity, category_id, store_id]):
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+            category, _ = Category.objects.get_or_create(id=category_id)
+            store, _ = Store.objects.get_or_create(id=store_id)
+
+            product = Product.objects.create(
+                name=product_name,
+                price=price,
+                quantity=quantity,
+                category=category,
+                store=store
+            )
+
+            return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
