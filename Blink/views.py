@@ -1,4 +1,5 @@
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
@@ -168,4 +169,21 @@ class OrderFromCartView(APIView):
         # Optionally, clear the shopping cart after creating the order
         shopping_cart.items.all().delete()
 
-        return Response({"message": "Order placed successfully"}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Order placed successfully","order_id":order.id}, status=status.HTTP_201_CREATED)
+
+
+class PaymentView(APIView):
+    def post(self, request):
+        order_id = request.data.get('order_id')
+        is_paid = request.data.get('paid')  # Assuming you receive 'paid' parameter for payment status
+        print(order_id)
+        order = Order.objects.get(id=order_id)
+
+        if is_paid.lower() == 'true':
+            order.status = Order.OrderStatus.PROCESSING
+            order.save()
+            return Response({'pay': True, 'order_id': order_id})
+        else:
+            order.status = Order.OrderStatus.FAILED
+            order.save()
+            return Response({'pay': False, 'order_id': order_id})
