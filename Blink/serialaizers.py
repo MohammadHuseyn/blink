@@ -142,3 +142,8 @@ class StoreSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     quantity = serializers.IntegerField()
+
+class LocationSerializer(serializers.Serializer):
+    class Meta:
+        model = Location
+        fields = ['name', 'latitude', 'longitude', 'address']

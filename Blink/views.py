@@ -2,7 +2,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
-    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -169,3 +169,22 @@ class OrderFromCartView(APIView):
         shopping_cart.items.all().delete()
 
         return Response({"message": "Order placed successfully"}, status=status.HTTP_201_CREATED)
+class LocationView(APIView):
+    def get(self, request):
+        user = request.data.get('user_id')
+        locations = Location.objects.get(user_id=user)
+        serializer = LocationSerializer(locations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = LocationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            Location.objects.create(
+                name=serializer.get_value('name'),
+                address=serializer.get_value('address'),
+                longitude=serializer.get_value('longitude'),
+                latitude=serializer.get_value('latitude')
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
