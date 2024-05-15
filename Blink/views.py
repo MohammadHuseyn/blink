@@ -13,6 +13,7 @@ from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, Ca
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 
 class SignupView(APIView):
     def post(self, request):
@@ -221,3 +222,25 @@ class AddProductView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CustomerProfileEdit(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        user = Customer.objects.get(id=user.id)
+        data = request.data
+
+        # Update user profile data
+        user.username = data.get('username', user.username)
+        user.email = data.get('email', user.email)
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        password = data.get('password')
+        if password:
+            user.password = make_password(password)
+        user.phone_number = data.get('phone_number', user.phone_number)
+        user.save()
+
+        return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
