@@ -3,7 +3,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
-    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -170,7 +170,6 @@ class OrderFromCartView(APIView):
 
         return Response({"message": "Order placed successfully","order_id":order.id}, status=status.HTTP_201_CREATED)
 
-
 class PaymentView(APIView):
     def post(self, request):
         order_id = request.data.get('order_id')
@@ -244,3 +243,27 @@ class CustomerProfileEdit(APIView):
         user.save()
 
         return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+class LocationView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user.id
+        locations = Location.objects.filter(customer=user)
+        serializer = LocationSerializer(locations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = LocationSerializer(data=request.data)
+        customer = Customer.objects.get(user_ptr_id=request.user.id)
+        if serializer.is_valid():
+            location = Location.objects.create(
+                name=request.data.get('name'),
+                address=request.data.get('address'),
+                longitude=request.data.get('longitude'),
+                latitude=request.data.get('latitude'),
+                customer=customer
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
