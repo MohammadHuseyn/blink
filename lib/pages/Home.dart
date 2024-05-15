@@ -4,6 +4,7 @@ import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
 import 'package:blink/pages/Payment.dart';
 import 'package:blink/pages/StorePage.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../classes/store.dart';
 import 'package:blink/pages/Address.dart';
@@ -34,7 +35,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
+    _loadAddresses();
     if (global.addressIndex != null) loadStores();
+
     super.initState();
   }
 
@@ -913,8 +916,10 @@ class _HomeState extends State<Home> {
                                                             setState(() {
                                                               if (global.card[i]
                                                                       .count >
-                                                                  1) {
-                                                                sum -= global.card[i].price;
+                                                                  0) {
+                                                                sum -= global
+                                                                    .card[i]
+                                                                    .price;
                                                                 global.card[i]
                                                                     .count -= 1;
                                                               }
@@ -1032,7 +1037,7 @@ class _HomeState extends State<Home> {
                                       Container(
                                         height: 50,
                                         child: Text(
-                                          '۰ تومان',
+                                          'رایگان',
                                           textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -1107,26 +1112,32 @@ class _HomeState extends State<Home> {
                                   width: 100,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      var req = [];
-                                      global.card.forEach((element) {
-                                        req.add({
-                                          "product_id": element.id,
-                                          "quantity": element.count
+                                      if (global.currentCardPayement) {
+                                        Navigator.push(context, MaterialPageRoute(builder: (builder)=>OrderStatus()));
+                                      } else {
+                                        var req = [];
+                                        global.card.forEach((element) {
+                                          req.add({
+                                            "product_id": element.id,
+                                            "quantity": element.count
+                                          });
                                         });
-                                      });
-                                      // req.addAll();
-                                      var res =
-                                          global.postRequest(req, "/cart/");
-                                      Map<String, dynamic> data = await res;
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => LastCheck(
-                                                  sum: data["total_price"]
-                                                      .toString())));
+                                        // req.addAll();
+                                        var res =
+                                            global.postRequest(req, "/cart/");
+                                        Map<String, dynamic> data = await res;
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => LastCheck(
+                                                    sum: data["total_price"]
+                                                        .toString())));
+                                      }
                                     },
                                     child: Text(
-                                      "تکمیل",
+                                      global.currentCardPayement
+                                          ? "پیگیری"
+                                          : "تکمیل",
                                       style: TextStyle(
                                           fontFamily: 'shabnam',
                                           fontSize: 20,
@@ -1194,6 +1205,21 @@ class _HomeState extends State<Home> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProfileEdit()));
   }
+  Future<void> _loadAddresses() async {
+    var res = global.getRequest("/locations/");
+    List<Map<String, dynamic>> data = await res;
+    data.forEach((element) {
+      setState(() {
+        global.addressIndex = global.addresses.length;
+        global.addresses.add(addres_data(
+            name: element["name"],
+            latLng: LatLng(double.parse(element["latitude"]),
+                double.parse(element["longitude"])),
+            id: element["id"],
+            desc: element["address"]));
+      });
+    });
+  }
 
   loadStores() async {
     // print("TOKEN" + global.token)
@@ -1214,7 +1240,7 @@ class _HomeState extends State<Home> {
       (storeData['products'] as Map<String, dynamic>)
           .forEach((String itemId, itemData) {
         var itemName = itemData['name'];
-        var itemPrice = itemData['price'];
+        var itemPrice = double.parse(itemData['price']);
         var item = Item(
             id: itemId, name: itemName, price: itemPrice, sotreid: storeId);
         items.add(item);

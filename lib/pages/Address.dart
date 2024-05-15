@@ -6,8 +6,14 @@ import '../global.dart' as gloabl;
 import 'Home.dart';
 
 class addres_data {
-  addres_data({required this.name, required this.latLng});
+  addres_data(
+      {required this.name,
+      required this.latLng,
+      required this.id,
+      required this.desc});
 
+  late int id;
+  late String desc;
   late String name;
   late LatLng latLng;
 }
@@ -27,6 +33,13 @@ class _AddressState extends State<Address> {
   List<Marker> markers = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    _loadAddresses();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -41,14 +54,17 @@ class _AddressState extends State<Address> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        leading:
-            IconButton(onPressed: () {
+        leading: IconButton(
+            onPressed: () {
               if (gloabl.addressIndex != null) {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-              } else Navigator.pop(context);
-            }, icon: Icon(Icons.arrow_back_outlined)),
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+              } else
+                Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_outlined)),
         title: Text(
           "انتخاب آدرس",
           style: TextStyle(fontFamily: 'shabnam', fontSize: 25),
@@ -252,14 +268,56 @@ class _AddressState extends State<Address> {
     return Container();
   }
 
-  void addAddress(String name, LatLng latLng) {
-    setState(() {
-      gloabl.addressIndex = gloabl.addresses.length;
-      gloabl.addresses.add(addres_data(name: name, latLng: latLng));
+  Future<void> addAddress(String name, LatLng latLng) async {
+    print("Here" + latLng.longitude.toString());
+    print(latLng.latitude);
+    gloabl.postRequest({
+      "name": name,
+      "latitude" : latLng.latitude,
+      "longitude" : latLng.longitude,
+      "id":-1,
+      "address"  : "this is a desc"
+    }, "/locations/");
+
+
+
+    gloabl.addresses.clear();
+    var res = gloabl.getRequest("/locations/");
+    List<Map<String, dynamic>> data = await res;
+    data.forEach((element) {
+      setState(() {
+        gloabl.addressIndex = gloabl.addresses.length;
+        gloabl.addresses.add(addres_data(
+            name: element["name"],
+            latLng: LatLng(double.parse(element["latitude"]),
+                double.parse(element["longitude"])),
+            id: element["id"],
+            desc: element["address"]));
+      });
     });
-    // Navigator.pop(context);
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => Address()));
+
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Address()));
   }
+
+  Future<void> _loadAddresses() async {
+    gloabl.addresses.clear();
+    var res = gloabl.getRequest("/locations/");
+    List<Map<String, dynamic>> data = await res;
+    data.forEach((element) {
+      setState(() {
+        gloabl.addressIndex = gloabl.addresses.length;
+        gloabl.addresses.add(addres_data(
+            name: element["name"],
+            latLng: LatLng(double.parse(element["latitude"]),
+                double.parse(element["longitude"])),
+            id: element["id"],
+            desc: element["address"]));
+      });
+    });
+  }
+
+
 }
 
 TileLayer get tilelayer => TileLayer(
