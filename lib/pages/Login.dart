@@ -36,6 +36,9 @@ class _LoginState extends State<Login> {
                 Map<String, dynamic> data = await res;
                 global.token = data["token"];
                 global.tokenbool = true;
+                global.username = data["user"]["username"];
+                global.first_name = data["user"]["first_name"];
+                global.last_name = data["user"]["last_name"];
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
               } catch (e) {

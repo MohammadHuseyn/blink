@@ -39,6 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    return PaymentPage(sum: "120000",);
+    return Login();
   }
 }

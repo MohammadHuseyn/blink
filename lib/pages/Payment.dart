@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../global.dart' as global;
+import 'Home.dart';
 
 class PaymentPage extends StatefulWidget {
   PaymentPage({super.key, required this.sum});
@@ -21,7 +23,9 @@ class _PaymentPageState extends State<PaymentPage> {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
                   child:Text("   انصراف   ",
                     style: TextStyle(
                       fontSize: 25,
@@ -42,7 +46,14 @@ class _PaymentPageState extends State<PaymentPage> {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    setState(() {
+                      global.currentCardPayement = true;
+                    });
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  },
                   child:Text("   پرداخت   ",
                     style: TextStyle(
                       fontSize: 25,

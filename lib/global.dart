@@ -2,17 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:blink/classes/store.dart';
 import 'package:http/http.dart' as http;
-
+// import 'classes/store.dart';
 
 // var url ='http://10.0.2.2:8000';
 var url ='http://192.168.1.3:8000';
+var s = null;
 var token = "";
+var currentCardPayement = false;
 var tokenbool = false;
+var username;
+var first_name;
+var last_name;
+var address_name = "آدرس ۱";
 List<Item> card = [];
-Future<Map<String, dynamic>> postRequest(Map<String, dynamic> data, String endpoint) async {
+Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
   var body = json.encode(data);
-
   var headerA = {"Content-Type": "application/json", "Authorization": 'Token $token'};
   var header = {"Content-Type": "application/json"};
   var response = await http.post(Uri.parse(url + endpoint),
