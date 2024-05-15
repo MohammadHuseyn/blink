@@ -23,7 +23,15 @@ class _StorePageState extends State<StorePage> {
         return ListTile(
           title: Text(store.items[i].name),
           onTap: () {
-            global.card.add(store.items[i]);
+            if (!global.currentCardPayement) {
+              if (global.s == null)
+                global.s = store;
+              else if (global.s!.id != store.id) {
+                global.card.removeRange(0, global.card.length - 1);
+                global.s = store;
+              }
+              global.card.add(store.items[i]);
+            }
           },
         );
       }),
