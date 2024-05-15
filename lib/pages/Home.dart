@@ -1,5 +1,8 @@
 import 'package:blink/pages/Chat.dart';
+import 'package:blink/pages/LastCheck.dart';
+import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
+import 'package:blink/pages/Payment.dart';
 import 'package:blink/pages/StorePage.dart';
 
 import '../classes/store.dart';
@@ -20,10 +23,10 @@ class Home extends StatefulWidget {
 var _currentIndex = 1;
 List<Store> stores = [
   Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
 ];
 
 class _HomeState extends State<Home> {
@@ -172,7 +175,7 @@ class _HomeState extends State<Home> {
         ),
         body: _currentIndex == 0
             ? SingleChildScrollView(
-              child: Container(
+                child: Container(
                   child: Column(
                     children: [
                       // Expanded(child: Container()),
@@ -218,7 +221,8 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 17),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 17),
                               child: ImageIcon(
                                 AssetImage('images/account.png'),
                                 color: Color(0xFF618771),
@@ -238,17 +242,16 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.symmetric(vertical: 40),
 
                           decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(color: Colors.grey),
-                            )
-                          ),
+                              border: Border(
+                            top: BorderSide(color: Colors.grey),
+                          )),
                           width: MediaQuery.of(context).size.width,
                           // height: MediaQuery.of(context).size.height * 0.03,
                           child: Center(
                             child: Text(
                               "تخفیف‌ها",
-                              style:
-                                  TextStyle(fontFamily: 'shabnam', fontSize: 20),
+                              style: TextStyle(
+                                  fontFamily: 'shabnam', fontSize: 20),
                             ),
                           ),
                         ),
@@ -257,6 +260,10 @@ class _HomeState extends State<Home> {
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           print("tapped");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrderHistory()));
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 20, left: 20),
@@ -264,16 +271,15 @@ class _HomeState extends State<Home> {
 
                           decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )
-                          ),
+                            top: BorderSide(color: Colors.grey),
+                          )),
                           width: MediaQuery.of(context).size.width,
                           // height: MediaQuery.of(context).size.height * 0.03,
                           child: Center(
                             child: Text(
                               "تاریخچه سفارش‌ها",
-                              style:
-                                  TextStyle(fontFamily: 'shabnam', fontSize: 20),
+                              style: TextStyle(
+                                  fontFamily: 'shabnam', fontSize: 20),
                             ),
                           ),
                         ),
@@ -282,23 +288,25 @@ class _HomeState extends State<Home> {
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           // print("tapped");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatPage()));
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 20, left: 20),
                           padding: EdgeInsets.symmetric(vertical: 40),
                           decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )
-                          ),
+                            top: BorderSide(color: Colors.grey),
+                          )),
                           width: MediaQuery.of(context).size.width,
                           // height: MediaQuery.of(context).size.height * 0.03,
                           child: Center(
                             child: Text(
                               "ارتباط با پشتیبانی",
-                              style:
-                                  TextStyle(fontFamily: 'shabnam', fontSize: 20),
+                              style: TextStyle(
+                                  fontFamily: 'shabnam', fontSize: 20),
                             ),
                           ),
                         ),
@@ -313,21 +321,21 @@ class _HomeState extends State<Home> {
                               MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Container(
-                          margin: EdgeInsets.only(right: 20, left: 20, bottom: 40),
+                          margin:
+                              EdgeInsets.only(right: 20, left: 20, bottom: 40),
                           padding: EdgeInsets.symmetric(vertical: 40),
                           decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.grey),
-                                bottom: BorderSide(color: Colors.grey),
-                              )
-                          ),
+                            top: BorderSide(color: Colors.grey),
+                            bottom: BorderSide(color: Colors.grey),
+                          )),
                           width: MediaQuery.of(context).size.width,
                           // height: MediaQuery.of(context).size.height * 0.03,
                           child: Center(
                             child: Text(
                               "خروج",
-                              style:
-                                  TextStyle(fontFamily: 'shabnam', fontSize: 20),
+                              style: TextStyle(
+                                  fontFamily: 'shabnam', fontSize: 20),
                             ),
                           ),
                         ),
@@ -353,7 +361,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-            )
+              )
             : _currentIndex == 1
                 ? SingleChildScrollView(
                     child: Container(
@@ -667,8 +675,8 @@ class _HomeState extends State<Home> {
                                   decoration: BoxDecoration(
                                       color: Color(0xFFEAF3EE),
                                       // color: Colors.red,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(40))),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40))),
                                   child: Row(
                                     children: [
                                       prodcut(),
@@ -717,10 +725,10 @@ class _HomeState extends State<Home> {
                                       textDirection: TextDirection.rtl,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(color: Color(0xFF256f46), width: 1.5)
-                                          )
-                                        ),
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: Color(0xFF256f46),
+                                                    width: 1.5))),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 15),
@@ -739,21 +747,27 @@ class _HomeState extends State<Home> {
                                                     ),
                                                   ],
                                                   // color: Colors.red,
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(15))),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(15))),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(5),
+                                                padding:
+                                                    const EdgeInsets.all(5),
                                                 child: ImageIcon(
                                                   AssetImage("images/shop.png"),
                                                   size: 65,
                                                 ),
                                               ),
                                             ),
-                                            title: Text(stores[i].name, style: TextStyle(fontSize: 20),),
+                                            title: Text(
+                                              stores[i].name,
+                                              style: TextStyle(fontSize: 20),
+                                            ),
                                             subtitle: Row(
                                               children: [
                                                 ImageIcon(
-                                                    AssetImage("images/location.png"),
+                                                  AssetImage(
+                                                      "images/location.png"),
                                                   color: Color(0xFF97b9a7),
                                                   size: 30,
                                                 ),
@@ -762,8 +776,16 @@ class _HomeState extends State<Home> {
                                             ),
                                             trailing: Column(
                                               children: [
-                                                Icon(Icons.star_rate_rounded, size: 32,color: Color(0xFF256f46),),
-                                                Text("4.1/5", style: TextStyle(fontSize: 17),)
+                                                Icon(
+                                                  Icons.star_rate_rounded,
+                                                  size: 32,
+                                                  color: Color(0xFF256f46),
+                                                ),
+                                                Text(
+                                                  "4.1/5",
+                                                  style:
+                                                      TextStyle(fontSize: 17),
+                                                )
                                               ],
                                             ),
                                             onTap: () {
@@ -772,7 +794,8 @@ class _HomeState extends State<Home> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           StorePage(
-                                                              store: stores[i])));
+                                                              store:
+                                                                  stores[i])));
                                             },
                                           ),
                                         ),
@@ -781,7 +804,9 @@ class _HomeState extends State<Home> {
                                   }),
                             ),
                           ),
-                          SizedBox(height: 5,)
+                          SizedBox(
+                            height: 5,
+                          )
                           // Expanded(child: Container())
                         ],
                       ),
@@ -800,81 +825,107 @@ class _HomeState extends State<Home> {
                               height: MediaQuery.of(context).size.height * 0.3,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: global.card.length == 0?
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                    child: Center(child: Text("سبد خرید خالی است", style: TextStyle(fontSize: 25),))) :
-                                ListView.builder(
-                                  itemCount: global.card.length,
-                                  itemBuilder: (context, i) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
-                                      child: Row(children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                if (global.card[i].count > 1)
-                                                  global.card[i].count -= 1;
-                                              });
-                                            },
-                                            icon: ImageIcon(
-                                              AssetImage('images/remove.png'),
-                                              color: Color(0xFF1C5334),
-                                              size: 25,
-                                            )),
-                                        Text(
-                                          global.card[i].count.toString(),
-                                          style: TextStyle(
-                                              fontFamily: 'shabnam',
-                                              color: Color(0xFF1C5334),
-                                              fontSize: 20),
-                                        ),
-                                        IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                global.card[i].count += 1;
-                                              });
-                                            },
-                                            icon: ImageIcon(
-                                              AssetImage('images/plus.png'),
-                                              color: Color(0xFF1C5334),
-                                              size: 25,
-                                            )),
-                                        Expanded(child: Container()),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              global.card[i].name,
-                                              style: TextStyle(
-                                                fontFamily: 'shabnam',
-                                                color: Color(0xFF1C5334),
-                                                fontSize: 23,
+                                child: global.card.length == 0
+                                    ? Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Center(
+                                            child: Text(
+                                          "سبد خرید خالی است",
+                                          style: TextStyle(fontSize: 25),
+                                        )))
+                                    : ListView.builder(
+                                        itemCount: global.card.length,
+                                        itemBuilder: (context, i) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 10),
+                                            child: Row(children: [
+                                              !global.currentCardPayement
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          if (global.card[i]
+                                                                  .count >
+                                                              1)
+                                                            global.card[i]
+                                                                .count -= 1;
+                                                        });
+                                                      },
+                                                      icon: ImageIcon(
+                                                        AssetImage(
+                                                            'images/remove.png'),
+                                                        color:
+                                                            Color(0xFF1C5334),
+                                                        size: 25,
+                                                      ))
+                                                  : Expanded(
+                                                      child: Container()),
+                                              Text(
+                                                global.card[i].count.toString(),
+                                                style: TextStyle(
+                                                    fontFamily: 'shabnam',
+                                                    color: Color(0xFF1C5334),
+                                                    fontSize: 20),
+                                                // textAlign: TextAlign.center,
                                               ),
-                                            ),
-                                            Text(
-                                              global.card[i].price.toString(),
-                                              style: TextStyle(
-                                                  fontFamily: 'shabnam',
-                                                  color: Color(0xFF1C5334),
-                                                  fontSize: 19),
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(child: Container()),
-                                        Image(
-                                            image: AssetImage('images/img.png'),
-                                            width: 75),
-                                        Expanded(child: Container())
-                                      ]),
-                                    );
-                                  },
-                                ),
+                                              !global.currentCardPayement
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          global.card[i]
+                                                              .count += 1;
+                                                        });
+                                                      },
+                                                      icon: ImageIcon(
+                                                        AssetImage(
+                                                            'images/plus.png'),
+                                                        color:
+                                                            Color(0xFF1C5334),
+                                                        size: 25,
+                                                      ))
+                                                  : Expanded(
+                                                      child: Container()),
+                                              Expanded(child: Container()),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    global.card[i].name,
+                                                    style: TextStyle(
+                                                      fontFamily: 'shabnam',
+                                                      color: Color(0xFF1C5334),
+                                                      fontSize: 23,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    global.card[i].price
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontFamily: 'shabnam',
+                                                        color:
+                                                            Color(0xFF1C5334),
+                                                        fontSize: 19),
+                                                  ),
+                                                ],
+                                              ),
+                                              Expanded(child: Container()),
+                                              Image(
+                                                  image: AssetImage(
+                                                      'images/img.png'),
+                                                  width: 75),
+                                              Expanded(child: Container())
+                                            ]),
+                                          );
+                                        },
+                                      ),
                               )),
                         ),
                         Expanded(child: Container()),
                         Text(
-                          "سفارش از [نام فروشگاه]",
+                          global.s == null
+                              ? "سفارشی ندارید"
+                              : "سفارش از " + global.s!.name,
+                          textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'shabnam',
@@ -889,30 +940,6 @@ class _HomeState extends State<Home> {
                             border: TableBorder.all(color: Colors.transparent),
                             textDirection: TextDirection.rtl,
                             children: [
-                              TableRow(children: [
-                                Container(
-                                  child: Text(
-                                    'نام محصول',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'shabnam',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  height: 50,
-                                ),
-                                Container(
-                                  height: 50,
-                                  child: Text(
-                                    'قیمت',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'shabnam',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ]),
                               TableRow(
                                 children: [
                                   Container(
@@ -929,33 +956,8 @@ class _HomeState extends State<Home> {
                                   Container(
                                     height: 50,
                                     child: Text(
-                                      'قیمت',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'shabnam',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    child: Text(
-                                      'بسته‌بندی',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'shabnam',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    child: Text(
-                                      'قیمت',
+                                      '۰ تومان',
+                                      textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'shabnam',
@@ -981,7 +983,8 @@ class _HomeState extends State<Home> {
                                   Container(
                                     height: 50,
                                     child: Text(
-                                      'قیمت',
+                                      '۵۰ هزار تومان',
+                                      textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'shabnam',
@@ -1027,9 +1030,21 @@ class _HomeState extends State<Home> {
                             Container(
                               width: 100,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  // global.postRequest({}, "/sendcart/");
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrderStatus()));
+                                onPressed: () async {
+                                  var req = [];
+                                  global.card.forEach((element) {
+                                    req.add({
+                                      "product_id": element.id,
+                                      "quantity" : element.count
+                                    });
+                                  });
+                                  // req.addAll();
+                                  var res = global.postRequest(req, "/cart/");
+                                  Map<String, dynamic> data = await res;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LastCheck(sum: data["total_price"].toString())));
                                 },
                                 child: Text(
                                   "تکمیل",
@@ -1054,6 +1069,9 @@ class _HomeState extends State<Home> {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () {
+                                  setState(() {
+                                    _currentIndex = 1;
+                                  });
                                   // Navigator.pop(context);
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
                                 },
@@ -1133,6 +1151,12 @@ class _HomeState extends State<Home> {
         stores.add(store);
       });
     });
+  }
+
+  sendcart() async {
+    // print("TOKEN" + global.token)
+    var res = global.postRequest({}, "/sendcart/");
+    Map<String, dynamic> data = await res;
   }
 
   prodcut() {

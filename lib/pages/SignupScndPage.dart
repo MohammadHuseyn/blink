@@ -1,11 +1,24 @@
+import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
+import '../global.dart' as global;
+import 'Home.dart';
 class SignupScndPage extends StatelessWidget {
-  SignupScndPage({required this.userkind});
+  SignupScndPage({required this.userkind, required this.username, required this.password});
   String userkind;
+
+  var first_name = TextEditingController();
+  var username = TextEditingController();
+  var password = TextEditingController();
+  var last_name = TextEditingController();
+  var email = TextEditingController();
+  var phone = TextEditingController();
+  var shopname = TextEditingController();
+  var shopaddress = TextEditingController();
+  var pelak = TextEditingController();
+  var license = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,25 +27,56 @@ class SignupScndPage extends StatelessWidget {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              var deli = {
+                "username" : username.text,
+                "password" : password.text,
+                "email" : email.text,
+                "first_name" : first_name.text,
+                "last_name" : last_name.text,
+                "phone_number" : phone.text,
+                "user_type" : "delivery",
+                // "longitude" : "35.715298",
+                // "latitude" : "51.404343",
+                // "location_name" : shopname.text,
+                // "store_name" : shopname.text,
+                "plate" : pelak.text,
+                "license" : license.text
+              };
+              var foro = {
+                "username" : username.text,
+                "password" : password.text,
+                "email" : email.text,
+                "first_name" : first_name.text,
+                "last_name" : last_name.text,
+                "phone_number" : phone.text,
+                "user_type" : "seller",
+                "longitude" : "35.715298",
+                "latitude" : "51.404343",
+                "location_name" : shopname.text,
+                "store_name" : shopname.text,
+              };
+              var cust = {
+                "username" : username.text,
+                "password" : password.text,
+                "email" : email.text,
+                "first_name" : first_name.text,
+                "last_name" : last_name.text,
+                "phone_number" : phone.text,
+                // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
+                "user_type" : "customer",
+                "longitude" : "35.715298",
+                "latitude" : "51.404343",
+                "location_name" : "usertemplocation",
+              };
 
-
-              // var res = global.postRequest({
-              //   "username": username.text,
-              //   "password": password.text,
-              //   "first_name": "first_name",
-              //   "last_name": "last_name",
-              //   "email": "email@gmail.com",
-              //   "phone_number": "09123456789",
-              //   "user_type": "customer",
-              // }, "/signup/");
-              // Map<String, dynamic> data = await res;
-              // global.token = data["token"];
-              // global.tokenbool = true;
-              // Navigator.pop(context);
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => Home()));
-
+              var res = global.postRequest(userkind == "f"? foro : userkind == "m"? cust : deli, "/signup/");
+              Map<String, dynamic> data = await res;
+              global.token = data["token"];
+              global.tokenbool = true;
+              Navigator.pop(context);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Home()));
             },
             child:Text("   تکمیل ثبت نام   ",
               style: TextStyle(
@@ -67,7 +111,8 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: username,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
@@ -91,13 +136,38 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: first_name,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
                             BorderRadius.all(Radius.circular(15))),
-                        labelText: '  نام و نام خانوادگی  ',
+                        labelText: '  نام  ',
+                        floatingLabelStyle: TextStyle(fontSize: 25),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                      ),
+                    ),
+                  )),
+            ),Padding(
+              padding: const EdgeInsets.only(
+                  top: 20, right: 20, left: 20, bottom: 20),
+              child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
+                      primaryColorDark: Colors.red,
+                    ),
+                    child: TextField(
+                      controller: last_name,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.teal),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(15))),
+                        labelText: '  نام خانوادگی  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
@@ -115,7 +185,8 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: email,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
@@ -139,7 +210,8 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: phone,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
@@ -164,7 +236,8 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: pelak,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
@@ -178,6 +251,32 @@ class SignupScndPage extends StatelessWidget {
                     ),
                   )),
             ) : Container(),
+            userkind == 'p'? Padding(
+              padding: const EdgeInsets.only(
+                  top: 20, right: 20, left: 20, bottom: 20),
+              child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
+                      primaryColorDark: Colors.red,
+                    ),
+                    child: TextField(
+                      controller: license,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.teal),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(15))),
+                        labelText: '  کد گواهینامه  ',
+                        floatingLabelStyle: TextStyle(fontSize: 25),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                      ),
+                    ),
+                  )),
+            ) : Container(),
+
             userkind == "f"?
             Padding(
               padding: const EdgeInsets.only(
@@ -189,7 +288,8 @@ class SignupScndPage extends StatelessWidget {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: shopname,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
@@ -203,31 +303,6 @@ class SignupScndPage extends StatelessWidget {
                     ),
                   )),
             ): Container(),
-            userkind == "f"?
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, right: 20, left: 20, bottom: 20),
-              child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.redAccent,
-                      primaryColorDark: Colors.red,
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
-                        labelText: '  آدرس فروشگاه  ',
-                        floatingLabelStyle: TextStyle(fontSize: 25),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
-                      ),
-                    ),
-                  )),
-            ) : Container(),
             userkind == "f"?
             Padding(
               padding: const EdgeInsets.only(bottom: 20, top: 10),
