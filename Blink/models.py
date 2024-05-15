@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, User
 
 class Customer(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
@@ -12,8 +12,8 @@ class Customer(User):
 
 class Delivery(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    driving_license_number = models.CharField(max_length=20, unique=True, help_text="Unique driving license number")
-    vehicle_license_plate = models.CharField(max_length=15, unique=True, help_text="Vehicle license plate number")
+    driving_license_number = models.CharField(max_length=20, unique=False, help_text="Unique driving license number")
+    vehicle_license_plate = models.CharField(max_length=15, unique=False, help_text="Vehicle license plate number")
 
     def __str__(self):
         return f"{self.username} (Driving License: {self.driving_license_number})"

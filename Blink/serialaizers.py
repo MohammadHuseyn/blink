@@ -81,11 +81,13 @@ class UserSignupSerializer(serializers.Serializer):
 
         return user
 
+
 class GeneralUserDetailSerializer(serializers.ModelSerializer):
     # Extend this serializer to capture common fields across all user types
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']  # Basic user fields
+
 
 # If you have specific user types with additional fields, you can create specialized serializers
 class CustomerDetailSerializer(GeneralUserDetailSerializer):
@@ -93,10 +95,12 @@ class CustomerDetailSerializer(GeneralUserDetailSerializer):
         model = Customer
         fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'location']
 
+
 class SellerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Seller
         fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', '', 'store']
+
 
 class DeliveryDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
@@ -105,13 +109,15 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
                                                             'driving_license_number']
 
 class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'name', 'price', 'quantity']
+     class Meta:
+         model = Product
+         fields = ['id', 'name', 'price', 'quantity']
+
 
 class StoreSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
+
     class Meta:
         model = Store
         fields = ['id', 'name', 'location', 'products']  # Include necessary fields
@@ -123,6 +129,7 @@ class StoreSerializer(serializers.ModelSerializer):
                 'longitude': obj.location.longitude,
                 'name': obj.location.name,
             }
+
     def get_products(self, obj):
         # Retrieve products related to this store and format as required
         product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
@@ -130,19 +137,8 @@ class StoreSerializer(serializers.ModelSerializer):
         # Create a dictionary with product_id as keys
         product_dict = {str(p['id']): p for p in product_data}
 
-
         return product_dict
 
-class CartItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()  # Nested serialization for the product
-
-    class Meta:
-        model = CartItem
-        fields = ['id', 'product', 'quantity']
-
-class ShoppingCartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True)  # Nested serialization for CartItem
-
-    class Meta:
-        model = ShoppingCart
-        fields = ['id', 'user', 'created_at', 'items']
+class CartItemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField()
+    quantity = serializers.IntegerField()
