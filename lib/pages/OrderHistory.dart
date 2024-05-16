@@ -90,10 +90,7 @@ card(context) {
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
                 onPressed: () async {
-
-
-
-
+                  bottomsheed(context);
                 },
                 child: Text(
                   "مشاهده فاکتور",
@@ -115,3 +112,216 @@ card(context) {
     ),
   );
 }
+void bottomsheed(context) {
+  showModalBottomSheet(context: context,
+      backgroundColor: Colors.transparent,
+      // isScrollControlled: true,
+      builder: (builder){
+    return Container(
+      // height: MediaQuery.of(context).size.height * 0.8,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25),
+          topLeft: Radius.circular(25)
+        )
+      ),
+      child: StatefulBuilder(builder: (BuildContext context,
+          StateSetter setState /*You can rename this!*/) {
+        return SingleChildScrollView(
+          child: Column(children: [
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 7.5),
+            //   child: Container(
+            //     height: 7,
+            //     width: 150,
+            //     decoration: BoxDecoration(
+            //         color: Colors.grey,
+            //         borderRadius: BorderRadius.circular(25)
+            //     ),
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+              child: Container(
+                // width: MediaQuery.of(context).size.width * 0.8,
+                // height: 250,
+                // color: Color(0xFFEAF3EE),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 1,
+                      blurRadius: 15,
+                      offset: Offset(0,10)
+                    )
+                  ],
+                  color: Color(0xFFdee8e2),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  )
+                ),
+                // color: Colors.red,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                            fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("نام محصول", style: TextStyle(
+                            fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("نام محصول", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Container(
+                // width: MediaQuery.of(context).size.width * 0.8,
+                // height: 250,
+                // color: Color(0xFFEAF3EE),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 1,
+                          blurRadius: 15,
+                          offset: Offset(0,10)
+                      )
+                    ],
+                    color: Color(0xFFdee8e2),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
+                    )
+                ),
+                // color: Colors.red,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("مالیات", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("بسته‌بندی", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("ارسال", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("تحویل سریع", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("تخفیف", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                      child: Row(
+                        children: [
+                          Text("قیمت", style: TextStyle(
+                              fontSize: 18
+                          ),),
+                          Expanded(child: Container()),
+                          Text("مبلغ نهایی", style: TextStyle(
+                              fontSize: 20
+                          ),)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            )
+          ],),
+        );
+      }),
+    );
+    });
+}
+
