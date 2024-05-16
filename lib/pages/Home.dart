@@ -45,10 +45,12 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     stores[0].items.add(
         Item(sotreid: stores[0].id, id: "11", name: "golabi", price: 10000));
-    stores[0].items.add(
-        Item(sotreid: stores[0].id, id: "22", name: "moz", price: 10000));
-    stores[0].items.add(
-        Item(sotreid: stores[0].id, id: "33", name: "sib", price: 10000));
+    stores[0]
+        .items
+        .add(Item(sotreid: stores[0].id, id: "22", name: "moz", price: 10000));
+    stores[0]
+        .items
+        .add(Item(sotreid: stores[0].id, id: "33", name: "sib", price: 10000));
 
     return global.addressIndex == null
         ? Scaffold(
@@ -227,193 +229,191 @@ class _HomeState extends State<Home> {
             ),
             body: _currentIndex == 0
                 ? SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          // Expanded(child: Container()),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 25),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () => profileChange(),
-                                    icon: Icon(
-                                      Icons.arrow_back_ios_rounded,
+                    child: Column(
+                      children: [
+                        // Expanded(child: Container()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () => profileChange(),
+                                  icon: Icon(
+                                    Icons.arrow_back_ios_rounded,
+                                    color: Color(0xFF1C5334),
+                                    size: 35,
+                                  )),
+                              GestureDetector(
+                                onTap: () => profileChange(),
+                                child: Text(
+                                  "تغییرات",
+                                  style: TextStyle(
+                                      fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
-                                      size: 35,
-                                    )),
-                                GestureDetector(
-                                  onTap: () => profileChange(),
-                                  child: Text(
-                                    "تغییرات",
+                                      fontSize: 20),
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Column(
+                                children: [
+                                  Text(
+                                    "نام کاربر",
+                                    style: TextStyle(
+                                      fontFamily: 'shabnam',
+                                      color: Color(0xFF1C5334),
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                  Text(
+                                    "نقش",
                                     style: TextStyle(
                                         fontFamily: 'shabnam',
-                                        color: Color(0xFF1C5334),
-                                        fontSize: 20),
+                                        color: Colors.grey,
+                                        fontSize: 19),
                                   ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 17),
+                                child: ImageIcon(
+                                  AssetImage('images/account.png'),
+                                  color: Color(0xFF618771),
+                                  size: 80,
                                 ),
-                                Expanded(child: Container()),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "نام کاربر",
-                                      style: TextStyle(
-                                        fontFamily: 'shabnam',
-                                        color: Color(0xFF1C5334),
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Text(
-                                      "نقش",
-                                      style: TextStyle(
-                                          fontFamily: 'shabnam',
-                                          color: Colors.grey,
-                                          fontSize: 19),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17),
-                                  child: ImageIcon(
-                                    AssetImage('images/account.png'),
-                                    color: Color(0xFF618771),
-                                    size: 80,
-                                  ),
-                                ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            bottomsheed_takhfif(context);
+                            print("tapped");
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20, left: 20),
+                            padding: EdgeInsets.symmetric(vertical: 40),
+                            decoration: BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey),
+                            )),
+                            width: MediaQuery.of(context).size.width,
+                            // height: MediaQuery.of(context).size.height * 0.03,
+                            child: Center(
+                              child: Text(
+                                "تخفیف‌ها",
+                                style: TextStyle(
+                                    fontFamily: 'shabnam', fontSize: 20),
+                              ),
                             ),
                           ),
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              print("tapped");
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 20, left: 20),
-                              padding: EdgeInsets.symmetric(vertical: 40),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            print("tapped");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderHistory()));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20, left: 20),
+                            padding: EdgeInsets.symmetric(vertical: 40),
 
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )),
-                              width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height * 0.03,
-                              child: Center(
-                                child: Text(
-                                  "تخفیف‌ها",
-                                  style: TextStyle(
-                                      fontFamily: 'shabnam', fontSize: 20),
-                                ),
+                            decoration: BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey),
+                            )),
+                            width: MediaQuery.of(context).size.width,
+                            // height: MediaQuery.of(context).size.height * 0.03,
+                            child: Center(
+                              child: Text(
+                                "تاریخچه سفارش‌ها",
+                                style: TextStyle(
+                                    fontFamily: 'shabnam', fontSize: 20),
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              print("tapped");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => OrderHistory()));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 20, left: 20),
-                              padding: EdgeInsets.symmetric(vertical: 40),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            // print("tapped");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatPage()));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20, left: 20),
+                            padding: EdgeInsets.symmetric(vertical: 40),
+                            decoration: BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey),
+                            )),
+                            width: MediaQuery.of(context).size.width,
+                            // height: MediaQuery.of(context).size.height * 0.03,
+                            child: Center(
+                              child: Text(
+                                "ارتباط با پشتیبانی",
+                                style: TextStyle(
+                                    fontFamily: 'shabnam', fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ),
 
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )),
-                              width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height * 0.03,
-                              child: Center(
-                                child: Text(
-                                  "تاریخچه سفارش‌ها",
-                                  style: TextStyle(
-                                      fontFamily: 'shabnam', fontSize: 20),
-                                ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            print("logged out");
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                right: 20, left: 20, bottom: 40),
+                            padding: EdgeInsets.symmetric(vertical: 40),
+                            decoration: BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey),
+                              bottom: BorderSide(color: Colors.grey),
+                            )),
+                            width: MediaQuery.of(context).size.width,
+                            // height: MediaQuery.of(context).size.height * 0.03,
+                            child: Center(
+                              child: Text(
+                                "خروج",
+                                style: TextStyle(
+                                    fontFamily: 'shabnam', fontSize: 20),
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              // print("tapped");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatPage()));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 20, left: 20),
-                              padding: EdgeInsets.symmetric(vertical: 40),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )),
-                              width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height * 0.03,
-                              child: Center(
-                                child: Text(
-                                  "ارتباط با پشتیبانی",
-                                  style: TextStyle(
-                                      fontFamily: 'shabnam', fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              print("logged out");
-                              Navigator.pop(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: 20, left: 20, bottom: 40),
-                              padding: EdgeInsets.symmetric(vertical: 40),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                top: BorderSide(color: Colors.grey),
-                                bottom: BorderSide(color: Colors.grey),
-                              )),
-                              width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height * 0.03,
-                              child: Center(
-                                child: Text(
-                                  "خروج",
-                                  style: TextStyle(
-                                      fontFamily: 'shabnam', fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // Expanded(child: Container())
-                          ImageIcon(
-                            AssetImage('images/logo.png'),
-                            size: 80,
-                            color: Color(0xFF399160),
-                          ),
-                          Text("with blink",
-                              style: TextStyle(
-                                  fontFamily: 'shabnam',
-                                  fontSize: 20,
-                                  color: Color(0xFF1C5334))),
-                          Text(
-                            "v 1.0.0",
+                        ),
+                        // Expanded(child: Container())
+                        ImageIcon(
+                          AssetImage('images/logo.png'),
+                          size: 80,
+                          color: Color(0xFF399160),
+                        ),
+                        Text("with blink",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
                                 fontSize: 20,
-                                color: Color(0xFF1C5334)),
-                          )
-                        ],
-                      ),
+                                color: Color(0xFF1C5334))),
+                        Text(
+                          "v 1.0.0",
+                          style: TextStyle(
+                              fontFamily: 'shabnam',
+                              fontSize: 20,
+                              color: Color(0xFF1C5334)),
+                        )
+                      ],
                     ),
                   )
                 : _currentIndex == 1
@@ -1118,7 +1118,11 @@ class _HomeState extends State<Home> {
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       if (global.currentCardPayement) {
-                                        Navigator.push(context, MaterialPageRoute(builder: (builder)=>OrderStatus()));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    OrderStatus()));
                                       } else {
                                         var req = [];
                                         global.card.forEach((element) {
@@ -1210,6 +1214,7 @@ class _HomeState extends State<Home> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProfileEdit()));
   }
+
   Future<void> _loadAddresses() async {
     var res = global.getRequest("/locations/");
     List<Map<String, dynamic>> data = await res;
@@ -1331,6 +1336,230 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+    );
+  }
+
+  void bottomsheed_takhfif(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (BuildContext context,
+            StateSetter setState /*You can rename this!*/) {
+          return SingleChildScrollView(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25))),
+              child: Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        Text(
+                          "کدهای تخفیف",
+                          style: TextStyle(fontSize: 25),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Color(0xFFEAF3EE),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0,12),
+                            blurRadius: 10,
+                            spreadRadius: -5
+                          )
+                        ]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text("تخفیف دسته ۱",
+                                  style: TextStyle(
+                                    fontSize: 20
+                                  ),),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+
+                                      },
+                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
+                                  Expanded(child: Container()),
+                                  Text("مقدار تخفیف",
+                                  style: TextStyle(
+                                    fontSize: 18
+                                  ),)
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text("انقضاء تا n روز دیگر",
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.red
+                              ),),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Color(0xFFEAF3EE),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0,12),
+                                blurRadius: 10,
+                                spreadRadius: -5
+                            )
+                          ]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text("تخفیف دسته ۱",
+                                    style: TextStyle(
+                                        fontSize: 20
+                                    ),),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+
+                                      },
+                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
+                                  Expanded(child: Container()),
+                                  Text("مقدار تخفیف",
+                                    style: TextStyle(
+                                        fontSize: 18
+                                    ),)
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text("انقضاء تا n روز دیگر",
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.red
+                                ),),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Color(0xFFEAF3EE),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0,12),
+                                blurRadius: 10,
+                                spreadRadius: -5
+                            )
+                          ]
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text("تخفیف دسته ۱",
+                                    style: TextStyle(
+                                        fontSize: 20
+                                    ),),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+
+                                      },
+                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
+                                  Expanded(child: Container()),
+                                  Text("مقدار تخفیف",
+                                    style: TextStyle(
+                                        fontSize: 18
+                                    ),)
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text("انقضاء تا n روز دیگر",
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.red
+                                ),),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+      },
     );
   }
 }
