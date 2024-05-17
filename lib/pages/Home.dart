@@ -848,10 +848,12 @@ class _HomeState extends State<Home> {
                                                 ),
                                                 trailing: Column(
                                                   children: [
-                                                    Icon(
-                                                      Icons.star_rate_rounded,
-                                                      size: 32,
-                                                      color: Color(0xFF256f46),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                                      child: ImageIcon(
+                                                        AssetImage("images/star.png"),
+                                                        color: Color(0xFF256F46),
+                                                      ),
                                                     ),
                                                     Text(
                                                       "4.1/5",
