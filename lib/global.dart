@@ -14,6 +14,7 @@ var token = "";
 var currentCardPayement = false;
 var tokenbool = false;
 var username;
+var userkind = "f";
 var order_id;
 var first_name;
 var last_name;

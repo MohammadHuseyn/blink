@@ -342,7 +342,9 @@ class _StorePageState extends State<StorePage> {
               return Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(25)),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(25),
+                    topLeft: Radius.circular(25))),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

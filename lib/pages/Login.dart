@@ -5,6 +5,8 @@ import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'StorePage.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -40,8 +42,19 @@ class _LoginState extends State<Login> {
                 global.first_name = data["user"]["first_name"];
                 global.last_name = data["user"]["last_name"];
                 global.email = data["user"]["email"];
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                switch (global.userkind) {
+                  case "f" : {
+                    Navigator.pop(context);
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => StorePage(store: stores[0],homepagemode: true,)));
+                  } break;
+                  case "m" : {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  } break;
+                  case "p" : {
+
+                  } break;
+                }
               } catch (e) {
                 print('Error: $e');
               }

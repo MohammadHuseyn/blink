@@ -4,7 +4,10 @@ import 'package:blink/pages/Login.dart';
 import 'package:blink/pages/OrderSubmitted.dart';
 import 'package:blink/pages/Payment.dart';
 import 'package:blink/pages/Signup.dart';
+import 'package:blink/pages/StoreHomPage.dart';
+import 'package:blink/pages/StorePage.dart';
 import 'package:flutter/material.dart';
+import 'classes/store.dart';
 import 'global.dart' as global;
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -39,8 +42,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    stores[0].items.add(
+        Item(sotreid: stores[0].id, id: "11", name: "golabi", price: 10000));
+    stores[0]
+        .items
+        .add(Item(sotreid: stores[0].id, id: "22", name: "moz", price: 10000));
+    stores[0]
+        .items
+        .add(Item(sotreid: stores[0].id, id: "33", name: "sib", price: 10000));
+
     FlutterNativeSplash.remove();
     global.addressIndex = 0;
-    return Home();
+    return StoreHomePage(store: stores[0]);
   }
 }
