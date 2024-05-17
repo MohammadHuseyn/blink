@@ -20,6 +20,47 @@ class _StoreCommentState extends State<StoreComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(0,0),
+                  blurRadius: 7,
+                  spreadRadius: 7
+              )
+            ]
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.085,
+            child: ElevatedButton(
+              onPressed: () async {
+                showDialog(context: context, builder: (builder){
+                  return Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
+                  );
+                });
+              },
+              child:Text("   ثبت نظر   ",
+                style: TextStyle(
+                  fontSize: 25,
+                ),),
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
+              ),
+            ),
+          ),
+        ),
+      ),
       appBar: AppBar(
         // centerTitle: true,
         // title: Text(store.name),
