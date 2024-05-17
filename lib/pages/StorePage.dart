@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:blink/pages/Home.dart';
+import 'package:blink/pages/ProductComment.dart';
+import 'package:blink/pages/StoreComment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -76,11 +78,20 @@ class _StorePageState extends State<StorePage> {
                       padding: const EdgeInsets.only(top: 15),
                       child: Row(
                         children: [
-                          Icon(Icons.arrow_back_ios_rounded),
-                          Text(
-                            "مشاهده نظرات",
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 18),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (builder) => StoreComment(store: store,)));
+                            },
+                            child: Row(
+                              children: [
+                                Icon(Icons.arrow_back_ios_rounded),
+                                Text(
+                                  "مشاهده نظرات",
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
                           ),
                           Expanded(child: Container()),
                           Text(
@@ -385,12 +396,21 @@ class _StorePageState extends State<StorePage> {
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
                           children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.arrow_back_ios_rounded)),
-                            Text(
-                              "مشاهده نظرات",
-                              style: TextStyle(fontSize: 20),
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.arrow_back_ios_rounded)),
+                                  Text(
+                                    "مشاهده نظرات",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (builder)=>ProductComment()));
+                              },
                             ),
                             Expanded(child: Container()),
                             Text(
