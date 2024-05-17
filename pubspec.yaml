@@ -67,6 +67,7 @@ flutter:
     - images/copy.png
     - images/star.png
     - images/star_empty.png
+    - images/commentratesent.png
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

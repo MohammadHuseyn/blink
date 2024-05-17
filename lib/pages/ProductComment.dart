@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'CommentRateSent.dart';
+
 class ProductComment extends StatefulWidget {
   const ProductComment({super.key});
 
@@ -182,7 +184,7 @@ class _ProductCommentState extends State<ProductComment> {
                                           height: MediaQuery.of(context).size.height * 0.085,
                                           child: ElevatedButton(
                                             onPressed: () async {
-
+                                              Navigator.push(context, MaterialPageRoute(builder: (builder)=> CommentRateSent()));
                                             },
                                             child:Text("   ثبت نظر   ",
                                               style: TextStyle(
@@ -367,7 +369,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                       height: MediaQuery.of(context).size.height * 0.085,
                                                       child: ElevatedButton(
                                                         onPressed: () async {
-
+                                                          Navigator.push(context, MaterialPageRoute(builder: (builder)=>CommentRateSent()));
                                                         },
                                                         child:Text("   ثبت   ",
                                                           style: TextStyle(
