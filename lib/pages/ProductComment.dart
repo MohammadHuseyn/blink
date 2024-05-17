@@ -157,7 +157,7 @@ class _ProductCommentState extends State<ProductComment> {
                                           height: MediaQuery.of(context).size.height * 0.085,
                                           child: ElevatedButton(
                                             onPressed: () async {
-
+                                              Navigator.pop(context);
                                             },
                                             child:Text("   بیخیال   ",
                                               style: TextStyle(
@@ -234,14 +234,174 @@ class _ProductCommentState extends State<ProductComment> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 30),
+                  padding: const EdgeInsets.only(left: 15, right: 12),
                   child: Column(
                     children: [
                       Expanded(child: Container()),
-                      ImageIcon(
-                        AssetImage("images/star.png"),
-                        color: Color(0xFF256F46),
-                        size: 30,
+                      IconButton(
+                        onPressed: () {
+                          var width =  MediaQuery.of(context).size.width * 0.9;
+                          var height = MediaQuery.of(context).size.height * 0.4;
+                          var rate = 0;
+                          var star = AssetImage("images/star.png");
+                          var empty_star = AssetImage("images/star_empty.png");
+
+                          showDialog(context: context, builder: (builder){
+                            return StatefulBuilder(
+                                builder: (context,StateSetter setstate2){
+                                  return Center(
+                                    child: Container(
+                                      width: width,
+                                      height: height,
+                                      child: Material(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 50),
+                                          child: Column(
+                                            children: [
+                                              Text("به این محصول چه امتیازی می‌دهید؟",
+                                              style: TextStyle(fontSize: 20),),
+                                              Expanded(child: Container()),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 35),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setstate2(() {
+                                                            rate = 1;
+                                                          });
+                                                          // setRate(1);
+                                                        },
+                                                        icon: ImageIcon(
+                                                          rate >= 1? star : empty_star,
+                                                          color: Color(0xFF256F46),
+                                                          size: 50,
+                                                        )),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setstate2(() {
+                                                            rate = 2;
+                                                          });
+                                                          // setRate(2);
+                                                        },
+                                                        icon: ImageIcon(
+                                                          rate >= 2? star : empty_star,
+                                                          color: Color(0xFF256F46),
+                                                          size: 50,
+                                                        )),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setstate2(() {
+                                                            rate = 3;
+                                                          });
+                                                          // setRate(3);
+                                                        },
+                                                        icon: ImageIcon(
+                                                          rate >= 3? star : empty_star,
+                                                          color: Color(0xFF256F46),
+                                                          size: 50,
+                                                        )),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setstate2(() {
+                                                            rate = 4;
+                                                          });
+                                                          // setRate(4);
+                                                        },
+                                                        icon: ImageIcon(
+                                                          rate >= 4? star : empty_star,
+                                                          color: Color(0xFF256F46),
+                                                          size: 50,
+                                                        )),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setstate2(() {
+                                                            rate = 5;
+                                                          });
+                                                          // setRate(4);
+
+                                                        },
+                                                        icon: ImageIcon(
+                                                          rate >= 5? star : empty_star,
+                                                          color: Color(0xFF256F46),
+                                                          size: 50,
+                                                        )),
+
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(child: Container()),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                                                    child: SizedBox(
+                                                      height: MediaQuery.of(context).size.height * 0.085,
+                                                      child: ElevatedButton(
+                                                        onPressed: () async {
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child:Text("   بیخیال   ",
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 25,
+                                                          ),),
+                                                        style: ButtonStyle(
+                                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(12),
+                                                                  side: BorderSide(color: Color(0xFF256F46))
+                                                              ),
+                                                            ),
+                                                            backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                                                    child: SizedBox(
+                                                      height: MediaQuery.of(context).size.height * 0.085,
+                                                      child: ElevatedButton(
+                                                        onPressed: () async {
+
+                                                        },
+                                                        child:Text("   ثبت   ",
+                                                          style: TextStyle(
+                                                            fontSize: 25,
+                                                          ),),
+                                                        style: ButtonStyle(
+                                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(12),
+                                                              ),
+                                                            ),
+                                                            backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              // Expanded(child: Container(
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );}
+                            );
+                          });
+
+                        },
+                        iconSize: 40,
+                        icon: ImageIcon(
+                          AssetImage("images/star.png"),
+                          color: Color(0xFF256F46),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
