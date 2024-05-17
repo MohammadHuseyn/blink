@@ -68,7 +68,7 @@ class _StoreCommentState extends State<StoreComment> {
                     Expanded(child: Container()),
                     Container(
                       decoration: BoxDecoration(
-                          // color: Color(0xffEAF3EE),
+                        // color: Color(0xffEAF3EE),
                           boxShadow: [
                             const BoxShadow(
                               color: Colors.grey,
@@ -99,10 +99,10 @@ class _StoreCommentState extends State<StoreComment> {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom:
-                              BorderSide(color: Color(0xFF7CA990), width: 2))),
+                          BorderSide(color: Color(0xFF7CA990), width: 2))),
                   child: Padding(
                     padding:
-                        const EdgeInsets.only(bottom: 8.0, right: 10, left: 10),
+                    const EdgeInsets.only(bottom: 8.0, right: 10, left: 10),
                     child: Row(
                       children: [
                         Text(
@@ -156,8 +156,8 @@ class _StoreCommentState extends State<StoreComment> {
                           padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
                           child: Container(
                             child: Text("نظر...",
-                            style: TextStyle(fontSize: 25),
-                            textDirection: TextDirection.rtl,),
+                              style: TextStyle(fontSize: 25),
+                              textDirection: TextDirection.rtl,),
                           ),
                         )
                       ],
