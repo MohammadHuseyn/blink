@@ -93,13 +93,13 @@ class GeneralUserDetailSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Customer
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'location']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number']
 
 
 class SellerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Seller
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', '', 'store']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'store']
 
 
 class DeliveryDetailSerializer(GeneralUserDetailSerializer):
@@ -111,7 +111,7 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
 class ProductSerializer(serializers.ModelSerializer):
      class Meta:
          model = Product
-         fields = ['id', 'name', 'price', 'quantity']
+         fields = ['id', 'name', 'price', 'quantity', 'category']
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -120,7 +120,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'location', 'products']  # Include necessary fields
+        fields = ['id', 'name', 'location', 'products','picture']  # Include necessary fields
 
     def get_location(self, obj):
         if obj.location:

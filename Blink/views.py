@@ -3,7 +3,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
-    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
+    ProductSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -13,7 +14,7 @@ from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, Ca
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 
 class SignupView(APIView):
     def post(self, request):
@@ -24,7 +25,8 @@ class SignupView(APIView):
             return Response({
                 'token': token.key,
                 'user_id': user.id,
-                'username': user.username
+                'username': user.username,
+                'user_type': user.user_type
             }, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -36,26 +38,50 @@ class LoginView(APIView):
         data = request.data
         username = data.get("username")
         password = data.get("password")
+        phone_number = ''
+        user_type = ''
 
         # Authenticate the user
         user = authenticate(username=username, password=password)
+        try:
+            customer = Customer.objects.get(id=user.id)
+
+        except:
+            customer = False
+        try:
+            seller = Seller.objects.get(id=user.id)
+
+        except:
+            seller = False
+        try:
+            delivery = Delivery.objects.get(id=user.id)
+        except:
+            delivery = False
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
-            # Determine the type of user
-            if isinstance(user, Customer):
+            if customer:
                 user_serializer = CustomerDetailSerializer(user)
-            elif isinstance(user, Seller):
+                phone_number = customer.phone_number
+                user_type = 'Customer'
+            elif seller:
                 user_serializer = SellerDetailSerializer(user)
-            elif isinstance(user, Delivery):
+                phone_number = seller.phone_number
+                user_type = 'Seller'
+            elif delivery:
                 user_serializer = DeliveryDetailSerializer(user)
+                phone_number = delivery.phone_number
+                user_type = 'Delivery'
+
             else:
                 user_serializer = GeneralUserDetailSerializer(user)
 
             return Response({
                 'token': token.key,
                 'user': user_serializer.data,
+                'phone_number': phone_number,
+                'user_type': user_type
             }, status=status.HTTP_200_OK)
         else:
             return Response({
@@ -222,6 +248,44 @@ class AddProductView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class EditProductView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        try:
+            data = request.data
+            product_id = data.get('product_id')
+            product_name = data.get('product_name')
+            price = data.get('price')
+            quantity = data.get('quantity')
+            category_id = data.get('category_id')
+            store_id = data.get('store_id')
+
+            if not all([product_id, product_name, price, quantity, category_id, store_id]):
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+            product = Product.objects.get(id=product_id)
+
+            category, _ = Category.objects.get_or_create(id=category_id)
+            store, _ = Store.objects.get_or_create(id=store_id)
+
+            product.name = product_name
+            product.price = price
+            product.quantity = quantity
+            product.category = category
+            product.store = store
+            product.save()
+
+            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK)
+
+        except Product.DoesNotExist:
+            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class CustomerProfileEdit(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -232,17 +296,22 @@ class CustomerProfileEdit(APIView):
         data = request.data
 
         # Update user profile data
-        user.username = data.get('username', user.username)
         user.email = data.get('email', user.email)
         user.first_name = data.get('first_name', user.first_name)
         user.last_name = data.get('last_name', user.last_name)
         password = data.get('password')
-        if password:
-            user.password = make_password(password)
-        user.phone_number = data.get('phone_number', user.phone_number)
+        current_password = data.get('current_password')
+
+        if password and current_password:
+            if check_password(current_password, user.password):
+                user.password = make_password(password)
+            else:
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
         user.save()
 
         return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+
 class LocationView(APIView):
 
     authentication_classes = [TokenAuthentication]
@@ -267,3 +336,43 @@ class LocationView(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SellerStoresView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Retrieve the seller based on the token
+        seller = request.user
+
+        try:
+            seller_profile = Seller.objects.get(id=seller.id)
+
+            # Get the seller's store
+            store = seller_profile.store
+
+            if store:
+                # Get all products for the store
+                products = Product.objects.filter(store=store)
+
+                # Serialize the store and its products
+                store_data = StoreSerializer(store).data
+                products_data = ProductSerializer(products, many=True).data
+
+                response_data = {
+                    'store': store_data
+                }
+
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {"error": "No store associated with this seller."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        except Seller.DoesNotExist:
+            return Response(
+                {"error": "Seller does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
