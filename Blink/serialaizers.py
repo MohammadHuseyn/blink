@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem
 
+
 class UserSignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=True)
     password = serializers.CharField(write_only=True, required=True)
@@ -31,8 +32,7 @@ class UserSignupSerializer(serializers.Serializer):
                 password=validated_data['password'],
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
-                phone_number=validated_data.get('phone_number', ''),
-                image=validated_data.get('image', '')
+                phone_number=validated_data.get('phone_number', '')
             )
 
         elif user_type == 'seller':
@@ -101,7 +101,7 @@ class CustomerDetailSerializer(GeneralUserDetailSerializer):
 class SellerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Seller
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', '', 'store', 'image']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'store', 'image']
 
 
 class DeliveryDetailSerializer(GeneralUserDetailSerializer):
@@ -113,7 +113,7 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'quantity', 'image']
+        fields = ['id', 'name', 'price', 'quantity', 'image', 'category']
 
 class StoreSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
@@ -148,4 +148,3 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['id', 'name', 'latitude', 'longitude', 'address']
-

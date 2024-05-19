@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
 from .views import SignupView, LoginView, StoreListView, ShoppingCartView, OrderFromCartView, PaymentView, \
-    AddProductView, CustomerProfileEdit, LocationView
+    AddProductView, CustomerProfileEdit, LocationView, SellerStoresView, EditProductView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +28,9 @@ urlpatterns = [
     path('makeorder/', OrderFromCartView.as_view(), name='makeorder'),
     path('payment/', PaymentView.as_view(), name='payment'),
     path('add_product/', AddProductView.as_view(), name='add_product'),
+    path('edit_product/', EditProductView.as_view(), name='add_product'),
     path('customer_edit_profile/', CustomerProfileEdit.as_view(), name='customer_edit_profile'),
-    path('locations/', LocationView.as_view(), name='location')
+    path('locations/', LocationView.as_view(), name='location'),
+    path('get_sellers_store/', SellerStoresView.as_view(), name='seller-stores'),
+
 ]

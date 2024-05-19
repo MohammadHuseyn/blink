@@ -14,9 +14,9 @@ from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, Ca
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
-from django.contrib.auth.hashers import make_password
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.auth.hashers import make_password, check_password
 
 class SignupView(APIView):
     def post(self, request):
@@ -28,7 +28,8 @@ class SignupView(APIView):
                 'token': token.key,
                 'user_id': user.id,
                 'username': user.username,
-                'image': user.image
+                'image': user.image,
+                'user_type': user.user_type
             }, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -40,31 +41,56 @@ class LoginView(APIView):
         data = request.data
         username = data.get("username")
         password = data.get("password")
+        phone_number = ''
+        user_type = ''
 
         # Authenticate the user
         user = authenticate(username=username, password=password)
+        try:
+            customer = Customer.objects.get(id=user.id)
+
+        except:
+            customer = False
+        try:
+            seller = Seller.objects.get(id=user.id)
+
+        except:
+            seller = False
+        try:
+            delivery = Delivery.objects.get(id=user.id)
+        except:
+            delivery = False
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
-            # Determine the type of user
-            if isinstance(user, Customer):
+            if customer:
                 user_serializer = CustomerDetailSerializer(user)
-            elif isinstance(user, Seller):
+                phone_number = customer.phone_number
+                user_type = 'Customer'
+            elif seller:
                 user_serializer = SellerDetailSerializer(user)
-            elif isinstance(user, Delivery):
+                phone_number = seller.phone_number
+                user_type = 'Seller'
+            elif delivery:
                 user_serializer = DeliveryDetailSerializer(user)
+                phone_number = delivery.phone_number
+                user_type = 'Delivery'
+
             else:
                 user_serializer = GeneralUserDetailSerializer(user)
 
             return Response({
                 'token': token.key,
                 'user': user_serializer.data,
+                'phone_number': phone_number,
+                'user_type': user_type
             }, status=status.HTTP_200_OK)
         else:
             return Response({
                 "error": "Invalid credentials"
             }, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -80,23 +106,21 @@ class StoreListView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
-            stores = Store.objects.all()
-            store_data = []
-            for store in stores:
-                products = Product.objects.filter(store=store)
-                product_serializer = ProductSerializer(products, many=True)
-                store_serializer = StoreSerializer(store)
-                store_dict = store_serializer.data
-                store_dict['products'] = product_serializer.data
-                store_data.append(store_dict)
 
-            return Response(store_data, status=status.HTTP_200_OK)
+            # Get all stores (you might want to filter by location or other criteria)
+            stores = Store.objects.all()
+            serializer = StoreSerializer(stores, many=True)
+            store_dict = {str(store['id']): store for store in serializer.data}
+
+            return Response(store_dict, status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
                 {"error": "Invalid token"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+
+
 class ShoppingCartView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -228,6 +252,44 @@ class AddProductView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class EditProductView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        try:
+            data = request.data
+            product_id = data.get('product_id')
+            product_name = data.get('product_name')
+            price = data.get('price')
+            quantity = data.get('quantity')
+            category_id = data.get('category_id')
+            store_id = data.get('store_id')
+
+            if not all([product_id, product_name, price, quantity, category_id, store_id]):
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+            product = Product.objects.get(id=product_id)
+
+            category, _ = Category.objects.get_or_create(id=category_id)
+            store, _ = Store.objects.get_or_create(id=store_id)
+
+            product.name = product_name
+            product.price = price
+            product.quantity = quantity
+            product.category = category
+            product.store = store
+            product.save()
+
+            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK)
+
+        except Product.DoesNotExist:
+            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class CustomerProfileEdit(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -244,12 +306,19 @@ class CustomerProfileEdit(APIView):
         user.last_name = data.get('last_name', user.last_name)
         password = data.get('password')
         image = data.get('image')
-        if password:
-            user.password = make_password(password)
         user.phone_number = data.get('phone_number', user.phone_number)
+        current_password = data.get('current_password')
+
+        if password and current_password:
+            if check_password(current_password, user.password):
+                user.password = make_password(password)
+            else:
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
         user.save()
 
         return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+
 class LocationView(APIView):
 
     authentication_classes = [TokenAuthentication]
@@ -274,6 +343,47 @@ class LocationView(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SellerStoresView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Retrieve the seller based on the token
+        seller = request.user
+
+        try:
+            seller_profile = Seller.objects.get(id=seller.id)
+
+            # Get the seller's store
+            store = seller_profile.store
+
+            if store:
+                # Get all products for the store
+                products = Product.objects.filter(store=store)
+
+                # Serialize the store and its products
+                store_data = StoreSerializer(store).data
+                products_data = ProductSerializer(products, many=True).data
+
+                response_data = {
+                    'store': store_data
+                }
+
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {"error": "No store associated with this seller."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        except Seller.DoesNotExist:
+            return Response(
+                {"error": "Seller does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 class ProductSearchView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
