@@ -67,14 +67,17 @@ class LoginView(APIView):
             if customer:
                 user_serializer = CustomerDetailSerializer(user)
                 phone_number = customer.phone_number
+                image = customer.image
                 user_type = 'Customer'
             elif seller:
                 user_serializer = SellerDetailSerializer(user)
                 phone_number = seller.phone_number
+                image = seller.image
                 user_type = 'Seller'
             elif delivery:
                 user_serializer = DeliveryDetailSerializer(user)
                 phone_number = delivery.phone_number
+                image = delivery.image
                 user_type = 'Delivery'
 
             else:
@@ -84,7 +87,8 @@ class LoginView(APIView):
                 'token': token.key,
                 'user': user_serializer.data,
                 'phone_number': phone_number,
-                'user_type': user_type
+                'user_type': user_type,
+                'image': image
             }, status=status.HTTP_200_OK)
         else:
             return Response({

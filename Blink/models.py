@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser, User
 
 class Customer(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
     def __str__(self):
         return self.username
 
@@ -16,7 +16,7 @@ class Delivery(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     driving_license_number = models.CharField(max_length=20, unique=False, help_text="Unique driving license number")
     vehicle_license_plate = models.CharField(max_length=15, unique=False, help_text="Vehicle license plate number")
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
     def __str__(self):
         return f"{self.username} (Driving License: {self.driving_license_number})"
 
@@ -24,15 +24,14 @@ class Delivery(User):
 class Administrator(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
     def __str__(self):
         return self.username
 
 
 class CustomerSupport(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
     def __str__(self):
         return self.username
 
@@ -75,8 +74,7 @@ class Store(models.Model):
     name = models.CharField(max_length=100)
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
-    picture = models.ImageField(upload_to='store_pictures/')
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -87,7 +85,7 @@ class Product(models.Model):
     quantity = models.IntegerField()
     store = models.ForeignKey(Store, related_name='products', on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=2048, null=True, blank=True)
 
     def __str__(self):
         return self.name

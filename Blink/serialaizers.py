@@ -95,7 +95,7 @@ class GeneralUserDetailSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Customer
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'location', 'image']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'image']
 
 
 class SellerDetailSerializer(GeneralUserDetailSerializer):
