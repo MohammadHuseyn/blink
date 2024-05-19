@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:blink/pages/Chat.dart';
 import 'package:blink/pages/LastCheck.dart';
 import 'package:blink/pages/OrderHistory.dart';
@@ -268,12 +271,21 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 17),
-                                child: ImageIcon(
-                                  AssetImage('images/account.png'),
-                                  color: Color(0xFF618771),
-                                  size: 80,
+                                child: Image.memory(
+                                  width: 150,
+                                  Uint8List.fromList(base64Decode(global.profile_imge)),
+                                  fit: BoxFit.cover, // Adjust the fit as needed
                                 ),
                               ),
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.symmetric(horizontal: 17),
+                              //   child: ImageIcon(
+                              //     AssetImage('images/account.png'),
+                              //     color: Color(0xFF618771),
+                              //     size: 80,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
