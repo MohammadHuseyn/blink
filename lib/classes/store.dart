@@ -11,11 +11,11 @@ class Store {
 }
 
 class Item {
-  int count = 1;
+  int count = 0;
   late String sotreid;
   late String id;
   late String name;
-  late String price;
+  late double price;
   Item({required this.sotreid, required this.id, required this.name, required this.price});
 
 }

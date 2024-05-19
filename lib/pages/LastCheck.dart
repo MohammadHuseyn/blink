@@ -14,10 +14,14 @@ class LastCheck extends StatelessWidget {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
-            onPressed: () {
-              gloabl.postRequest({
-                "location_id" : "1",
-              }, "/makeorder/");
+            onPressed: () async {
+              // try {
+                var res = await gloabl.postRequest({
+                  "location_id" : "1",
+                }, "/makeorder/");
+                Map<String, dynamic> data = await res;
+                gloabl.order_id = data["order_id"];
+              // } catch(e) {}
               Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(sum: "120000")));
             },
             child: Text(

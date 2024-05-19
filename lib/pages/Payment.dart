@@ -1,3 +1,4 @@
+import 'package:blink/pages/OrderSubmitted.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as global;
@@ -24,6 +25,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
                   onPressed: (){
+                    global.postRequest({
+                      "paid" : false,
+                      "order_id" : global.order_id
+                    }, '/payment/');
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child:Text("   انصراف   ",
@@ -47,12 +53,16 @@ class _PaymentPageState extends State<PaymentPage> {
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
                   onPressed: (){
+                    var res = global.postRequest({
+                      "paid" : true,
+                      "order_id" : global.order_id
+                    }, '/payment/');
                     setState(() {
                       global.currentCardPayement = true;
                     });
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderSubmitted()));
                   },
                   child:Text("   پرداخت   ",
                     style: TextStyle(

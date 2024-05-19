@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../global.dart' as global;
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
 
@@ -8,12 +8,63 @@ class ProfileEdit extends StatefulWidget {
   State<ProfileEdit> createState() => _ProfileEditState();
 }
 
+var username = TextEditingController();
+var first_name = TextEditingController();
+var email = TextEditingController();
+var last_name = TextEditingController();
+var phone = TextEditingController();
+var newpass = TextEditingController();
+var duppass = TextEditingController();
 var showPass = false;
 var currPass = TextEditingController();
 class _ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
+    username.text = global.username;
+    first_name.text = global.first_name;
+    last_name.text = global.last_name;
+    first_name.text = global.first_name;
+    email.text = global.email;
     return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.085,
+          child: ElevatedButton(
+            onPressed: () {
+              if (newpass.text == duppass.text) {
+                  global.postRequest({
+                    "first_name": first_name.text,
+                    "last_name": last_name.text,
+                    "email" : email.text,
+                    "password" : newpass.text,
+                  }, "/customer_edit_profile/");
+                //   global.postRequest({
+                //     "first_name": first_name.text,
+                //     "last_name": last_name.text,
+                //     "current_pass": currPass.text,
+                //     "new_pass": newpass.text,
+                //   }, "/customer_edit_profile/");
+              }
+            },
+            child: Text(
+              "  ثبت تغییرات   ",
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Color(0xFF256F46))),
+          ),
+        ),
+      ),
+
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Color(0xFF256F46),
@@ -40,7 +91,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColor: Colors.redAccent,
                         primaryColorDark: Colors.red,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: username,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
@@ -64,13 +116,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColor: Colors.redAccent,
                         primaryColorDark: Colors.red,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: first_name,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
                               BorderRadius.all(Radius.circular(15))),
-                          labelText: '  نام و نام خانوادگی  ',
+                          labelText: '  نام  ',
                           floatingLabelStyle: TextStyle(fontSize: 25),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
@@ -88,7 +141,58 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColor: Colors.redAccent,
                         primaryColorDark: Colors.red,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: last_name,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                          labelText: '  نام خانوادگی  ',
+                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        ),
+                      ),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, right: 20, left: 20, bottom: 20),
+                child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Theme(
+                      data: ThemeData(
+                        primaryColor: Colors.redAccent,
+                        primaryColorDark: Colors.red,
+                      ),
+                      child: TextField(
+                        controller: email,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                          labelText: '  ایمیل  ',
+                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        ),
+                      ),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, right: 20, left: 20, bottom: 20),
+                child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Theme(
+                      data: ThemeData(
+                        primaryColor: Colors.redAccent,
+                        primaryColorDark: Colors.red,
+                      ),
+                      child: TextField(
+                        controller: phone,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
@@ -143,7 +247,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColor: Colors.redAccent,
                         primaryColorDark: Colors.red,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: newpass,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
@@ -167,7 +272,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColor: Colors.redAccent,
                         primaryColorDark: Colors.red,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: duppass,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
@@ -181,24 +287,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     )),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child:Text("   ثبت تغییرات   ",
-                    style: TextStyle(
-                        fontSize: 20,
-                    ),),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
-                  ),
-                ),
-              )
             ],
           ),
         ),

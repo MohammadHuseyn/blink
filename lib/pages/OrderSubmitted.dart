@@ -1,5 +1,8 @@
+import 'package:blink/pages/OrderStatus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'Home.dart';
 
 class OrderSubmitted extends StatefulWidget {
   const OrderSubmitted({super.key});
@@ -12,12 +15,24 @@ class _OrderSubmittedState extends State<OrderSubmitted> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (builder)=>Home()));
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (builder) => OrderStatus()));
+            },
             child:Text("   پیگیری سفارش   ",
               style: TextStyle(
                 fontSize: 25,
