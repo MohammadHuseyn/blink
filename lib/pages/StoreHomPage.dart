@@ -12,26 +12,25 @@ class StoreHomePage extends StatefulWidget {
 }
 
 var _currentIndex = 1;
+late Store store;
 var name = TextEditingController();
 var price = TextEditingController();
 var count = TextEditingController();
 var desc = TextEditingController();
-var store_id = TextEditingController();
 class _StoreHomePageState extends State<StoreHomePage> {
   // _StoreHomePageState({required this.store});
   //
-  late Store store;
 
   @override
   void initState() {
     // TODO: implement initState
-    _load_store();
+    load_store();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // _load_store();
+    // load_store();
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Color(0xFF256F46),
@@ -334,7 +333,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     });
   }
 
-  Future<void> _load_store() async {
+  Future<void> load_store() async {
     var res = global.getRequestmap('/get_sellers_store/');
     Map<String, dynamic> data = await res;
     List<Item> items = [];
@@ -359,195 +358,173 @@ class _StoreHomePageState extends State<StoreHomePage> {
     });
     // return store;
   }
-}
-
-void bottomShett(context) {
-  showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return StatefulBuilder(builder: (context, StateSetter setState) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(25),
-                    topLeft: Radius.circular(25))),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              bottomNavigationBar: Container(
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0, 0),
-                      color: Colors.grey,
-                      spreadRadius: 7,
-                      blurRadius: 7)
-                ]),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.085,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        global.postRequest({
-                          "product_name"
-                        }, '/add_product/');
-                      },
-                      child: Text(
-                        "   افزودن محصول   ",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+  void bottomShett(context) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25))),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                bottomNavigationBar: Container(
+                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 0),
+                        color: Colors.grey,
+                        spreadRadius: 7,
+                        blurRadius: 7)
+                  ]),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.085,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          global.postRequest({
+                            "product_name" : name.text,
+                            "price" : price.text,
+                            "quantity" : count.text,
+                            "category_id" : "1",
+                            "store_id" : store.id
+                          }, '/add_product/');
+                          load_store();
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "   افزودن محصول   ",
+                          style: TextStyle(
+                            fontSize: 25,
                           ),
-                          backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => Color(0xFF256F46))),
+                        ),
+                        style: ButtonStyle(
+                            shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                    (states) => Color(0xFF256F46))),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: Container(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Color(0xFFEAF3EE)
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Color(0xFFEAF3EE)
                               // color: Colors.red
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 35),
+                              child: ImageIcon(
+                                AssetImage("images/product.png"),
+                                color: Color(0xFF5E846E),
+                                size: 95,
                               ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 35),
-                            child: ImageIcon(
-                              AssetImage("images/product.png"),
-                              color: Color(0xFF5E846E),
-                              size: 95,
-                            ),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              controller: name,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                labelText: '  نام محصول  ',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, right: 20, left: 20, bottom: 20),
+                        child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Colors.redAccent,
+                                primaryColorDark: Colors.red,
                               ),
-                            ),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              controller: count,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                                labelText: '  تعداد  ',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                              child: TextField(
+                                controller: name,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.teal),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                                  labelText: '  نام محصول  ',
+                                  floatingLabelStyle: TextStyle(fontSize: 25),
+                                  floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                                  labelStyle: TextStyle(
+                                      fontSize: 25, fontFamily: 'shabnam'),
+                                ),
                               ),
-                            ),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              controller: desc,
-                              maxLines: 3,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                labelText: '  توضیحات  ',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, right: 20, left: 20, bottom: 20),
+                        child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Colors.redAccent,
+                                primaryColorDark: Colors.red,
                               ),
-                            ),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              controller: price,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                labelText: '  قیمت  ',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                              child: TextField(
+                                controller: count,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.teal),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                                  labelText: '  تعداد  ',
+                                  floatingLabelStyle: TextStyle(fontSize: 25),
+                                  floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                                  labelStyle: TextStyle(
+                                      fontSize: 25, fontFamily: 'shabnam'),
+                                ),
                               ),
-                            ),
-                          )),
-                    ),
-                  ],
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, right: 20, left: 20, bottom: 20),
+                        child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Colors.redAccent,
+                                primaryColorDark: Colors.red,
+                              ),
+                              child: TextField(
+                                controller: price,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.teal),
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                                  labelText: '  قیمت  ',
+                                  floatingLabelStyle: TextStyle(fontSize: 25),
+                                  floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                                  labelStyle: TextStyle(
+                                      fontSize: 25, fontFamily: 'shabnam'),
+                                ),
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          });
         });
-      });
+  }
+
 }
