@@ -90,4 +90,27 @@ Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
     throw Exception('Failed to get data: ${response.statusCode}');
   }
 }
+Future<Map<String, dynamic>> putRequest(dynamic data, String endpoint) async {
+  // Encode Map to JSON
+  var body = json.encode(data);
+
+  // Send PUT request
+  var response = await http.put(
+    Uri.parse(url + endpoint),
+    headers: tokenbool ? headerA : header,
+    body: body,
+  );
+
+  // Check if the response status code is OK (200) or Created (201)
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    // Parse the response body from JSON to Map
+    Map<String, dynamic> responseData = json.decode(response.body);
+    print(responseData);
+    return responseData;
+  } else {
+    // If the response status code is not OK, throw an error or handle it accordingly
+    throw Exception('Failed to put data: ${response.statusCode}');
+  }
+}
+
 

@@ -12,6 +12,7 @@ class Store {
 
 class Item {
   int count = 0;
+  int quantity = 0;
   late String sotreid;
   late String id;
   late String name;

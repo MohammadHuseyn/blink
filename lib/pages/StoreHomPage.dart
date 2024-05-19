@@ -117,7 +117,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xFF256F46),
           onPressed: () {
-            bottomShett(context);
+            bottomShett(context,null, false);
           },
           child: Icon(
             Icons.add,
@@ -263,7 +263,10 @@ class _StoreHomePageState extends State<StoreHomePage> {
       padding: EdgeInsets.only(left: left, right: right, top: 20),
       child: GestureDetector(
         onTap: () {
-          // bottomShett(item);
+          name.text = item.name;
+          count.text = item.quantity.toString();
+          price.text = item.price.toString();
+          bottomShett(context,item, true);
         },
         child: Container(
           width: MediaQuery.of(context).size.width * 0.39,
@@ -343,6 +346,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
       var itemPrice = double.parse(itemData['price']);
       var item = Item(
           id: itemId, name: itemName, price: itemPrice, sotreid: data["store"]["id"].toString());
+      item.quantity = itemData["quantity"];
       items.add(item);
     });
 
@@ -358,7 +362,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     });
     // return store;
   }
-  void bottomShett(context) {
+  void bottomShett(context, Item? item, bool edit) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
@@ -386,13 +390,22 @@ class _StoreHomePageState extends State<StoreHomePage> {
                       height: MediaQuery.of(context).size.height * 0.085,
                       child: ElevatedButton(
                         onPressed: () async {
-                          global.postRequest({
+                          edit? global.putRequest({
+                            "product_id" : item!.id.toString(),
+                            "product_name" : name.text,
+                            "price" : price.text,
+                            "quantity" : count.text,
+                            "category_id" : "1",
+                            "store_id" : store.id
+                          }, '/edit_product/') : global.postRequest({
                             "product_name" : name.text,
                             "price" : price.text,
                             "quantity" : count.text,
                             "category_id" : "1",
                             "store_id" : store.id
                           }, '/add_product/');
+                          load_store();
+                          load_store();
                           load_store();
                           Navigator.pop(context);
                         },
