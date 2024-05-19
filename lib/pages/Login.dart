@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:blink/pages/StoreHomPage.dart';
+
 import '../global.dart' as global;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
@@ -42,16 +44,17 @@ class _LoginState extends State<Login> {
                 global.first_name = data["user"]["first_name"];
                 global.last_name = data["user"]["last_name"];
                 global.email = data["user"]["email"];
+                global.userkind = data["user_type"];
                 switch (global.userkind) {
-                  case "f" : {
+                  case "Seller" : {
                     Navigator.pop(context);
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => StorePage(store: stores[0],homepagemode: true,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => StoreHomePage()));
                   } break;
-                  case "m" : {
+                  case "Customer" : {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                   } break;
-                  case "p" : {
+                  case "Delivery" : {
 
                   } break;
                 }
