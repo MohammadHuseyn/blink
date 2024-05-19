@@ -3,7 +3,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
-    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer
+    SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
+    ProductSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -14,6 +15,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class SignupView(APIView):
     def post(self, request):
@@ -24,7 +27,8 @@ class SignupView(APIView):
             return Response({
                 'token': token.key,
                 'user_id': user.id,
-                'username': user.username
+                'username': user.username,
+                'image': user.image
             }, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -62,7 +66,6 @@ class LoginView(APIView):
                 "error": "Invalid credentials"
             }, status=status.HTTP_401_UNAUTHORIZED)
 
-
 class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -77,21 +80,23 @@ class StoreListView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
-
-            # Get all stores (you might want to filter by location or other criteria)
             stores = Store.objects.all()
-            serializer = StoreSerializer(stores, many=True)
-            store_dict = {str(store['id']): store for store in serializer.data}
+            store_data = []
+            for store in stores:
+                products = Product.objects.filter(store=store)
+                product_serializer = ProductSerializer(products, many=True)
+                store_serializer = StoreSerializer(store)
+                store_dict = store_serializer.data
+                store_dict['products'] = product_serializer.data
+                store_data.append(store_dict)
 
-            return Response(store_dict, status=status.HTTP_200_OK)
+            return Response(store_data, status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
                 {"error": "Invalid token"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
-
-
 class ShoppingCartView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -202,7 +207,7 @@ class AddProductView(APIView):
             quantity = data.get('quantity')
             category_id = data.get('category_id')
             store_id = data.get('store_id')
-
+            image = data.get('image')
             if not all([product_name, price, quantity, category_id, store_id]):
                 return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -214,7 +219,8 @@ class AddProductView(APIView):
                 price=price,
                 quantity=quantity,
                 category=category,
-                store=store
+                store=store,
+                image=image
             )
 
             return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED)
@@ -237,6 +243,7 @@ class CustomerProfileEdit(APIView):
         user.first_name = data.get('first_name', user.first_name)
         user.last_name = data.get('last_name', user.last_name)
         password = data.get('password')
+        image = data.get('image')
         if password:
             user.password = make_password(password)
         user.phone_number = data.get('phone_number', user.phone_number)
@@ -267,3 +274,15 @@ class LocationView(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ProductSearchView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        store_id = self.request.query_params.get('store_id', None)
+        if store_id:
+            queryset = queryset.filter(store_id=store_id)
+        return queryset

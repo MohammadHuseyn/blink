@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+MEDIA_URL = '/images/'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +32,7 @@ SECRET_KEY = 'django-insecure-&rtw8#vb^ph8-v^4ji0n8gdmm9t_74gq@*qy2g3^1h0dl3-q=1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3', '10.0.2.2','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.4', '10.0.2.2','127.0.0.1', '192.168.1.4', '192.168.23.31', '172.20.10.5']
 
 
 # Application definition
@@ -40,7 +47,7 @@ INSTALLED_APPS = [
     'Blink',
     'rest_framework',
     'rest_framework.authtoken',
-
+    'django_filters',
 ]
 
 MIDDLEWARE = [

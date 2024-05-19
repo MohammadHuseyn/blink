@@ -2,7 +2,6 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem
 
-
 class UserSignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=True)
     password = serializers.CharField(write_only=True, required=True)
@@ -17,7 +16,7 @@ class UserSignupSerializer(serializers.Serializer):
     latitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
     longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
     location_name = serializers.CharField(max_length=20, required=False, allow_blank=True)
-
+    image = serializers.CharField(max_length=None, required=False)
     vehicle_license_plate = serializers.CharField(max_length=20, required=False, allow_blank=True)
     driving_license_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
 
@@ -32,7 +31,8 @@ class UserSignupSerializer(serializers.Serializer):
                 password=validated_data['password'],
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
-                phone_number=validated_data.get('phone_number', '')
+                phone_number=validated_data.get('phone_number', ''),
+                image=validated_data.get('image', '')
             )
 
         elif user_type == 'seller':
@@ -40,7 +40,8 @@ class UserSignupSerializer(serializers.Serializer):
                 location = Location.objects.create(
                     latitude=validated_data.pop('latitude'),
                     longitude=validated_data.pop('longitude'),
-                    name=validated_data.pop('location_name', '')  # Optional name for the location
+                    name=validated_data.pop('location_name', ''),
+                    image=validated_data.get('image', '')
                 )
             else:
                 location = None  # Location might be optional
@@ -51,7 +52,8 @@ class UserSignupSerializer(serializers.Serializer):
                 password=validated_data['password'],
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
-                phone_number=validated_data.get('phone_number', '')
+                phone_number=validated_data.get('phone_number', ''),
+                image=validated_data.get('image', '')
             )
             store_name = validated_data.pop('store_name', None)
             if not store_name:
@@ -93,13 +95,13 @@ class GeneralUserDetailSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Customer
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'location']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'location', 'image']
 
 
 class SellerDetailSerializer(GeneralUserDetailSerializer):
     class Meta:
         model = Seller
-        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', '', 'store']
+        fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', '', 'store', 'image']
 
 
 class DeliveryDetailSerializer(GeneralUserDetailSerializer):
@@ -109,10 +111,9 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
                                                             'driving_license_number']
 
 class ProductSerializer(serializers.ModelSerializer):
-     class Meta:
-         model = Product
-         fields = ['id', 'name', 'price', 'quantity']
-
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'price', 'quantity', 'image']
 
 class StoreSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
@@ -120,7 +121,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'location', 'products']  # Include necessary fields
+        fields = ['id', 'name', 'location', 'products', 'image']
 
     def get_location(self, obj):
         if obj.location:
@@ -147,3 +148,4 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['id', 'name', 'latitude', 'longitude', 'address']
+
