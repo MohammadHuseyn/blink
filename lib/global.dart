@@ -17,6 +17,7 @@ var username;
 var userkind = "m";
 var order_id;
 var first_name;
+var phone_number;
 var last_name;
 var email;
 // var address_name = "آدرس ۱";

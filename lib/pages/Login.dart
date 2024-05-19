@@ -45,6 +45,7 @@ class _LoginState extends State<Login> {
                 global.last_name = data["user"]["last_name"];
                 global.email = data["user"]["email"];
                 global.userkind = data["user_type"];
+                global.phone_number = data["phone_number"];
                 switch (global.userkind) {
                   case "Seller" : {
                     Navigator.pop(context);

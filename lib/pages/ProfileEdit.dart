@@ -25,6 +25,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     last_name.text = global.last_name;
     first_name.text = global.first_name;
     email.text = global.email;
+    phone.text = global.phone_number;
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -33,18 +34,13 @@ class _ProfileEditState extends State<ProfileEdit> {
           child: ElevatedButton(
             onPressed: () {
               if (newpass.text == duppass.text) {
-                  global.postRequest({
-                    "first_name": first_name.text,
-                    "last_name": last_name.text,
+                  global.putRequest({
+                    "first_name" : first_name.text,
+                    "last_name" : last_name.text,
                     "email" : email.text,
-                    "password" : newpass.text,
-                  }, "/customer_edit_profile/");
-                //   global.postRequest({
-                //     "first_name": first_name.text,
-                //     "last_name": last_name.text,
-                //     "current_pass": currPass.text,
-                //     "new_pass": newpass.text,
-                //   }, "/customer_edit_profile/");
+                    "current_password" : currPass.text,
+                    "password" : newpass.text
+                  }, '/customer_edit_profile/');
               }
             },
             child: Text(
@@ -92,6 +88,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColorDark: Colors.red,
                       ),
                       child: TextField(
+                        readOnly: true,
                         controller: username,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -192,6 +189,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColorDark: Colors.red,
                       ),
                       child: TextField(
+                        readOnly: true,
                         controller: phone,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -217,14 +215,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColorDark: Colors.red,
                       ),
                       child: TextField(
-                        obscureText: !showPass,
                         controller: currPass,
                         decoration: InputDecoration(
-                          suffixIcon: IconButton(onPressed: (){
-                            setState(() {
-                              showPass = !showPass;
-                            });
-                          }, icon: Icon(Icons.remove_red_eye)),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -248,8 +240,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColorDark: Colors.red,
                       ),
                       child: TextField(
+                        obscureText: !showPass,
                         controller: newpass,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(onPressed: (){
+                            setState(() {
+                              showPass = !showPass;
+                            });
+                          }, icon: Icon(Icons.remove_red_eye)),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -273,13 +271,19 @@ class _ProfileEditState extends State<ProfileEdit> {
                         primaryColorDark: Colors.red,
                       ),
                       child: TextField(
+                        obscureText: !showPass,
                         controller: duppass,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(onPressed: (){
+                            setState(() {
+                              showPass = !showPass;
+                            });
+                          }, icon: Icon(Icons.remove_red_eye)),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
                               BorderRadius.all(Radius.circular(15))),
-                          labelText: '  تکرار رمز جدید  ',
+                          labelText: ' تکرار رمز جدید  ',
                           floatingLabelStyle: TextStyle(fontSize: 25),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
