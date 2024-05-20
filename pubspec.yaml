@@ -74,6 +74,8 @@ flutter:
     - images/cross.png
     - images/tick.png
     - images/fast.png
+    - images/customer.png
+    - images/store.png
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

@@ -1,4 +1,5 @@
 import 'package:blink/pages/Chat.dart';
+import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:blink/pages/OrderSubmitted.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: new ThemeData(
         fontFamily: 'shabnam',
         primarySwatch: Colors.blue,
@@ -53,6 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     FlutterNativeSplash.remove();
     global.addressIndex = 0;
-    return StoreHomePage();
+    return DeliveryHomePage();
   }
 }

@@ -124,7 +124,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: _currentIndex == 1? FloatingActionButton(
           backgroundColor: Color(0xFF256F46),
           onPressed: () {
             bottomShett(context, null, false);
@@ -133,7 +133,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
             Icons.add,
             size: 50,
           ),
-        ),
+        ) : Container(),
         appBar: AppBar(
           backgroundColor: Color(0xFF256F46),
         ),
