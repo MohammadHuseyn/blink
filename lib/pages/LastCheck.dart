@@ -119,7 +119,7 @@ class LastCheck extends StatelessWidget {
                   Container(
                     height: 50,
                     child: Text(
-                      gloabl.address_name,
+                      gloabl.addresses[gloabl.addressIndex].name,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'shabnam',

@@ -1,24 +1,85 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:image/image.dart' as img;
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import '../global.dart' as global;
 import 'Home.dart';
-class SignupScndPage extends StatelessWidget {
-  SignupScndPage({required this.userkind, required this.username, required this.password});
-  String userkind;
 
-  var first_name = TextEditingController();
+class SignupScndPage extends StatefulWidget {
+  SignupScndPage(
+      {required this.userkind, required this.username, required this.password});
+
+  String userkind;
   var username = TextEditingController();
   var password = TextEditingController();
+
+  @override
+  State<SignupScndPage> createState() => _SignupScndPageState();
+}
+
+LatLng? latlngLocal = null;
+List<Marker> markers = [];
+var mapc = MapController();
+bool isMapRead = false;
+class _SignupScndPageState extends State<SignupScndPage> {
+  final ImagePicker _picker = ImagePicker();
+
+  File? _imageFile;
+
+
+  Future<File> cropImageToSquare(File imageFile) async {
+    final imageBytes = await imageFile.readAsBytes();
+    final img.Image? image = img.decodeImage(imageBytes);
+
+    if (image == null) {
+      throw Exception("Could not decode image.");
+    }
+
+    int shortestSide = image.width < image.height ? image.width : image.height;
+    int xOffset = (image.width - shortestSide) ~/ 2;
+    int yOffset = (image.height - shortestSide) ~/ 2;
+
+    final img.Image croppedImage = img.copyCrop(
+      image,
+      x: xOffset,
+      y: yOffset,
+      width: shortestSide,
+      height: shortestSide,
+    );
+
+    final croppedFile = await imageFile.writeAsBytes(img.encodePng(croppedImage));
+    setState(() {
+      _imageFile = croppedFile;
+    });
+    return croppedFile;
+  }
+
+
+  String? base64Image = "";
+
+  var first_name = TextEditingController();
+
   var last_name = TextEditingController();
+
   var email = TextEditingController();
+
   var phone = TextEditingController();
+
   var shopname = TextEditingController();
+
   var shopaddress = TextEditingController();
+
   var pelak = TextEditingController();
+
   var license = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,48 +90,58 @@ class SignupScndPage extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () async {
               var deli = {
-                "username" : username.text,
-                "password" : password.text,
-                "email" : email.text,
-                "first_name" : first_name.text,
-                "last_name" : last_name.text,
-                "phone_number" : phone.text,
-                "user_type" : "delivery",
+                "username": widget.username.text,
+                "password": widget.password.text,
+                "email": email.text,
+                "first_name": first_name.text,
+                "last_name": last_name.text,
+                "phone_number": phone.text,
+                "user_type": "delivery",
+                "image" : base64Image,
                 // "longitude" : "35.715298",
                 // "latitude" : "51.404343",
                 // "location_name" : shopname.text,
                 // "store_name" : shopname.text,
-                "plate" : pelak.text,
-                "license" : license.text
+                "plate": pelak.text,
+                "license": license.text
               };
               var foro = {
-                "username" : username.text,
-                "password" : password.text,
-                "email" : email.text,
-                "first_name" : first_name.text,
-                "last_name" : last_name.text,
-                "phone_number" : phone.text,
-                "user_type" : "seller",
-                "longitude" : "35.715298",
-                "latitude" : "51.404343",
-                "location_name" : shopname.text,
-                "store_name" : shopname.text,
+                "username": widget.username.text,
+                "password": widget.password.text,
+                "email": email.text,
+                "first_name": first_name.text,
+                "last_name": last_name.text,
+                "phone_number": phone.text,
+                "user_type": "seller",
+                "longitude": latlngLocal!.longitude,
+                "latitude": latlngLocal!.latitude,
+                "location_name": shopname.text,
+                "store_name": shopname.text,
+                "image" : base64Image,
               };
               var cust = {
-                "username" : username.text,
-                "password" : password.text,
-                "email" : email.text,
-                "first_name" : first_name.text,
-                "last_name" : last_name.text,
-                "phone_number" : phone.text,
+                "username": widget.username.text,
+                "password": widget.password.text,
+                "email": email.text,
+                "first_name": first_name.text,
+                "last_name": last_name.text,
+                "phone_number": phone.text,
                 // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
-                "user_type" : "customer",
-                "longitude" : "35.715298",
-                "latitude" : "51.404343",
-                "location_name" : "usertemplocation",
+                "user_type": "customer",
+                "longitude": "35.715298",
+                "latitude": "51.404343",
+                "location_name": "usertemplocation",
+                "image" : base64Image,
+
               };
 
-              var res = global.postRequest(userkind == "f"? foro : userkind == "m"? cust : deli, "/signup/");
+              var res = global.postRequest(
+                  widget.userkind == "f"
+                      ? foro
+                      : widget.userkind == "m"
+                          ? cust
+                          : deli,
+                  "/signup/");
               Map<String, dynamic> data = await res;
               global.token = data["token"];
               global.tokenbool = true;
@@ -78,29 +149,89 @@ class SignupScndPage extends StatelessWidget {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Home()));
             },
-            child:Text("   تکمیل ثبت نام   ",
+            child: Text(
+              "   تکمیل ثبت نام   ",
               style: TextStyle(
                 fontSize: 25,
-              ),),
+              ),
+            ),
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
-            ),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xFF256F46))),
           ),
         ),
       ),
-
       appBar: AppBar(
         backgroundColor: Color(0xFF256F46),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ImageIcon(AssetImage("images/addimage.png"), size: 150, color: Color(0xFF1c5334),),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 75, // Adjust the radius as needed
+                    backgroundColor: Colors.transparent, // Make the background transparent
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
+                      child: Container(
+                        width: 150, // Width of the IconButton
+                        height: 150, // Height of the IconButton
+                        child: IconButton(
+                          padding: EdgeInsets.zero, // Remove padding around the icon
+                          icon: _imageFile != null
+                              ? Image.file(
+                            _imageFile!,
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover, // Ensure the image fills the IconButton
+                          )
+                              : ImageIcon(
+                            AssetImage("images/addimage.png"),
+                            color: Color(0xFF1c5334),
+                            size: 150, // Size of the ImageIcon
+                          ),
+                          onPressed: () async {
+                            final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+                            if (image != null) {
+                                (await cropImageToSquare(File(image.path))) as File?;
+                              // If you need the base64 string for any purpose
+                              List<int> imageBytes = await _imageFile!.readAsBytes();
+                              base64Image = base64Encode(imageBytes);
+                            } else {
+                              print('No image selected.');
+                            }
+                          },
+                          iconSize: 150, // Size of the IconButton
+                        ),
+                      ),
+                    ),
+                  ),
+                  _imageFile != null? IconButton(
+                    icon: Icon(
+                      Icons.highlight_remove_rounded, // Use any icon you prefer for deleting the image
+                      color: Colors.red, // Change the color if needed
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _imageFile = null; // Set _imageFile to null
+                      });
+                    },
+                    iconSize: 30, // Adjust the size of the icon as needed
+                  ) : Container(),
+
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                   top: 20, right: 20, left: 20, bottom: 20),
@@ -112,16 +243,17 @@ class SignupScndPage extends StatelessWidget {
                       primaryColorDark: Colors.red,
                     ),
                     child: TextField(
-                      controller: username,
+                      controller: widget.username,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: '  نام کاربری  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        labelStyle:
+                            TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                       ),
                     ),
                   )),
@@ -142,15 +274,17 @@ class SignupScndPage extends StatelessWidget {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: '  نام  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        labelStyle:
+                            TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                       ),
                     ),
                   )),
-            ),Padding(
+            ),
+            Padding(
               padding: const EdgeInsets.only(
                   top: 20, right: 20, left: 20, bottom: 20),
               child: Directionality(
@@ -166,11 +300,12 @@ class SignupScndPage extends StatelessWidget {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: '  نام خانوادگی  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        labelStyle:
+                            TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                       ),
                     ),
                   )),
@@ -191,11 +326,12 @@ class SignupScndPage extends StatelessWidget {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: '  ایمیل  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        labelStyle:
+                            TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                       ),
                     ),
                   )),
@@ -216,133 +352,186 @@ class SignupScndPage extends StatelessWidget {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: '  تلفن همراه  ',
                         floatingLabelStyle: TextStyle(fontSize: 25),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        labelStyle:
+                            TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                       ),
                     ),
                   )),
             ),
-
-            userkind == 'p'? Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, right: 20, left: 20, bottom: 20),
-              child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.redAccent,
-                      primaryColorDark: Colors.red,
-                    ),
-                    child: TextField(
-                      controller: pelak,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
-                        labelText: '  پلاک وسیله نقلیه  ',
-                        floatingLabelStyle: TextStyle(fontSize: 25),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
-                      ),
-                    ),
-                  )),
-            ) : Container(),
-            userkind == 'p'? Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, right: 20, left: 20, bottom: 20),
-              child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.redAccent,
-                      primaryColorDark: Colors.red,
-                    ),
-                    child: TextField(
-                      controller: license,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
-                        labelText: '  کد گواهینامه  ',
-                        floatingLabelStyle: TextStyle(fontSize: 25),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
-                      ),
-                    ),
-                  )),
-            ) : Container(),
-
-            userkind == "f"?
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, right: 20, left: 20, bottom: 20),
-              child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.redAccent,
-                      primaryColorDark: Colors.red,
-                    ),
-                    child: TextField(
-                      controller: shopname,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
-                        labelText: '  نام فروشگاه  ',
-                        floatingLabelStyle: TextStyle(fontSize: 25),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
-                      ),
-                    ),
-                  )),
-            ): Container(),
-            userkind == "f"?
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: Text("انتخاب فروشگاه روی نقشه", style: TextStyle(fontSize: 20, color: Colors.black87),),
-            ) : Container(),
-            userkind == "f"?
-            Container(
-              decoration: BoxDecoration(
-                // border: Border.all(color: Colors.grey),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 20,
-                    offset: Offset(1,5),
+            widget.userkind == 'p'
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, right: 20, left: 20, bottom: 20),
+                    child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Theme(
+                          data: ThemeData(
+                            primaryColor: Colors.redAccent,
+                            primaryColorDark: Colors.red,
+                          ),
+                          child: TextField(
+                            controller: pelak,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.teal),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              labelText: '  پلاک وسیله نقلیه  ',
+                              floatingLabelStyle: TextStyle(fontSize: 25),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                  fontSize: 25, fontFamily: 'shabnam'),
+                            ),
+                          ),
+                        )),
                   )
-                ]
+                : Container(),
+            widget.userkind == 'p'
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, right: 20, left: 20, bottom: 20),
+                    child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Theme(
+                          data: ThemeData(
+                            primaryColor: Colors.redAccent,
+                            primaryColorDark: Colors.red,
+                          ),
+                          child: TextField(
+                            controller: license,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.teal),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              labelText: '  کد گواهینامه  ',
+                              floatingLabelStyle: TextStyle(fontSize: 25),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                  fontSize: 25, fontFamily: 'shabnam'),
+                            ),
+                          ),
+                        )),
+                  )
+                : Container(),
+            widget.userkind == "f"
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, right: 20, left: 20, bottom: 20),
+                    child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Theme(
+                          data: ThemeData(
+                            primaryColor: Colors.redAccent,
+                            primaryColorDark: Colors.red,
+                          ),
+                          child: TextField(
+                            controller: shopname,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.teal),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              labelText: '  نام فروشگاه  ',
+                              floatingLabelStyle: TextStyle(fontSize: 25),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                  fontSize: 25, fontFamily: 'shabnam'),
+                            ),
+                          ),
+                        )),
+                  )
+                : Container(),
+            widget.userkind == "f"
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 20, top: 10),
+                    child: Text(
+                      "انتخاب فروشگاه روی نقشه",
+                      style: TextStyle(fontSize: 20, color: Colors.black87),
+                    ),
+                  )
+                : Container(),
+            widget.userkind == "f"
+                ? Container(
+              decoration: BoxDecoration(
+                // borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  const BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 5.0,
+                    blurRadius: 7.0,
+                  ),
+                ],
               ),
-                height: MediaQuery.of(context).size.width *0.8,width: MediaQuery.of(context).size.width *0.8,child: map()): Container(),
-            SizedBox(height: 20,)
+              child: SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: map()),
+                )
+                : Container(),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
     );
   }
+
   Widget map() {
-    return FlutterMap(
-        options: MapOptions(
-            initialCenter: LatLng(35.715298, 51.404343),
-            initialZoom: 11,
-            interactionOptions:
-            InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom)),
-        children: [
-          tilelayer,
-          MarkerLayer(markers: [
-            // Marker(point: point, child: child)
-          ])
-        ]);
+    return Scaffold(
+      body: FlutterMap(
+        mapController: mapc,
+          options: MapOptions(
+              onTap: (tap_position, latlng) {
+                latlngLocal = latlng;
+                // print('Tapped at: $latlng');
+                // Clear existing markers
+                setState(() {
+                  setState(() {
+                    markers.clear();
+                    markers.add(
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: latlng,
+                        // Child parameter instead of builder
+                        // Directly using an Icon as the child
+                        child: Container(
+                          child: Icon(
+                            Icons.location_pin,
+                            color: Colors.red,
+                            size: 40.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+                  // Add a marker for the tapped location
+                });
+              },
+              initialCenter: LatLng(35.715298, 51.404343),
+              initialZoom: 5,
+              interactionOptions: InteractionOptions(
+                  flags: InteractiveFlag.pinchZoom)),
+          children: [
+            tilelayer,
+            MarkerLayer(markers: markers)
+          ]),
+    );
   }
+
 }
+
+
 TileLayer get tilelayer => TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  userAgentPackageName: 'com.blink.example',
-);
+      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      userAgentPackageName: 'com.blink.example',
+    );

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:blink/pages/Chat.dart';
 import 'package:blink/pages/LastCheck.dart';
 import 'package:blink/pages/OrderHistory.dart';
@@ -43,14 +46,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    stores[0].items.add(
-        Item(sotreid: stores[0].id, id: "11", name: "golabi", price: 10000));
-    stores[0]
-        .items
-        .add(Item(sotreid: stores[0].id, id: "22", name: "moz", price: 10000));
-    stores[0]
-        .items
-        .add(Item(sotreid: stores[0].id, id: "33", name: "sib", price: 10000));
 
     return global.addressIndex == null
         ? Scaffold(
@@ -276,12 +271,21 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 17),
-                                child: ImageIcon(
-                                  AssetImage('images/account.png'),
-                                  color: Color(0xFF618771),
-                                  size: 80,
+                                child: Image.memory(
+                                  width: 150,
+                                  Uint8List.fromList(base64Decode(global.profile_imge)),
+                                  fit: BoxFit.cover, // Adjust the fit as needed
                                 ),
                               ),
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.symmetric(horizontal: 17),
+                              //   child: ImageIcon(
+                              //     AssetImage('images/account.png'),
+                              //     color: Color(0xFF618771),
+                              //     size: 80,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
