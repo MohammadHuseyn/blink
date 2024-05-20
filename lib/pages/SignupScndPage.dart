@@ -24,6 +24,10 @@ class SignupScndPage extends StatefulWidget {
   State<SignupScndPage> createState() => _SignupScndPageState();
 }
 
+LatLng? latlngLocal = null;
+List<Marker> markers = [];
+var mapc = MapController();
+bool isMapRead = false;
 class _SignupScndPageState extends State<SignupScndPage> {
   final ImagePicker _picker = ImagePicker();
 
@@ -109,8 +113,8 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 "last_name": last_name.text,
                 "phone_number": phone.text,
                 "user_type": "seller",
-                "longitude": "35.715298",
-                "latitude": "51.404343",
+                "longitude": latlngLocal!.longitude,
+                "latitude": latlngLocal!.latitude,
                 "location_name": shopname.text,
                 "store_name": shopname.text,
                 "image" : base64Image,
@@ -456,18 +460,21 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 : Container(),
             widget.userkind == "f"
                 ? Container(
-                    decoration: BoxDecoration(
-                        // border: Border.all(color: Colors.grey),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 20,
-                            offset: Offset(1, 5),
-                          )
-                        ]),
-                    height: MediaQuery.of(context).size.width * 0.8,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: map())
+              decoration: BoxDecoration(
+                // borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  const BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 5.0,
+                    blurRadius: 7.0,
+                  ),
+                ],
+              ),
+              child: SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: map()),
+                )
                 : Container(),
             SizedBox(
               height: 20,
@@ -479,20 +486,50 @@ class _SignupScndPageState extends State<SignupScndPage> {
   }
 
   Widget map() {
-    return FlutterMap(
-        options: MapOptions(
-            initialCenter: LatLng(35.715298, 51.404343),
-            initialZoom: 11,
-            interactionOptions:
-                InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom)),
-        children: [
-          tilelayer,
-          MarkerLayer(markers: [
-            // Marker(point: point, child: child)
-          ])
-        ]);
+    return Scaffold(
+      body: FlutterMap(
+        mapController: mapc,
+          options: MapOptions(
+              onTap: (tap_position, latlng) {
+                latlngLocal = latlng;
+                // print('Tapped at: $latlng');
+                // Clear existing markers
+                setState(() {
+                  setState(() {
+                    markers.clear();
+                    markers.add(
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: latlng,
+                        // Child parameter instead of builder
+                        // Directly using an Icon as the child
+                        child: Container(
+                          child: Icon(
+                            Icons.location_pin,
+                            color: Colors.red,
+                            size: 40.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+                  // Add a marker for the tapped location
+                });
+              },
+              initialCenter: LatLng(35.715298, 51.404343),
+              initialZoom: 5,
+              interactionOptions: InteractionOptions(
+                  flags: InteractiveFlag.pinchZoom)),
+          children: [
+            tilelayer,
+            MarkerLayer(markers: markers)
+          ]),
+    );
   }
+
 }
+
 
 TileLayer get tilelayer => TileLayer(
       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

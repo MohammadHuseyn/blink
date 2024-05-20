@@ -13,6 +13,7 @@ var first_name = TextEditingController();
 var email = TextEditingController();
 var last_name = TextEditingController();
 var phone = TextEditingController();
+var store_name = TextEditingController();
 var newpass = TextEditingController();
 var duppass = TextEditingController();
 var showPass = false;
@@ -26,6 +27,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     first_name.text = global.first_name;
     email.text = global.email;
     phone.text = global.phone_number;
+    store_name.text = global.storeName;
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -153,6 +155,31 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     )),
               ),
+              global.userkind == "Seller"? Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, right: 20, left: 20, bottom: 20),
+                child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Theme(
+                      data: ThemeData(
+                        primaryColor: Colors.redAccent,
+                        primaryColorDark: Colors.red,
+                      ),
+                      child: TextField(
+                        controller: store_name,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                          labelText: '  نام فروشگاه  ',
+                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        ),
+                      ),
+                    )),
+              ) : Container(),
               Padding(
                 padding: const EdgeInsets.only(
                     top: 20, right: 20, left: 20, bottom: 20),
