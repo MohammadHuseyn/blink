@@ -135,12 +135,12 @@ class _StorePageState extends State<StorePage> {
                           scrollDirection: Axis.vertical,
                           itemCount: store.items.length,
                           itemBuilder: (cntx, i) {
+                            if (i != 0)
+                              i++;
                             return Row(
                               children: [
-                                prodcut(15, 0, store.items[i]),
-                                i + 1 >= store.items.length
-                                    ? Container()
-                                    : prodcut(15, 0, store.items[i + 1]),
+                                i < store.items.length? prodcut(15, 0, store.items[i++]) : Container(),
+                                i < store.items.length? prodcut(15, 0, store.items[i++]) : Container(),
                               ],
                             );
                           }),
@@ -342,7 +342,9 @@ class _StorePageState extends State<StorePage> {
               return Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(25)),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(25),
+                    topLeft: Radius.circular(25))),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

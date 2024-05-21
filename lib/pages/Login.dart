@@ -1,9 +1,13 @@
 import 'dart:ui';
+import 'package:blink/pages/StoreHomPage.dart';
+
 import '../global.dart' as global;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'StorePage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -40,8 +44,22 @@ class _LoginState extends State<Login> {
                 global.first_name = data["user"]["first_name"];
                 global.last_name = data["user"]["last_name"];
                 global.email = data["user"]["email"];
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                global.userkind = data["user_type"];
+                global.phone_number = data["phone_number"];
+                global.profile_imge = data["image"];
+                switch (global.userkind) {
+                  case "Seller" : {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => StoreHomePage()));
+                  } break;
+                  case "Customer" : {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  } break;
+                  case "Delivery" : {
+
+                  } break;
+                }
               } catch (e) {
                 print('Error: $e');
               }
