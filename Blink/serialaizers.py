@@ -56,11 +56,7 @@ class UserSignupSerializer(serializers.Serializer):
                 address=validated_data.pop('address', ''),
                 user_id=user1.id
             )
-            if 'latitude' in validated_data and 'longitude' in validated_data:
-                pass
-            else:
-                location = None  # Location might be optional
-
+            print(location.latitude)
             store = Store.objects.create(
                 name=store_name,
                 location=location,
@@ -127,12 +123,7 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'location', 'products', 'image']
 
     def get_location(self, obj):
-        if obj.location:
-            return {
-                'latitude': obj.location.latitude,
-                'longitude': obj.location.longitude,
-                'name': obj.location.name,
-            }
+        return LocationSerializer(obj.location).data
 
     def get_products(self, obj):
         # Retrieve products related to this store and format as required
