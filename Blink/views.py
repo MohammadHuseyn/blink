@@ -23,13 +23,43 @@ class SignupView(APIView):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            try:
+                customer = Customer.objects.get(id=user.id)
+
+            except:
+                customer = False
+            try:
+                seller = Seller.objects.get(id=user.id)
+
+            except:
+                seller = False
+            try:
+                delivery = Delivery.objects.get(id=user.id)
+            except:
+                delivery = False
+
+            if customer:
+                user_serializer = CustomerDetailSerializer(user)
+                phone_number = customer.phone_number
+                image = customer.image
+                user_type = 'Customer'
+            elif seller:
+                user_serializer = SellerDetailSerializer(user)
+                phone_number = seller.phone_number
+                image = seller.image
+                user_type = 'Seller'
+            elif delivery:
+                user_serializer = DeliveryDetailSerializer(user)
+                phone_number = delivery.phone_number
+                image = delivery.image
+                user_type = 'Delivery'
             token, created = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
-                'user_id': user.id,
-                'username': user.username,
-                'image': user.image,
-                'user_type': user.user_type
+                'user': user_serializer.data,
+                'phone_number': phone_number,
+                'image': image,
+                'user_type': user_type
             }, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -328,8 +358,8 @@ class LocationView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        user = request.user.id
-        locations = Location.objects.filter(customer=user)
+        user = request.user
+        locations = Location.objects.filter(user_id=user.id)
         serializer = LocationSerializer(locations, many=True)
         return Response(serializer.data)
 
@@ -342,7 +372,7 @@ class LocationView(APIView):
                 address=request.data.get('address'),
                 longitude=request.data.get('longitude'),
                 latitude=request.data.get('latitude'),
-                customer=customer
+                user_id=customer.id
             )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

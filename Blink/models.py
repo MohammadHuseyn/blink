@@ -42,7 +42,7 @@ class Location(models.Model):
     longitude = models.DecimalField(max_digits=25, decimal_places=15)
     timestamp = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=200, blank=True)
-    customer = models.ForeignKey(Customer, related_name='location', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='location', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Latitude: {self.latitude}, Longitude: {self.longitude}"
@@ -51,6 +51,7 @@ class Location(models.Model):
 class Seller(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     store = models.OneToOneField('Store', related_name='seller_profile', on_delete=models.CASCADE, null=True)
+    image = models.CharField(max_length=2048, null=True)
 
 
 class DiscountCode(models.Model):

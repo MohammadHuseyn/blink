@@ -14,37 +14,27 @@ class UserSignupSerializer(serializers.Serializer):
         choices=[('customer', 'Customer'), ('seller', 'Seller'), ('delivery', 'Delivery')])
     # Additional fields for seller store information
     store_name = serializers.CharField(max_length=100, required=False)
-    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
-    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=False)  # For new location
+    latitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)  # For new location
+    longitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)  # For new location
     location_name = serializers.CharField(max_length=20, required=False, allow_blank=True)
-    image = serializers.CharField(max_length=None, required=False)
+    image = serializers.CharField(max_length=20480000, required=False)
     vehicle_license_plate = serializers.CharField(max_length=20, required=False, allow_blank=True)
     driving_license_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
-
     def create(self, validated_data):
         user_type = validated_data.get('user_type')
-
         # Create the appropriate user based on user_type
         if user_type == 'customer':
             user = Customer.objects.create_user(
-                username=validated_data['username'],
+                username=validated_data.get('username', ''),
                 email=validated_data.get('email', ''),
-                password=validated_data['password'],
+                password=validated_data.get('password', ''),
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
-                phone_number=validated_data.get('phone_number', '')
+                phone_number=validated_data.get('phone_number', ''),
+                image=validated_data.get('image', '')
             )
 
         elif user_type == 'seller':
-            if 'latitude' in validated_data and 'longitude' in validated_data:
-                location = Location.objects.create(
-                    latitude=validated_data.pop('latitude'),
-                    longitude=validated_data.pop('longitude'),
-                    name=validated_data.pop('location_name', ''),
-                    image=validated_data.get('image', '')
-                )
-            else:
-                location = None  # Location might be optional
 
             user = Seller.objects.create_user(
                 username=validated_data['username'],
@@ -56,12 +46,25 @@ class UserSignupSerializer(serializers.Serializer):
                 image=validated_data.get('image', '')
             )
             store_name = validated_data.pop('store_name', None)
+            user1 = User.objects.get(id=user.id)
             if not store_name:
                 raise serializers.ValidationError("Store name is required")
+            location = Location.objects.create(
+                latitude=validated_data.pop('latitude'),
+                longitude=validated_data.pop('longitude'),
+                name=validated_data.pop('location_name', ''),
+                address=validated_data.pop('address', ''),
+                user_id=user1.id
+            )
+            if 'latitude' in validated_data and 'longitude' in validated_data:
+                pass
+            else:
+                location = None  # Location might be optional
 
             store = Store.objects.create(
                 name=store_name,
-                location=location
+                location=location,
+                image=validated_data.get('image', '')
             )
             user.store = store
             user.save()
@@ -76,13 +79,13 @@ class UserSignupSerializer(serializers.Serializer):
                 last_name=validated_data.get('last_name', ''),
                 phone_number=validated_data.get('phone_number', ''),
                 vehicle_license_plate=validated_data.get('plate', ''),
-                driving_license_number=validated_data.get('license', '')
+                driving_license_number=validated_data.get('license', ''),
+                image=validated_data.get('image', '')
             )
         else:
             raise serializers.ValidationError("Invalid user type")
 
         return user
-
 
 class GeneralUserDetailSerializer(serializers.ModelSerializer):
     # Extend this serializer to capture common fields across all user types
