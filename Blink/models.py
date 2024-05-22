@@ -8,6 +8,7 @@ from django.contrib.auth.models import AbstractUser, User
 class Customer(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+
     def __str__(self):
         return self.username
 
@@ -17,6 +18,7 @@ class Delivery(User):
     driving_license_number = models.CharField(max_length=20, unique=False, help_text="Unique driving license number")
     vehicle_license_plate = models.CharField(max_length=15, unique=False, help_text="Vehicle license plate number")
     image = models.CharField(max_length=2048, null=True, blank=True)
+
     def __str__(self):
         return f"{self.username} (Driving License: {self.driving_license_number})"
 
@@ -25,6 +27,7 @@ class Administrator(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+
     def __str__(self):
         return self.username
 
@@ -32,6 +35,7 @@ class Administrator(User):
 class CustomerSupport(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+
     def __str__(self):
         return self.username
 
@@ -76,6 +80,7 @@ class Store(models.Model):
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+
     def __str__(self):
         return self.name
 
@@ -87,6 +92,7 @@ class Product(models.Model):
     store = models.ForeignKey(Store, related_name='products', on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+    description = models.TextField(blank=True, max_length=100)
 
     def __str__(self):
         return self.name
@@ -139,12 +145,14 @@ class Order(models.Model):
         CREATED = 'CREATED', _('Created')
         PENDING = 'PENDING', _('Pending')
         PROCESSING = 'PROCESSING', _('Processing')
+        WAITING = 'WAITING', _('Waiting')
         DISPATCHED = 'DISPATCHED', _('Dispatched')
         DELIVERED = 'DELIVERED', _('Delivered')
         CANCELLED = 'CANCELLED', _('Cancelled')
         FAILED = 'PAYMENT', _('Failed')
 
     customer = models.ForeignKey(Customer, related_name='orders', on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, related_name='orders', on_delete=models.CASCADE)
     delivery_location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True,
                                           related_name='orders')
     delivery_person = models.ForeignKey(Delivery, related_name='orders', on_delete=models.SET_NULL, null=True,
@@ -160,6 +168,7 @@ class Order(models.Model):
                               help_text="Status of the order")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    fast_delivery = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order #{self.id} by {self.customer.username} - Total: {self.total_price} - Status: {self.status}"

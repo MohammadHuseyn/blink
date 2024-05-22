@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer
+    ProductSerializer, OrderSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -17,6 +17,7 @@ from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import make_password, check_password
+
 
 class SignupView(APIView):
     def post(self, request):
@@ -80,38 +81,42 @@ class LoginView(APIView):
             customer = Customer.objects.get(id=user.id)
 
         except:
-            customer = False
+            customer = None
+
         try:
             seller = Seller.objects.get(id=user.id)
-
         except:
-            seller = False
+            seller = None
+
         try:
             delivery = Delivery.objects.get(id=user.id)
         except:
-            delivery = False
+            delivery = None
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
             if customer:
-                user_serializer = CustomerDetailSerializer(user)
+                user_serializer = CustomerDetailSerializer(customer)
                 phone_number = customer.phone_number
                 image = customer.image
                 user_type = 'Customer'
             elif seller:
-                user_serializer = SellerDetailSerializer(user)
+                user_serializer = SellerDetailSerializer(seller)
                 phone_number = seller.phone_number
                 image = seller.image
                 user_type = 'Seller'
             elif delivery:
-                user_serializer = DeliveryDetailSerializer(user)
+                user_serializer = DeliveryDetailSerializer(delivery)
                 phone_number = delivery.phone_number
                 image = delivery.image
                 user_type = 'Delivery'
 
             else:
                 user_serializer = GeneralUserDetailSerializer(user)
+                phone_number = ''
+                image = ''
+                user_type = 'Unknown'
 
             return Response({
                 'token': token.key,
@@ -182,7 +187,8 @@ class ShoppingCartView(APIView):
                 # Optionally, you can perform additional actions here, such as updating product stock
             total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all()) + 50000
 
-            return Response({"message": "Shopping cart updated successfully","total_price":total_price}, status=status.HTTP_200_OK)
+            return Response({"message": "Shopping cart updated successfully", "total_price": total_price},
+                            status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -204,20 +210,29 @@ class OrderFromCartView(APIView):
 
         # Assuming the delivery location and other necessary details are provided in the request
         delivery_location_id = request.data.get('location_id')
-        delivery_location = Location.objects.get(pk=delivery_location_id)
+        delivery_location = Location.objects.get(id=delivery_location_id)
         total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all())
+        store_id = request.data.get('store_id')
+        store = Store.objects.get(id=store_id)
+        fast_delivery = request.data.get('fast_delivery')
+        if fast_delivery:
+            delivery_price = 100000
+        else:
+            delivery_price = 50000
 
         # Create the order
         order = Order.objects.create(
             customer=user,
             delivery_location=delivery_location,
-            delivery_price=50000,  # Example delivery price, replace with actual value
-            discount=None,  # No discount applied initially, can be set based on business logic
-            discount_value=0.00,  # No discount applied initially
+            delivery_price=delivery_price,
+            discount=None,
+            discount_value=0.00,
             total_price=total_price,
-            status=Order.OrderStatus.PENDING,  # Initial status set to PENDING
-            created_at=timezone.now(),  # Set current time as creation time
-            updated_at=timezone.now()  #
+            status=Order.OrderStatus.PENDING,
+            created_at=timezone.now(),
+            updated_at=timezone.now(),
+            store=store,
+            fast_delivery=fast_delivery,
         )
 
         # Move items from the shopping cart to the order
@@ -231,16 +246,18 @@ class OrderFromCartView(APIView):
         # Optionally, clear the shopping cart after creating the order
         shopping_cart.items.all().delete()
 
-        return Response({"message": "Order placed successfully","order_id":order.id}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Order placed successfully", "order_id": order.id}, status=status.HTTP_201_CREATED)
+
 
 class PaymentView(APIView):
     def post(self, request):
         order_id = request.data.get('order_id')
-        is_paid = request.data.get('paid')  # Assuming you receive 'paid' parameter for payment status
+        is_paid = request.data.get('paid')
         order = Order.objects.get(id=order_id)
 
         if is_paid:
             order.status = Order.OrderStatus.PENDING
+            order.updated_at = timezone.now()
             order.save()
 
             for item in order.items.all():
@@ -253,6 +270,8 @@ class PaymentView(APIView):
             order.status = Order.OrderStatus.FAILED
             order.save()
             return Response({'pay': False, 'order_id': order_id})
+
+
 class AddProductView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -266,6 +285,7 @@ class AddProductView(APIView):
             category_id = data.get('category_id')
             store_id = data.get('store_id')
             image = data.get('image')
+            description = data.get('product_description')
             if not all([product_name, price, quantity, category_id, store_id]):
                 return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -278,13 +298,16 @@ class AddProductView(APIView):
                 quantity=quantity,
                 category=category,
                 store=store,
-                image=image
+                image=image,
+                description=description
             )
 
-            return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED)
+            return Response({'success': 'Product added successfully', 'product_id': product.id},
+                            status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class EditProductView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -299,6 +322,8 @@ class EditProductView(APIView):
             quantity = data.get('quantity')
             category_id = data.get('category_id')
             store_id = data.get('store_id')
+            image = data.get('image')
+            description = data.get('product_description')
 
             if not all([product_id, product_name, price, quantity, category_id, store_id]):
                 return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
@@ -313,6 +338,8 @@ class EditProductView(APIView):
             product.quantity = quantity
             product.category = category
             product.store = store
+            product.image = image
+            product.description = description
             product.save()
 
             return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK)
@@ -353,10 +380,11 @@ class CustomerProfileEdit(APIView):
 
         return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
 
-class LocationView(APIView):
 
+class LocationView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         user = request.user
         locations = Location.objects.filter(user_id=user.id)
@@ -418,6 +446,7 @@ class SellerStoresView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
 class ProductSearchView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -430,3 +459,140 @@ class ProductSearchView(generics.ListAPIView):
         if store_id:
             queryset = queryset.filter(store_id=store_id)
         return queryset
+
+
+class AcceptRejectOrderView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        store_id = request.query_params.get('store_id')
+        desired_statuses = ['PENDING', 'PROCESSING', 'WAITING']
+        orders = Order.objects.filter(store_id=store_id, status__in=desired_statuses)
+        json_data = []
+        for order in orders:
+            customer_name = order.customer.first_name + " " + order.customer.last_name
+            delivery_location = Location.objects.get(id=order.delivery_location.id).address
+            order_items = OrderItem.objects.filter(order_id=order.id)
+            fast_delivery = order.fast_delivery
+            order_items_data = []
+            for item in order_items:
+                product = Product.objects.get(id=item.product.id)
+                product_id = product.id
+                product_name = product.name
+                count = item.quantity
+                price = product.price
+                image = product.image
+                order_items_data.append(
+                    {"product_id": product_id, "product_name": product_name, "count": count, "price": price,
+                     "image": image})
+
+            json_data.append({"order_id": order.id, 'customer_name': customer_name,
+                              'delivery_location': delivery_location, "status": order.status,
+                              "total_price": order.total_price, "order_items": order_items_data,
+                              "discount_value": order.discount_value, "discount_code": None,
+                              "fast_delivery": fast_delivery})
+
+        return Response(json_data)
+
+    def post(self, request):
+        # Parse JSON data
+        data = request.data
+        order_id = data.get('order_id')
+        order_status = data.get('status')
+        desired_statuses = ['PENDING', 'PROCESSING', 'WAITING']
+
+        # Validate data
+        if order_id is None or order_status is None:
+            return Response({'error': 'Both order_id and accept fields are required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Retrieve the order
+            order = Order.objects.get(pk=order_id, status__in=desired_statuses)
+
+            # Update order status based on accept value
+            if order_status == 'Accepted':
+                order.status = Order.OrderStatus.PROCESSING
+            elif order_status == 'Rejected':
+                order.status = Order.OrderStatus.CANCELLED
+            elif order_status == 'Processed':
+                order.status = Order.OrderStatus.WAITING
+
+            # Save changes
+            order.updated_at = timezone.now()
+            order.save()
+
+            return Response({'message': 'Order status updated successfully'}, status=status.HTTP_200_OK)
+
+        except Order.DoesNotExist:
+            return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class OrderStatusView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        order_id = request.query_params.get('order_id')
+        order = Order.objects.get(id=order_id)
+        order_data = OrderSerializer(order)
+
+        return Response({"order": order_data.data})
+
+class DeliveryOrdersView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        desired_statuses = ['DISPATCHED', 'WAITING']
+        orders = Order.objects.filter(status__in=desired_statuses)
+        json_data = []
+        for order in orders:
+            customer_name = order.customer.first_name + " " + order.customer.last_name
+            delivery_location = Location.objects.get(id=order.delivery_location.id).address
+            store = Store.objects.get(id=order.store_id)
+            store_name = store.name
+            store_location = Location.objects.get(id=store.location.id).address
+            fast_delivery = order.fast_delivery
+            json_data.append({"order_id": order.id, 'customer_name': customer_name,
+                              'delivery_location': delivery_location, "status": order.status,
+                              "store_location": store_location, "fast_delivery": fast_delivery,
+                              "store_name": store_name})
+
+        return Response(json_data)
+
+    def post(self, request):
+        user = request.user
+        user = Delivery.objects.get(id=user.id)
+        data = request.data
+        order_id = data.get('order_id')
+        order_status = data.get('status')
+
+        # Validate data
+        if order_id is None or order_status is None:
+            return Response({'error': 'Both order_id and accept fields are required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Retrieve the order
+            order = Order.objects.get(pk=order_id)
+
+            # Update order status based on accept value
+            if order_status == 'Accepted':
+                order.status = Order.OrderStatus.DISPATCHED
+                order.delivery_person = user
+            elif order_status == 'Rejected':
+                order.status = Order.OrderStatus.WAITING
+                order.delivery_person = None
+            elif order_status == 'Delivered':
+                order.status = Order.OrderStatus.DELIVERED
+
+            # Save changes
+            order.updated_at = timezone.now()
+            order.save()
+
+            return Response({'message': 'Order status updated successfully'}, status=status.HTTP_200_OK)
+
+        except Order.DoesNotExist:
+            return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
