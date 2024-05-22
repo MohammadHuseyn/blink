@@ -4,13 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer
+    ProductSerializer, ProductCommentSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem, \
-    Category
+    Category, ProductComment
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
@@ -60,9 +60,9 @@ class SignupView(APIView):
                 'phone_number': phone_number,
                 'image': image,
                 'user_type': user_type
-            }, status=status.HTTP_201_CREATED)
+            }, content_type='application/json; charset=utf-8', status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,content_type='application/json; charset=utf-8', status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
@@ -119,11 +119,11 @@ class LoginView(APIView):
                 'phone_number': phone_number,
                 'user_type': user_type,
                 'image': image
-            }, status=status.HTTP_200_OK)
+            },content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
         else:
             return Response({
                 "error": "Invalid credentials"
-            }, status=status.HTTP_401_UNAUTHORIZED)
+            },content_type='application/json; charset=utf-8', status=status.HTTP_401_UNAUTHORIZED)
 
 
 class StoreListView(APIView):
@@ -136,7 +136,7 @@ class StoreListView(APIView):
 
         if not longitude or not latitude:
             return Response(
-                {"error": "Longitude, latitude, and token are required"},
+                {"error": "Longitude, latitude, and token are required"},content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
@@ -146,11 +146,11 @@ class StoreListView(APIView):
             serializer = StoreSerializer(stores, many=True)
             store_dict = {str(store['id']): store for store in serializer.data}
 
-            return Response(store_dict, status=status.HTTP_200_OK)
+            return Response(store_dict,content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
-                {"error": "Invalid token"},
+                {"error": "Invalid token"},content_type='application/json; charset=utf-8',
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
@@ -182,9 +182,9 @@ class ShoppingCartView(APIView):
                 # Optionally, you can perform additional actions here, such as updating product stock
             total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all()) + 50000
 
-            return Response({"message": "Shopping cart updated successfully","total_price":total_price}, status=status.HTTP_200_OK)
+            return Response({"message": "Shopping cart updated successfully","total_price":total_price}, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, content_type='application/json; charset=utf-8', status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderFromCartView(APIView):
@@ -231,7 +231,7 @@ class OrderFromCartView(APIView):
         # Optionally, clear the shopping cart after creating the order
         shopping_cart.items.all().delete()
 
-        return Response({"message": "Order placed successfully","order_id":order.id}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Order placed successfully","order_id":order.id}, content_type='application/json; charset=utf-8', status=status.HTTP_201_CREATED)
 
 class PaymentView(APIView):
     def post(self, request):
@@ -248,11 +248,11 @@ class PaymentView(APIView):
                 product.quantity -= item.quantity
                 product.save()
 
-            return Response({'pay': True, 'order_id': order_id})
+            return Response({'pay': True, 'order_id': order_id}, content_type='application/json; charset=utf-8')
         else:
             order.status = Order.OrderStatus.FAILED
             order.save()
-            return Response({'pay': False, 'order_id': order_id})
+            return Response({'pay': False, 'order_id': order_id}, content_type='application/json; charset=utf-8')
 class AddProductView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -267,7 +267,7 @@ class AddProductView(APIView):
             store_id = data.get('store_id')
             image = data.get('image')
             if not all([product_name, price, quantity, category_id, store_id]):
-                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
 
             category, _ = Category.objects.get_or_create(id=category_id)
             store, _ = Store.objects.get_or_create(id=store_id)
@@ -281,10 +281,10 @@ class AddProductView(APIView):
                 image=image
             )
 
-            return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED)
+            return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8',)
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR, content_type='application/json; charset=utf-8')
 
 class EditProductView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -301,7 +301,7 @@ class EditProductView(APIView):
             store_id = data.get('store_id')
 
             if not all([product_id, product_name, price, quantity, category_id, store_id]):
-                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8',)
 
             product = Product.objects.get(id=product_id)
 
@@ -315,13 +315,13 @@ class EditProductView(APIView):
             product.store = store
             product.save()
 
-            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK)
+            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
 
         except Product.DoesNotExist:
-            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8')
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR, content_type='application/json; charset=utf-8',)
 
 
 class CustomerProfileEdit(APIView):
@@ -347,11 +347,11 @@ class CustomerProfileEdit(APIView):
             if check_password(current_password, user.password):
                 user.password = make_password(password)
             else:
-                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
 
         user.save()
 
-        return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+        return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
 
 class LocationView(APIView):
 
@@ -375,8 +375,8 @@ class LocationView(APIView):
                 user_id=customer.id
             )
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8',)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8',)
 
 
 class SellerStoresView(APIView):
@@ -405,17 +405,17 @@ class SellerStoresView(APIView):
                     'store': store_data
                 }
 
-                return Response(response_data, status=status.HTTP_200_OK)
+                return Response(response_data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
             else:
                 return Response(
                     {"error": "No store associated with this seller."},
-                    status=status.HTTP_404_NOT_FOUND
+                    status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
                 )
 
         except Seller.DoesNotExist:
             return Response(
                 {"error": "Seller does not exist."},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
             )
 
 class ProductSearchView(generics.ListAPIView):
@@ -430,3 +430,31 @@ class ProductSearchView(generics.ListAPIView):
         if store_id:
             queryset = queryset.filter(store_id=store_id)
         return queryset
+
+
+class ProductCommentView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        product_id = request.query_params.get('product_id')
+        if not product_id:
+            return Response({"error": "product_id is required as a query parameter"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        comments = ProductComment.objects.filter(product_id=product_id)
+        serializer = ProductCommentSerializer(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
+
+    def post(self, request):
+        product_id = request.query_params.get('product_id')
+        if not product_id:
+            return Response({"error": "product_id is required as a query parameter"}, content_type='application/json; charset=utf-8',
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['product'] = product_id
+        data['user'] = request.user.id
+        serializer = ProductCommentSerializer(data=data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')

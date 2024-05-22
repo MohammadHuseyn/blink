@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem
+from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment
 
 
 class UserSignupSerializer(serializers.Serializer):
@@ -142,3 +142,12 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['id', 'name', 'latitude', 'longitude', 'address']
+class ProductCommentSerializer(serializers.ModelSerializer):
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    class Meta:
+        model = ProductComment
+        fields = ['id', 'product', 'user', 'comment', 'user_first_name',
+                  'user_last_name', 'comment_created']
+        read_only_fields = ['user_first_name', 'user_last_name']
+
