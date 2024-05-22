@@ -9,6 +9,7 @@ import 'package:blink/pages/Payment.dart';
 import 'package:blink/pages/StorePage.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../classes/item.dart';
 import '../classes/store.dart';
 import 'package:blink/pages/Address.dart';
 import 'package:blink/pages/Login.dart';
@@ -26,8 +27,10 @@ class Home extends StatefulWidget {
 
 var _currentIndex = 1;
 var sum = 0.0;
+bool fast = false;
 List<Store> stores = [
-  Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
+  Store(
+      id: "1", name: "baq gilas", longitude: 12554, latitude: 98455, image: ""),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
@@ -46,7 +49,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return global.addressIndex == null
         ? Scaffold(
             bottomNavigationBar: Padding(
@@ -241,7 +243,7 @@ class _HomeState extends State<Home> {
                               GestureDetector(
                                 onTap: () => profileChange(),
                                 child: Text(
-                                  "تغییرات",
+                                  "ویرایش",
                                   style: TextStyle(
                                       fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
@@ -252,7 +254,7 @@ class _HomeState extends State<Home> {
                               Column(
                                 children: [
                                   Text(
-                                    "نام کاربر",
+                                    global.first_name ,
                                     style: TextStyle(
                                       fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
@@ -260,7 +262,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   Text(
-                                    "نقش",
+                                    "مشتری",
                                     style: TextStyle(
                                         fontFamily: 'shabnam',
                                         color: Colors.grey,
@@ -271,11 +273,23 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 17),
-                                child: Image.memory(
-                                  width: 150,
-                                  Uint8List.fromList(base64Decode(global.profile_imge)),
-                                  fit: BoxFit.cover, // Adjust the fit as needed
-                                ),
+                                child: global.profile_imge == ""
+                                    ? ImageIcon(
+                                        AssetImage('images/account.png'),
+                                        color: Color(0xFF618771),
+                                        size: 80,
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(75),
+                                        // Same radius as the CircleAvatar
+                                        child: Image.memory(
+                                          width: 100,
+                                          Uint8List.fromList(base64Decode(
+                                              global.profile_imge)),
+                                          fit: BoxFit
+                                              .cover, // Adjust the fit as needed
+                                        ),
+                                      ),
                               ),
                               // Padding(
                               //   padding:
@@ -787,100 +801,151 @@ class _HomeState extends State<Home> {
                               ),
                               SizedBox(
                                 height: 500,
-                                child: Container(
-                                  child: ListView.builder(
-                                      itemCount: stores.length,
-                                      itemBuilder: (context, i) {
-                                        return Directionality(
-                                          textDirection: TextDirection.rtl,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        color:
-                                                            Color(0xFF256f46),
-                                                        width: 1.5))),
+                                child: ListView.builder(
+                                    itemCount: stores.length,
+                                    itemBuilder: (context, i) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      StorePage(
+                                                          store: stores[i])));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Color(0xFF256f46),
+                                                      width: 1.5))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 15),
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      vertical: 15),
-                                              child: ListTile(
-                                                leading: Container(
-                                                  decoration: BoxDecoration(
-                                                      // color: Color(0xffEAF3EE),
-                                                      boxShadow: [
-                                                        const BoxShadow(
-                                                          color: Colors.grey,
-                                                        ),
-                                                        const BoxShadow(
+                                                      horizontal: 15),
+                                              child: Row(
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 8.0),
+                                                        child: ImageIcon(
+                                                          AssetImage(
+                                                              "images/star.png"),
                                                           color:
-                                                              Color(0xffEAF3EE),
-                                                          spreadRadius: -0.2,
-                                                          blurRadius: 5.0,
+                                                              Color(0xFF256F46),
                                                         ),
-                                                      ],
-                                                      // color: Colors.red,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  15))),
-                                                  child: Padding(
+                                                      ),
+                                                      Text(
+                                                        "4.1/5",
+                                                        style: TextStyle(
+                                                            fontSize: 17),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Expanded(child: Container()),
+                                                  Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 8.0),
+                                                        child: Text(
+                                                          stores[i].name,
+                                                          style: TextStyle(
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                              "  آدرس انتخاب شده"),
+                                                          ImageIcon(
+                                                            AssetImage(
+                                                                "images/location.png"),
+                                                            color: Color(
+                                                                0xFF97b9a7),
+                                                            size: 30,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Padding(
                                                     padding:
-                                                        const EdgeInsets.all(5),
-                                                    child: ImageIcon(
-                                                      AssetImage(
-                                                          "images/shop.png"),
-                                                      size: 65,
+                                                        const EdgeInsets.only(
+                                                            left: 15),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          // color: Color(0xffEAF3EE),
+                                                          boxShadow: [
+                                                            const BoxShadow(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            const BoxShadow(
+                                                              color: Color(
+                                                                  0xffEAF3EE),
+                                                              spreadRadius:
+                                                                  -0.2,
+                                                              blurRadius: 5.0,
+                                                            ),
+                                                          ],
+                                                          // color: Colors.red,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15))),
+                                                      child: stores[i].image ==
+                                                              ""
+                                                          ? Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15,
+                                                                      vertical:
+                                                                          15),
+                                                              child: ImageIcon(
+                                                                AssetImage(
+                                                                    "images/shop.png"),
+                                                                size: 50,
+                                                              ))
+                                                          : ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                              // Same radius as the CircleAvatar
+                                                              child:
+                                                                  Image.memory(
+                                                                width: 100,
+                                                                height: 100,
+                                                                Uint8List.fromList(
+                                                                    base64Decode(
+                                                                        stores[i]
+                                                                            .image)),
+                                                                fit: BoxFit
+                                                                    .cover, // Adjust the fit as needed
+                                                              ),
+                                                            ),
                                                     ),
                                                   ),
-                                                ),
-                                                title: Text(
-                                                  stores[i].name,
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                ),
-                                                subtitle: Row(
-                                                  children: [
-                                                    ImageIcon(
-                                                      AssetImage(
-                                                          "images/location.png"),
-                                                      color: Color(0xFF97b9a7),
-                                                      size: 30,
-                                                    ),
-                                                    Text("  آدرس انتخاب شده"),
-                                                  ],
-                                                ),
-                                                trailing: Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(bottom: 8.0),
-                                                      child: ImageIcon(
-                                                        AssetImage("images/star.png"),
-                                                        color: Color(0xFF256F46),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "4.1/5",
-                                                      style: TextStyle(
-                                                          fontSize: 17),
-                                                    )
-                                                  ],
-                                                ),
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              StorePage(
-                                                                  store: stores[
-                                                                      i])));
-                                                },
+                                                ],
                                               ),
                                             ),
                                           ),
-                                        );
-                                      }),
-                                ),
+                                        ),
+                                      );
+                                    }),
                               ),
                               SizedBox(
                                 height: 5,
@@ -899,7 +964,7 @@ class _HomeState extends State<Home> {
                                       color: Colors.black12,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
-                                  margin: EdgeInsets.symmetric(horizontal: 8.0),
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
                                   child: Padding(
@@ -933,6 +998,9 @@ class _HomeState extends State<Home> {
                                                                     .price;
                                                                 global.card[i]
                                                                     .count -= 1;
+                                                                if ( global.card[i]
+                                                                    .count == 0)
+                                                                  global.card.removeAt(i);
                                                               }
                                                             });
                                                           },
@@ -1000,16 +1068,47 @@ class _HomeState extends State<Home> {
                                                     ],
                                                   ),
                                                   Expanded(child: Container()),
-                                                  Image(
-                                                      image: AssetImage(
-                                                          'images/img.png'),
-                                                      width: 75),
+                                                  global.card[i].image == ""?Padding(
+                                                    padding: const EdgeInsets.all(10),
+                                                    child: Image(
+                                                        image: AssetImage(
+                                                            'images/product.png'),
+                                                        width: 60),
+                                                  ) : ClipRRect(
+                                                        child: Image.memory(
+                                                    width: 80,
+                                                    Uint8List.fromList(
+                                                          base64Decode(global.card[i].image)),
+                                                    fit: BoxFit.fitWidth, // Adjust the fit as needed
+                                                  ),
+                                                    borderRadius: BorderRadius.circular(20),
+                                                      ),
                                                   Expanded(child: Container())
                                                 ]),
                                               );
                                             },
                                           ),
                                   )),
+                            ),
+                            Expanded(child: Container()),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "تحویل فوری؟ هزینه ارسال افزایش پیدا می‌کند.",
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Checkbox(
+                                    focusColor: Color(0xFF256F46),
+                                    activeColor: Color(0xFF256F46),
+                                    value: fast,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        fast = value ?? false;
+                                      });
+                                    }),
+                              ],
                             ),
                             Expanded(child: Container()),
                             Text(
@@ -1258,7 +1357,11 @@ class _HomeState extends State<Home> {
         var itemName = itemData['name'];
         var itemPrice = double.parse(itemData['price']);
         var item = Item(
-            id: itemId, name: itemName, price: itemPrice, sotreid: storeId);
+            id: itemId,
+            name: itemName,
+            price: itemPrice,
+            sotreid: storeId,
+            image: "");
         items.add(item);
       });
 
@@ -1266,9 +1369,10 @@ class _HomeState extends State<Home> {
       var store = Store(
           id: id,
           name: name,
-          longitude: longitude,
-          latitude: latitude,
-          items: items);
+          longitude: double.parse(longitude),
+          latitude: double.parse(latitude),
+          items: items,
+          image: storeData["image"]);
       setState(() {
         stores.add(store);
       });
@@ -1301,43 +1405,57 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            global.profile_imge == ""
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
+                    child: ImageIcon(
+                      AssetImage("images/shop.png"),
+                      size: 50,
+                    ))
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      // Same radius as the CircleAvatar
+                      child: Image.memory(
+                        width: 100,
+                        Uint8List.fromList(base64Decode(global.profile_imge)),
+                        fit: BoxFit.cover, // Adjust the fit as needed
+                      ),
+                    ),
+                  ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
-              child: ImageIcon(
-                AssetImage("images/product.png"),
-                color: Color(0xFF517360),
-                size: 60,
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: Container()),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "120000",
+                        style: TextStyle(
+                            fontSize: 15,
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.grey),
+                      ),
+                      Text(
+                        "120000",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  Text(
+                    "15%",
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                    textAlign: TextAlign.right,
+                  ),
+                  Expanded(child: Container()),
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(child: Container()),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "120000",
-                      style: TextStyle(
-                          fontSize: 15,
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey),
-                    ),
-                    Text(
-                      "120000",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
-                Text(
-                  "15%",
-                  style: TextStyle(color: Colors.red, fontSize: 20),
-                  textAlign: TextAlign.right,
-                ),
-                Expanded(child: Container()),
-              ],
             )
           ],
         ),
@@ -1362,8 +1480,8 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 25),
                     child: Row(
                       children: [
                         Expanded(child: Container()),
@@ -1375,69 +1493,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Color(0xFFEAF3EE),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0,12),
-                            blurRadius: 10,
-                            spreadRadius: -5
-                          )
-                        ]
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
-                              child: Row(
-                                children: [
-                                  Expanded(child: Container()),
-                                  Text("تخفیف دسته ۱",
-                                  style: TextStyle(
-                                    fontSize: 20
-                                  ),),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-
-                                      },
-                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
-                                  Expanded(child: Container()),
-                                  Text("مقدار تخفیف",
-                                  style: TextStyle(
-                                    fontSize: 18
-                                  ),)
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Text("انقضاء تا n روز دیگر",
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.red
-                              ),),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -1445,53 +1502,55 @@ class _HomeState extends State<Home> {
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.grey,
-                                offset: Offset(0,12),
+                                offset: Offset(0, 12),
                                 blurRadius: 10,
-                                spreadRadius: -5
-                            )
-                          ]
-                      ),
+                                spreadRadius: -5)
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   Expanded(child: Container()),
-                                  Text("تخفیف دسته ۱",
-                                    style: TextStyle(
-                                        fontSize: 20
-                                    ),),
+                                  Text(
+                                    "تخفیف دسته ۱",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   IconButton(
-                                      onPressed: () {
-
-                                      },
-                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
+                                      onPressed: () {},
+                                      icon: ImageIcon(
+                                        AssetImage("images/copy.png"),
+                                        color: Color(0xFF2E8B57),
+                                      ),
+                                      iconSize: 35),
                                   Expanded(child: Container()),
-                                  Text("مقدار تخفیف",
-                                    style: TextStyle(
-                                        fontSize: 18
-                                    ),)
+                                  Text(
+                                    "مقدار تخفیف",
+                                    style: TextStyle(fontSize: 18),
+                                  )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 15),
-                              child: Text("انقضاء تا n روز دیگر",
+                              child: Text(
+                                "انقضاء تا n روز دیگر",
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.red
-                                ),),
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.red),
+                              ),
                             )
                           ],
                         ),
@@ -1499,7 +1558,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -1507,53 +1567,120 @@ class _HomeState extends State<Home> {
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.grey,
-                                offset: Offset(0,12),
+                                offset: Offset(0, 12),
                                 blurRadius: 10,
-                                spreadRadius: -5
-                            )
-                          ]
-                      ),
+                                spreadRadius: -5)
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   Expanded(child: Container()),
-                                  Text("تخفیف دسته ۱",
-                                    style: TextStyle(
-                                        fontSize: 20
-                                    ),),
+                                  Text(
+                                    "تخفیف دسته ۱",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   IconButton(
-                                      onPressed: () {
-
-                                      },
-                                      icon: ImageIcon(AssetImage("images/copy.png"), color: Color(0xFF2E8B57),), iconSize: 35),
+                                      onPressed: () {},
+                                      icon: ImageIcon(
+                                        AssetImage("images/copy.png"),
+                                        color: Color(0xFF2E8B57),
+                                      ),
+                                      iconSize: 35),
                                   Expanded(child: Container()),
-                                  Text("مقدار تخفیف",
-                                    style: TextStyle(
-                                        fontSize: 18
-                                    ),)
+                                  Text(
+                                    "مقدار تخفیف",
+                                    style: TextStyle(fontSize: 18),
+                                  )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 15),
-                              child: Text("انقضاء تا n روز دیگر",
+                              child: Text(
+                                "انقضاء تا n روز دیگر",
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.red
-                                ),),
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.red),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Color(0xFFEAF3EE),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 12),
+                                blurRadius: 10,
+                                spreadRadius: -5)
+                          ]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text(
+                                    "تخفیف دسته ۱",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: ImageIcon(
+                                        AssetImage("images/copy.png"),
+                                        color: Color(0xFF2E8B57),
+                                      ),
+                                      iconSize: 35),
+                                  Expanded(child: Container()),
+                                  Text(
+                                    "مقدار تخفیف",
+                                    style: TextStyle(fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                "انقضاء تا n روز دیگر",
+                                textDirection: TextDirection.rtl,
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.red),
+                              ),
                             )
                           ],
                         ),

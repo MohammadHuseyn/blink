@@ -1,15 +1,33 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:blink/classes/comment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../classes/item.dart';
+import '../classes/store.dart';
+import '../global.dart' as global;
 import 'CommentRateSent.dart';
 
 class ProductComment extends StatefulWidget {
-  const ProductComment({super.key});
-
+  ProductComment({required this.item});
+  Item item;
   @override
-  State<ProductComment> createState() => _ProductCommentState();
+  State<ProductComment> createState() => _ProductCommentState(item:item);
 }
+
+var comment = TextEditingController();
 class _ProductCommentState extends State<ProductComment> {
+  _ProductCommentState({required this.item});
+
+  Item item;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _load_comments(item);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +150,7 @@ class _ProductCommentState extends State<ProductComment> {
                                           textInputAction: TextInputAction.newline,
                                           maxLines: 5,
                                           keyboardType: TextInputType.multiline,
-                                          // controller: ,
+                                          controller: comment,
                                           style: TextStyle(
                                               fontSize: 20.0, height: 2.0, color: Colors.black
                                           ),
@@ -184,6 +202,13 @@ class _ProductCommentState extends State<ProductComment> {
                                           height: MediaQuery.of(context).size.height * 0.085,
                                           child: ElevatedButton(
                                             onPressed: () async {
+                                              global.postRequest({
+                                                // "rate": rate,
+                                                "comment" : comment.text,
+                                                // "user_id" : global
+                                              }, "/product-comments/?product_id="+item.id);
+                                              _load_comments(item);
+                                              _load_comments(item);
                                               Navigator.push(context, MaterialPageRoute(builder: (builder)=> CommentRateSent()));
                                             },
                                             child:Text("   ثبت نظر   ",
@@ -236,7 +261,7 @@ class _ProductCommentState extends State<ProductComment> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 12),
+                  padding: const EdgeInsets.only(left: 15, right: 50),
                   child: Column(
                     children: [
                       Expanded(child: Container()),
@@ -422,308 +447,128 @@ class _ProductCommentState extends State<ProductComment> {
                   height: 200,
                   // width: MediaQuery.of(context).size.width,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: ImageIcon(
-                      AssetImage("images/product.png"),
-                      size: 250,
-                      color: Color(0xFF949494),
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(top: 0),
+                      child: global.profile_imge == ""
+                          ? ImageIcon(
+                        AssetImage("images/shop.png"),
+                        size: 250,
+                        color: Color(0xFF949494),
+                      )
+                          : ClipRRect(
+                        // borderRadius: BorderRadius.circular(75),
+                        // Same radius as the CircleAvatar
+                        child: Image.memory(
+                          width: 200,
+                          Uint8List.fromList(
+                              base64Decode(global.profile_imge)),
+                          fit: BoxFit.fitWidth, // Adjust the fit as needed
+                        ),
+                      ))
                 ),
               ],
             )),
         body: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 5),
           child: Container(
             child: Padding(
                 padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "۳۲۱ امتیاز",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.black54),
-                            textDirection: TextDirection.rtl,
-                          ),
-                          Expanded(child: Container()),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: Text("نام محصول", style: TextStyle(fontSize: 25),),
-                          )
-                        ],
-                      ),              Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom:
-                                  BorderSide(color: Color(0xFF7CA990), width: 2))),
-                          child: Padding(
-                            padding:
-                            const EdgeInsets.only(bottom: 8.0, right: 10, left: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "۶۵ نظر",
-                                  textDirection: TextDirection.rtl,
-                                  style: TextStyle(color: Colors.grey, fontSize: 18),
-                                ),
-                                Expanded(child: Container()),
-                                Text(
-                                  "نظرات کاربران",
-                                  style: TextStyle(fontSize: 25),
-                                )
-                              ],
-                            ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "۳۲۱ امتیاز",
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.black54),
+                          textDirection: TextDirection.rtl,
+                        ),
+                        Expanded(child: Container()),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Text("نام محصول", style: TextStyle(fontSize: 25),),
+                        )
+                      ],
+                    ),              Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                BorderSide(color: Color(0xFF7CA990), width: 2))),
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 8.0, right: 10, left: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                "۶۵ نظر",
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Expanded(child: Container()),
+                              Text(
+                                "نظرات کاربران",
+                                style: TextStyle(fontSize: 25),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            child: Column(
-                              children: [
-                                Row(
+                    ),
+                    Container(
+                        child: Expanded(
+                          child: ListView.builder(itemCount: item.comments.length, itemBuilder: (context, i) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Container(
+                                child: Column(
                                   children: [
-                                    ImageIcon(
-                                      AssetImage("images/star.png"),
-                                      color: Color(0xFF256F46),
-                                      size: 30,
+                                    Row(
+                                      children: [
+                                        ImageIcon(
+                                          AssetImage("images/star.png"),
+                                          color: Color(0xFF256F46),
+                                          size: 30,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10, top: 5),
+                                          child: Text(
+                                            "4.1/5",
+                                            style: TextStyle(
+                                                fontSize: 20, color: Color(0xFF256F46)),
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                        Text(
+                                          item.comments[i].date,
+                                          textDirection: TextDirection.rtl,
+                                          style: TextStyle(color: Colors.black87),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text(item.comments[i].name, style: TextStyle(fontSize: 22),),
+                                        )
+                                      ],
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 10, top: 5),
-                                      child: Text(
-                                        "4.1/5",
-                                        style: TextStyle(
-                                            fontSize: 20, color: Color(0xFF256F46)),
+                                      padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
+                                      child: Container(
+                                        child: Text(item.comments[i].comment,
+                                          style: TextStyle(fontSize: 25),
+                                          textDirection: TextDirection.rtl,),
                                       ),
-                                    ),
-                                    Expanded(child: Container()),
-                                    Text(
-                                      "۱۰ اردیبهشت ۱۴۰۳",
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(color: Colors.black87),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text("نام کاربر", style: TextStyle(fontSize: 22),),
                                     )
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
-                                  child: Container(
-                                    child: Text("نظر...",
-                                      style: TextStyle(fontSize: 25),
-                                      textDirection: TextDirection.rtl,),
-                                  ),
-                                )
-                              ],
-                            ),
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom:
-                                    BorderSide(color: Color(0xFF7CA990), width: 2))),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      ImageIcon(
-                                        AssetImage("images/star.png"),
-                                        color: Color(0xFF256F46),
-                                        size: 30,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10, top: 5),
-                                        child: Text(
-                                          "4.1/5",
-                                          style: TextStyle(
-                                              fontSize: 20, color: Color(0xFF256F46)),
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      Text(
-                                        "۱۰ اردیبهشت ۱۴۰۳",
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(color: Colors.black87),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("نام کاربر", style: TextStyle(fontSize: 22),),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
-                                    child: Container(
-                                      child: Text("نظر...",
-                                        style: TextStyle(fontSize: 25),
-                                        textDirection: TextDirection.rtl,),
-                                    ),
-                                  )
-                                ],
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                        BorderSide(color: Color(0xFF7CA990), width: 2))),
                               ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                      BorderSide(color: Color(0xFF7CA990), width: 2))),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      ImageIcon(
-                                        AssetImage("images/star.png"),
-                                        color: Color(0xFF256F46),
-                                        size: 30,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10, top: 5),
-                                        child: Text(
-                                          "4.1/5",
-                                          style: TextStyle(
-                                              fontSize: 20, color: Color(0xFF256F46)),
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      Text(
-                                        "۱۰ اردیبهشت ۱۴۰۳",
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(color: Colors.black87),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("نام کاربر", style: TextStyle(fontSize: 22),),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
-                                    child: Container(
-                                      child: Text("نظر...",
-                                        style: TextStyle(fontSize: 25),
-                                        textDirection: TextDirection.rtl,),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                      BorderSide(color: Color(0xFF7CA990), width: 2))),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      ImageIcon(
-                                        AssetImage("images/star.png"),
-                                        color: Color(0xFF256F46),
-                                        size: 30,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10, top: 5),
-                                        child: Text(
-                                          "4.1/5",
-                                          style: TextStyle(
-                                              fontSize: 20, color: Color(0xFF256F46)),
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      Text(
-                                        "۱۰ اردیبهشت ۱۴۰۳",
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(color: Colors.black87),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("نام کاربر", style: TextStyle(fontSize: 22),),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
-                                    child: Container(
-                                      child: Text("نظر...",
-                                        style: TextStyle(fontSize: 25),
-                                        textDirection: TextDirection.rtl,),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                      BorderSide(color: Color(0xFF7CA990), width: 2))),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      ImageIcon(
-                                        AssetImage("images/star.png"),
-                                        color: Color(0xFF256F46),
-                                        size: 30,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10, top: 5),
-                                        child: Text(
-                                          "4.1/5",
-                                          style: TextStyle(
-                                              fontSize: 20, color: Color(0xFF256F46)),
-                                        ),
-                                      ),
-                                      Expanded(child: Container()),
-                                      Text(
-                                        "۱۰ اردیبهشت ۱۴۰۳",
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(color: Colors.black87),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("نام کاربر", style: TextStyle(fontSize: 22),),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10,bottom: 45, top: 20),
-                                    child: Container(
-                                      child: Text("نظر...",
-                                        style: TextStyle(fontSize: 25),
-                                        textDirection: TextDirection.rtl,),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                      BorderSide(color: Color(0xFF7CA990), width: 2))),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                            );
+                    }),
+                        )),
+                  ],
                 )),
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -741,5 +586,15 @@ class _ProductCommentState extends State<ProductComment> {
                 ),
           ),
         ));
+  }
+
+  Future<void> _load_comments(Item item) async {
+    var res = global.getRequest("/product-comments/?product_id=" + item.id);
+    List<Map<String, dynamic>> data = await res;
+    setState(() {
+      data.forEach((element) {
+        item.comments.add(Comment(comment: element["comment"], name: element["user_first_name"] + " " + element["user_last_name"], date: element["comment_created"]));
+      });
+    });
   }
 }

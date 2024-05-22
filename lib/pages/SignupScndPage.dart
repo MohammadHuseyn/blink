@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:image/image.dart' as img;
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import '../global.dart' as global;
 import 'Home.dart';
+import 'StoreHomPage.dart';
 
 class SignupScndPage extends StatefulWidget {
   SignupScndPage(
@@ -89,65 +91,94 @@ class _SignupScndPageState extends State<SignupScndPage> {
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
             onPressed: () async {
-              var deli = {
-                "username": widget.username.text,
-                "password": widget.password.text,
-                "email": email.text,
-                "first_name": first_name.text,
-                "last_name": last_name.text,
-                "phone_number": phone.text,
-                "user_type": "delivery",
-                "image" : base64Image,
-                // "longitude" : "35.715298",
-                // "latitude" : "51.404343",
-                // "location_name" : shopname.text,
-                // "store_name" : shopname.text,
-                "plate": pelak.text,
-                "license": license.text
-              };
-              var foro = {
-                "username": widget.username.text,
-                "password": widget.password.text,
-                "email": email.text,
-                "first_name": first_name.text,
-                "last_name": last_name.text,
-                "phone_number": phone.text,
-                "user_type": "seller",
-                "longitude": latlngLocal!.longitude,
-                "latitude": latlngLocal!.latitude,
-                "location_name": shopname.text,
-                "store_name": shopname.text,
-                "image" : base64Image,
-              };
-              var cust = {
-                "username": widget.username.text,
-                "password": widget.password.text,
-                "email": email.text,
-                "first_name": first_name.text,
-                "last_name": last_name.text,
-                "phone_number": phone.text,
-                // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
-                "user_type": "customer",
-                "longitude": "35.715298",
-                "latitude": "51.404343",
-                "location_name": "usertemplocation",
-                "image" : base64Image,
-
-              };
+              // var deli = ;
+              // var foro = ;
+              // var cust = ;
 
               var res = global.postRequest(
                   widget.userkind == "f"
-                      ? foro
+                      ? {
+                    "username": widget.username.text,
+                    "password": widget.password.text,
+                    "email": email.text,
+                    "first_name": first_name.text,
+                    "last_name": last_name.text,
+                    "phone_number": phone.text,
+                    "user_type": "seller",
+                    "longitude": latlngLocal!.longitude,
+                    "latitude": latlngLocal!.latitude,
+                    // "longitude": "35.715298",
+                    // "latitude": "51.404343",
+                    "location_name": shopname.text,
+                    "store_name": shopname.text,
+                    "image" : base64Image,
+                    "address" : shopaddress.text
+                  }
                       : widget.userkind == "m"
-                          ? cust
-                          : deli,
+                          ? {
+                    "username": widget.username.text,
+                    "password": widget.password.text,
+                    "email": email.text,
+                    "first_name": first_name.text,
+                    "last_name": last_name.text,
+                    "phone_number": phone.text,
+                    // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
+                    "user_type": "customer",
+                    "longitude": "35.715298",
+                    "latitude": "51.404343",
+                    "location_name": "usertemplocation",
+                    "image" : base64Image,
+
+                  }
+                          : {
+                    "username": widget.username.text,
+                    "password": widget.password.text,
+                    "email": email.text,
+                    "first_name": first_name.text,
+                    "last_name": last_name.text,
+                    "phone_number": phone.text,
+                    "user_type": "delivery",
+                    "image" : base64Image,
+                    // "longitude" : "35.715298",
+                    // "latitude" : "51.404343",
+                    // "location_name" : shopname.text,
+                    // "store_name" : shopname.text,
+                    "plate": pelak.text,
+                    "license": license.text
+                  },
                   "/signup/");
               Map<String, dynamic> data = await res;
               global.token = data["token"];
               global.tokenbool = true;
-              Navigator.pop(context);
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()));
+              global.username = data["user"]["username"];
+              global.first_name = data["user"]["first_name"];
+              global.last_name = data["user"]["last_name"];
+              global.email = data["user"]["email"];
+              global.userkind = data["user_type"];
+              global.phone_number = data["phone_number"];
+              global.profile_imge = data["image"];
+              switch (global.userkind) {
+                case "Seller" : {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoreHomePage()));
+                } break;
+                case "Customer" : {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                } break;
+                case "Delivery" : {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryHomePage()));
+
+                } break;
+              }
+              global.tokenbool = true;
+              // Navigator.pop(context);
+              // Navigator.push(
+              //     context, MaterialPageRoute(builder: (context) => Home()));
             },
             child: Text(
               "   تکمیل ثبت نام   ",
@@ -448,6 +479,35 @@ class _SignupScndPageState extends State<SignupScndPage> {
                           ),
                         )),
                   )
+                : Container(),
+            widget.userkind == "f"
+                ? Padding(
+              padding: const EdgeInsets.only(
+                  top: 20, right: 20, left: 20, bottom: 20),
+              child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
+                      primaryColorDark: Colors.red,
+                    ),
+                    child: TextField(
+                      controller: shopaddress,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.teal),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(15))),
+                        labelText: '  آدرس  ',
+                        floatingLabelStyle: TextStyle(fontSize: 25),
+                        floatingLabelBehavior:
+                        FloatingLabelBehavior.always,
+                        labelStyle: TextStyle(
+                            fontSize: 25, fontFamily: 'shabnam'),
+                      ),
+                    ),
+                  )),
+            )
                 : Container(),
             widget.userkind == "f"
                 ? Padding(

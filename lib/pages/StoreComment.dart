@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:blink/pages/CommentRateSent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../global.dart' as global;
 import '../classes/store.dart';
 
 class StoreComment extends StatefulWidget {
@@ -18,6 +21,12 @@ class _StoreCommentState extends State<StoreComment> {
 
   Store store;
 
+  @override
+  void initState() {
+    // _load_comments(item);
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -443,7 +452,7 @@ class _StoreCommentState extends State<StoreComment> {
                       style: TextStyle(fontSize: 25),
                     ),
                     Expanded(child: Container()),
-                    Container(
+                    global.profile_imge == ""? Container(
                       decoration: BoxDecoration(
                         // color: Color(0xffEAF3EE),
                           boxShadow: [
@@ -459,11 +468,23 @@ class _StoreCommentState extends State<StoreComment> {
                           // color: Colors.red,
                           borderRadius: BorderRadius.all(Radius.circular(15))),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        child: ImageIcon(
-                          AssetImage("images/shop.png"),
-                          size: 90,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 15),
+                          child: ImageIcon(
+                            AssetImage("images/shop.png"),
+                            size: 60,
+                          )
+                      )
+                    ) : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
+                        child: Image.memory(
+                          width: 100,
+                          Uint8List.fromList(
+                              base64Decode(global.profile_imge)),
+                          fit: BoxFit
+                              .cover, // Adjust the fit as needed
                         ),
                       ),
                     ),
@@ -744,4 +765,8 @@ class _StoreCommentState extends State<StoreComment> {
       ),
     );
   }
+
+  // void _load_comments(Item item) {
+  //   global.getRequest("/product-comments/?product_id="+item.id)
+  // }
 }

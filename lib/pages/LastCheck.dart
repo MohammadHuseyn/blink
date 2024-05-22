@@ -17,7 +17,8 @@ class LastCheck extends StatelessWidget {
             onPressed: () async {
               // try {
                 var res = await gloabl.postRequest({
-                  "location_id" : "1",
+                  "location_id" : gloabl.addresses[gloabl.addressIndex].id,
+                  "store_id" : gloabl.store_id
                 }, "/makeorder/");
                 Map<String, dynamic> data = await res;
                 gloabl.order_id = data["order_id"];

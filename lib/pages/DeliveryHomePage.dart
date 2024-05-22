@@ -171,7 +171,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 style: TextStyle(
                                   fontFamily: 'shabnam',
                                   color: Color(0xFF1C5334),
-                                  fontSize: 25,
+                                  fontSize: 20,
                                 ),
                               ),
                               Text(
@@ -191,13 +191,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     color: Color(0xFF618771),
                                     size: 80,
                                   )
-                                : Image.memory(
-                                    width: 150,
-                                    Uint8List.fromList(
-                                        base64Decode(global.profile_imge)),
-                                    fit: BoxFit
-                                        .cover, // Adjust the fit as needed
-                                  ),
+                                : ClipRRect(
+                              borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
+                                  child: Image.memory(
+                                      width: 100,
+                                      Uint8List.fromList(
+                                          base64Decode(global.profile_imge)),
+                                      fit: BoxFit
+                                          .cover, // Adjust the fit as needed
+                                    ),
+                                ),
                           ),
                           // Padding(
                           //   padding:
@@ -211,8 +214,8 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         print("tapped");
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Orders()));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) => Orders(store: store,)));
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 20, left: 20),
@@ -500,12 +503,22 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                         ],
                         // color: Colors.red,
                         borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: Padding(
+                    child: global.profile_imge == ""
+                        ? Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 15),
                       child: ImageIcon(
                         AssetImage("images/shop.png"),
                         size: 50,
+                      )
+                    ) : ClipRRect(
+                      borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
+                      child: Image.memory(
+                        width: 100,
+                        Uint8List.fromList(
+                            base64Decode(global.profile_imge)),
+                        fit: BoxFit
+                            .cover, // Adjust the fit as needed
                       ),
                     ),
                   ),
