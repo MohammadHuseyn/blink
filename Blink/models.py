@@ -8,7 +8,6 @@ from django.contrib.auth.models import AbstractUser, User
 class Customer(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
-
     def __str__(self):
         return self.username
 
@@ -18,7 +17,6 @@ class Delivery(User):
     driving_license_number = models.CharField(max_length=20, unique=False, help_text="Unique driving license number")
     vehicle_license_plate = models.CharField(max_length=15, unique=False, help_text="Vehicle license plate number")
     image = models.CharField(max_length=2048, null=True, blank=True)
-
     def __str__(self):
         return f"{self.username} (Driving License: {self.driving_license_number})"
 
@@ -27,7 +25,6 @@ class Administrator(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
-
     def __str__(self):
         return self.username
 
@@ -35,7 +32,6 @@ class Administrator(User):
 class CustomerSupport(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
-
     def __str__(self):
         return self.username
 
@@ -80,7 +76,6 @@ class Store(models.Model):
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
-
     def __str__(self):
         return self.name
 
@@ -94,6 +89,7 @@ class Product(models.Model):
     image = models.CharField(max_length=2048, null=True, blank=True)
     description = models.TextField(blank=True, max_length=100)
 
+    rate = models.DecimalField(max_digits= 3, decimal_places=2)
     def __str__(self):
         return self.name
 
@@ -103,7 +99,7 @@ class ProductComment(models.Model):
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     comment = models.TextField()
     comment_created = models.DateTimeField(auto_now_add=True)
-
+    rate = models.DecimalField(max_digits= 1, decimal_places=0, default=3)
     def __str__(self):
         return f"Comment for {self.product.name}"
 

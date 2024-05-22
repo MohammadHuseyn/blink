@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, Order, OrderItem
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment
-
+from django.db.models import Avg
 
 class UserSignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=True)
@@ -113,7 +113,7 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'quantity', 'image', 'category']
+        fields = ['id', 'name', 'price', 'quantity', 'image', 'category', 'rate']
 
 class StoreSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
@@ -130,9 +130,12 @@ class StoreSerializer(serializers.ModelSerializer):
         # Retrieve products related to this store and format as required
         product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
 
-        # Create a dictionary with product_id as keys
+        for p in product_data :
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != 0) :
+                p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
+            else :
+                p['rate'] = 0
         product_dict = {str(p['id']): p for p in product_data}
-
         return product_dict
 
 class CartItemSerializer(serializers.Serializer):
@@ -156,6 +159,6 @@ class ProductCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductComment
         fields = ['id', 'product', 'user', 'comment', 'user_first_name',
-                  'user_last_name', 'comment_created']
+                  'user_last_name', 'comment_created', 'rate']
         read_only_fields = ['user_first_name', 'user_last_name']
 
