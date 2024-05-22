@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:blink/classes/store.dart';
 import 'package:blink/pages/Address.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'classes/item.dart';
-// import 'classes/store.dart';
+import 'classes/order.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
@@ -20,6 +19,7 @@ var username = "username";
 var userkind = "";
 var storeName = "باغ گیلاس";
 var store_id = "";
+// var order_id;
 var order_id;
 var first_name = "محسین";
 String profile_imge = "";

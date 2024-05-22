@@ -6,13 +6,15 @@ class Store {
   late String name;
   late double longitude;
   late double latitude;
+  double rate;
   late List<Item> items;
   List<Comment> comments = [];
   String image = "";
   Store(
       {required this.id,
       required this.name,
-      required this.longitude,
+        required this.longitude,
+        required this.rate,
       required this.latitude,
         required this.image,
       List<Item>? items})

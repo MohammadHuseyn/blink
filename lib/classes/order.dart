@@ -1,6 +1,6 @@
 import 'item.dart';
 
-class order {
+class Order {
   int order_id;
   String customer;
   String address;
@@ -10,9 +10,12 @@ class order {
   double? discount_value;
   double total_price;
   String status;
+  String store_name;
+  String store_address;
+  bool fast;
   List<Item> items = [];
 
-  order({
+  Order({
     required this.address,
     required this.order_id,
     required this.customer,
@@ -20,6 +23,9 @@ class order {
     required this.discount_value,
     required this.discount,
     required this.items,
-    required this.status
+    required this.store_address,
+    required this.status,
+    required this.store_name,
+    required this.fast
   });
 }

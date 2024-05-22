@@ -27,10 +27,9 @@ class Home extends StatefulWidget {
 
 var _currentIndex = 1;
 var sum = 0.0;
-bool fast = false;
 List<Store> stores = [
   Store(
-      id: "1", name: "baq gilas", longitude: 12554, latitude: 98455, image: ""),
+      id: "1", name: "baq gilas",rate: 2.5, longitude: 12554, latitude: 98455, image: ""),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
@@ -1091,26 +1090,6 @@ class _HomeState extends State<Home> {
                                   )),
                             ),
                             Expanded(child: Container()),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "تحویل فوری؟ هزینه ارسال افزایش پیدا می‌کند.",
-                                  textDirection: TextDirection.rtl,
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Checkbox(
-                                    focusColor: Color(0xFF256F46),
-                                    activeColor: Color(0xFF256F46),
-                                    value: fast,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        fast = value ?? false;
-                                      });
-                                    }),
-                              ],
-                            ),
-                            Expanded(child: Container()),
                             Text(
                               global.s == null
                                   ? "سفارشی ندارید"
@@ -1244,8 +1223,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => LastCheck(
-                                                    sum: data["total_price"]
-                                                        .toString())));
+                                                    sum: data["total_price"])));
                                       }
                                     },
                                     child: Text(
@@ -1358,7 +1336,9 @@ class _HomeState extends State<Home> {
         var itemPrice = double.parse(itemData['price']);
         var item = Item(
             id: itemId,
+            desc: itemData['name'],
             name: itemName,
+            rate: itemData['rate'],
             price: itemPrice,
             sotreid: storeId,
             image: "");
@@ -1368,6 +1348,7 @@ class _HomeState extends State<Home> {
       // Create Store object and add it to the list
       var store = Store(
           id: id,
+          rate: storeData['rate'],
           name: name,
           longitude: double.parse(longitude),
           latitude: double.parse(latitude),

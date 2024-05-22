@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/StoreHomPage.dart';
 
 import '../global.dart' as global;
@@ -57,6 +58,8 @@ class _LoginState extends State<Login> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                   } break;
                   case "Delivery" : {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryHomePage()));
 
                   } break;
                 }

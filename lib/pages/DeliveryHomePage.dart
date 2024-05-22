@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:blink/pages/OrderHistory.dart';
+import 'package:blink/pages/StoreHomPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blink/global.dart' as global;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../classes/order.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
 import 'Home.dart';
@@ -22,13 +24,14 @@ class DeliveryHomePage extends StatefulWidget {
 }
 
 var _currentIndex = 1;
-late Store store;
 var name = TextEditingController();
 var price = TextEditingController();
 var count = TextEditingController();
 var desc = TextEditingController();
 LatLng? latlngLocal = null;
 List<Marker> markers = [];
+List<Order> orders = [];
+bool got_data = false;
 var mapc = MapController();
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
@@ -38,13 +41,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    // load_store();
+    _load_orders();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    store = stores[0];
+    // store = stores[0];
     // load_store();
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
@@ -105,33 +108,38 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
             ),
           ],
         ),
-        appBar: _currentIndex == 1? AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.location_on,
-              color: Color(0xFF2E8B57),
-              size: 40,
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: ImageIcon(
-                    AssetImage("images/notification.png"),
+        appBar: _currentIndex == 1
+            ? AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  onPressed: () {
+                    _load_orders();
+                    _load_orders();
+                  },
+                  icon: Icon(
+                    Icons.refresh_rounded,
                     color: Color(0xFF2E8B57),
-                    size: 50,
-                  )),
-            )
-          ],
-        ) : AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
+                    size: 40,
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: ImageIcon(
+                          AssetImage("images/notification.png"),
+                          color: Color(0xFF2E8B57),
+                          size: 50,
+                        )),
+                  )
+                ],
+              )
+            : AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+              ),
         body: _currentIndex == 0
             ? SingleChildScrollView(
                 child: Column(
@@ -167,7 +175,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           Column(
                             children: [
                               Text(
-                                global.first_name + " " + global.last_name,
+                                global.first_name,
                                 style: TextStyle(
                                   fontFamily: 'shabnam',
                                   color: Color(0xFF1C5334),
@@ -192,15 +200,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     size: 80,
                                   )
                                 : ClipRRect(
-                              borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
-                                  child: Image.memory(
+                                    borderRadius: BorderRadius.circular(75),
+                                    // Same radius as the CircleAvatar
+                                    child: Image.memory(
                                       width: 100,
                                       Uint8List.fromList(
                                           base64Decode(global.profile_imge)),
                                       fit: BoxFit
                                           .cover, // Adjust the fit as needed
                                     ),
-                                ),
+                                  ),
                           ),
                           // Padding(
                           //   padding:
@@ -340,34 +349,24 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                       ),
                     ),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            order(context),
-                            order(context),
-                            order(context),
-                            order(context),
-                            order(context),
-                          ],
-                        ),
-                      ),
-                    ),
+                        child: ListView.builder(
+                            itemCount: orders.length,
+                            itemBuilder: (context, i) {
+                              return order(context, orders[i]);
+                            })),
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(25),
-                          topLeft: Radius.circular(25)
-                        ),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0,0),
-                            spreadRadius: 2,
-                            blurRadius: 4
-                          )
-                        ]
-                      ),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(25),
+                              topLeft: Radius.circular(25)),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 0),
+                                spreadRadius: 2,
+                                blurRadius: 4)
+                          ]),
                       child: Column(
                         children: [
                           Container(
@@ -403,7 +402,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     });
   }
 
-  order(BuildContext context) {
+  order(BuildContext context, Order order) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: GestureDetector(
@@ -414,122 +413,150 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
           decoration: BoxDecoration(
               border: Border(
                   bottom: BorderSide(color: Color(0xFF899E92), width: 2.0))),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            child: Row(
-              children: [
-                Column(
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                child: Row(
                   children: [
-                    Text(
-                      "۱۲۰۰۰۰ تومان",
-                      style: TextStyle(fontSize: 20),
-                      textDirection: TextDirection.rtl,
-                    ),
-                    Row(
+                    Column(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: ImageIcon(
-                            AssetImage("images/cross.png"),
-                            color: Colors.red,
-                          ),
-                          iconSize: 40,
+                        Text(
+                          order.total_price.toString() + " تومان",
+                          style: TextStyle(fontSize: 20),
+                          textDirection: TextDirection.rtl,
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            global.postRequest({
+                              "order_id": order.order_id,
+                              "status": order.status == "WAITING"? "Accepted" : "Delivered"
+                            }, "/delivery_orders/");
+                            _load_orders();
+                            _load_orders();
+                          },
                           icon: ImageIcon(
                             AssetImage("images/tick.png"),
                             color: Colors.green,
                           ),
                           iconSize: 40,
+                        )
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                    Column(
+                      // mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "از " + order.store_name,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "برای " + order.customer.split(" ")[0],
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "از " + order.store_address,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              ImageIcon(
+                                AssetImage("images/location.png"),
+                                color: Color(0xFF97b9a7),
+                                size: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "از " + order.address,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              ImageIcon(
+                                AssetImage("images/location.png"),
+                                color: Color(0xFF97b9a7),
+                                size: 30,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            // color: Color(0xffEAF3EE),
+                            boxShadow: [
+                              const BoxShadow(
+                                color: Colors.grey,
+                              ),
+                              const BoxShadow(
+                                color: Color(0xffEAF3EE),
+                                spreadRadius: -0.2,
+                                blurRadius: 5.0,
+                              ),
+                            ],
+                            // color: Colors.red,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: global.profile_imge == ""
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 15),
+                                child: ImageIcon(
+                                  AssetImage("images/shop.png"),
+                                  size: 50,
+                                ))
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                // Same radius as the CircleAvatar
+                                child: Image.memory(
+                                  width: 100,
+                                  Uint8List.fromList(
+                                      base64Decode(global.profile_imge)),
+                                  fit: BoxFit.cover, // Adjust the fit as needed
+                                ),
+                              ),
+                      ),
+                    ),
                   ],
                 ),
-                Expanded(child: Container()),
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "نام فروشگاه",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        children: [
-                          Text("آدرس مبدا "),
-                          ImageIcon(
-                            AssetImage("images/location.png"),
-                            color: Color(0xFF97b9a7),
-                            size: 30,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        children: [
-                          Text("آدرس مقصد "),
-                          ImageIcon(
-                            AssetImage("images/location.png"),
-                            color: Color(0xFF97b9a7),
-                            size: 30,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  order.status == "WAITING"
+                      ? "در دست فروشنده"
+                      : "شما در حال تحویل این سفارش هستید",
+                  style: TextStyle(fontSize: 20),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        // color: Color(0xffEAF3EE),
-                        boxShadow: [
-                          const BoxShadow(
-                            color: Colors.grey,
-                          ),
-                          const BoxShadow(
-                            color: Color(0xffEAF3EE),
-                            spreadRadius: -0.2,
-                            blurRadius: 5.0,
-                          ),
-                        ],
-                        // color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: global.profile_imge == ""
-                        ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: ImageIcon(
-                        AssetImage("images/shop.png"),
-                        size: 50,
-                      )
-                    ) : ClipRRect(
-                      borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
-                      child: Image.memory(
-                        width: 100,
-                        Uint8List.fromList(
-                            base64Decode(global.profile_imge)),
-                        fit: BoxFit
-                            .cover, // Adjust the fit as needed
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
+
   Widget map() {
     return Scaffold(
       body: FlutterMap(
@@ -564,32 +591,27 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
               },
               initialCenter: LatLng(35.715298, 51.404343),
               initialZoom: 5,
-              interactionOptions: InteractionOptions(
-                  flags: InteractiveFlag.pinchZoom)),
-          children: [
-            tilelayer,
-            MarkerLayer(markers: markers)
-          ]),
+              interactionOptions:
+                  InteractionOptions(flags: InteractiveFlag.pinchZoom)),
+          children: [tilelayer, MarkerLayer(markers: markers)]),
     );
   }
+
   void bottomsheed(context) {
-    showModalBottomSheet(context: context,
+    showModalBottomSheet(
+        context: context,
         backgroundColor: Colors.transparent,
         // isScrollControlled: true,
-        builder: (builder){
+        builder: (builder) {
           return Scaffold(
             bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
+              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                BoxShadow(
                     blurRadius: 7,
                     spreadRadius: 7,
-                    offset: Offset(0,0),
-                    color: Colors.grey
-                  )
-                ]
-              ),
+                    offset: Offset(0, 0),
+                    color: Colors.grey)
+              ]),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -625,9 +647,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
-                      topLeft: Radius.circular(25)
-                  )
-              ),
+                      topLeft: Radius.circular(25))),
               child: StatefulBuilder(builder: (BuildContext context,
                   StateSetter setState /*You can rename this!*/) {
                 return SingleChildScrollView(
@@ -640,7 +660,10 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Text("موقعیت سفارش", style: TextStyle(fontSize: 25),),
+                              Text(
+                                "موقعیت سفارش",
+                                style: TextStyle(fontSize: 25),
+                              ),
                             ],
                           ),
                         ),
@@ -649,10 +672,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Text("نام فروشگاه",style: TextStyle(fontSize: 20),),
+                              Text(
+                                "نام فروشگاه",
+                                style: TextStyle(fontSize: 20),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: Image.asset("images/store.png", width: 50,),
+                                child: Image.asset(
+                                  "images/store.png",
+                                  width: 50,
+                                ),
                               )
                             ],
                           ),
@@ -662,10 +691,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Text("نام مشتری",style: TextStyle(fontSize: 20),),
+                              Text(
+                                "نام مشتری",
+                                style: TextStyle(fontSize: 20),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: Image.asset("images/customer.png", width: 50,),
+                                child: Image.asset(
+                                  "images/customer.png",
+                                  width: 50,
+                                ),
                               )
                             ],
                           ),
@@ -687,11 +722,36 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
           );
         });
   }
+
+  Future<void> _load_orders() async {
+    setState(() {
+      orders.clear();
+      got_data = false;
+    });
+    var res = global.getRequest("/delivery_orders/");
+    List<Map<String, dynamic>> data = await res;
+    // List<Map<String, dynamic>> orders_data = List<Map<String, dynamic>>.from(data["order"]);
+    data.forEach((element) {
+      setState(() {
+        orders.add(Order(
+            store_address: element["store_location"],
+            address: element["delivery_location"],
+            order_id: element["order_id"],
+            customer: element["customer_name"],
+            total_price: 0.0,
+            discount: element["discount_code"],
+            discount_value: 0.0,
+            status: element["status"],
+            store_name: element["store_name"],
+            fast: element["fast_delivery"],
+            items: []));
+      });
+    });
+    got_data = true;
+  }
 }
 
 TileLayer get tilelayer => TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  userAgentPackageName: 'com.blink.example',
-);
-
-
+      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      userAgentPackageName: 'com.blink.example',
+    );

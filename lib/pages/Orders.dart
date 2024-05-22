@@ -20,7 +20,7 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  List<order> orders = [];
+  List<Order> orders = [];
   bool got_data = false;
 
   _OrdersState({required this.store});
@@ -109,6 +109,9 @@ class _OrdersState extends State<Orders> {
   }
 
   Future<void> _load_orders(Store store) async {
+    setState(() {
+      got_data = false;
+    });
     var res = global.getRequest("/accept_reject_order/?store_id=" + store.id);
     List<Map<String, dynamic>> data = await res;
     // List<Map<String, dynamic>> orders_data = List<Map<String, dynamic>>.from(data["order"]);
@@ -120,6 +123,8 @@ class _OrdersState extends State<Orders> {
       order_items.forEach((element) {
         Item item = Item(
             image: element["image"],
+            rate: 2.5,
+            desc:"[not needed]",
             id: element["product_id"].toString(),
             name: element["product_name"],
             sotreid: store.id,
@@ -129,7 +134,8 @@ class _OrdersState extends State<Orders> {
       });
       setState(() {
         orders.clear();
-        orders.add(order(
+        orders.add(Order(
+          store_address: element["store_location"],
             address: element["delivery_location"],
             order_id: element["order_id"],
             customer: element["customer_name"],
@@ -137,13 +143,15 @@ class _OrdersState extends State<Orders> {
             discount: element["discount_code"],
             discount_value: element["discount_value"],
             status: element["status"],
+            fast: element["fast_delivery"],
+            store_name: "[not needed]",
             items: items));
       });
     });
     got_data = true;
   }
 
-  Widget card(context, order order) {
+  Widget card(context, Order order) {
     return GestureDetector(
       onTap: () {
         bottomsheed(context, order);
@@ -165,7 +173,7 @@ class _OrdersState extends State<Orders> {
                         style: TextStyle(fontSize: 18),
                         textDirection: TextDirection.rtl,
                       ),
-                      order.status != "DISPATCHED"
+                      order.status != "WAITING"
                           ? Row(
                               children: [
                                 IconButton(
@@ -229,8 +237,8 @@ class _OrdersState extends State<Orders> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
+                  order.fast? Padding(
+                    padding: const EdgeInsets.only(left: 8),
                     child: Column(
                       children: [
                         Image.asset(
@@ -244,7 +252,7 @@ class _OrdersState extends State<Orders> {
                         )
                       ],
                     ),
-                  )
+                  ) : Container()
                 ],
               ),
               Padding(
@@ -254,7 +262,7 @@ class _OrdersState extends State<Orders> {
                       ? "در انتظار فروشنده"
                       : order.status == "PROCESSING"
                           ? "در دست فروشنده"
-                          : "در دست پیک",
+                          : order.status == "WAITING"? "در انتظار پیک":"در دست پیک",
                   style: TextStyle(
                       fontSize: 20,
                       color: Color(0xFF256F46),
@@ -268,7 +276,7 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  void bottomsheed(context, order order) {
+  void bottomsheed(context, Order order) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
@@ -338,7 +346,9 @@ class _OrdersState extends State<Orders> {
                                   onPressed: () {
                                     global.postRequest({
                                       "order_id": order.order_id,
-                                      "status": "Rejected"
+                                      "status": order.status == "PENDING"
+                                          ? "Accepted"
+                                          : "Processed"
                                     }, "/accept_reject_order/");
                                     _load_orders(store);
                                     _load_orders(store);
@@ -354,7 +364,7 @@ class _OrdersState extends State<Orders> {
                                   onPressed: () {
                                     global.postRequest({
                                       "order_id": order.order_id,
-                                      "accept": true
+                                      "status": "Rejected"
                                     }, "/accept_reject_order/");
                                     _load_orders(store);
                                     _load_orders(store);

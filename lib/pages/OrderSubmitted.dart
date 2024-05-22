@@ -22,7 +22,7 @@ class _OrderSubmittedState extends State<OrderSubmitted> {
             Navigator.pop(context);
             Navigator.push(context, MaterialPageRoute(builder: (builder)=>Home()));
           },
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Color(0xFF256F46),),
         ),
       ),
       bottomNavigationBar: Padding(

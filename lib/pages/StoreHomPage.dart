@@ -133,8 +133,11 @@ class _StoreHomePageState extends State<StoreHomePage> {
             ? FloatingActionButton(
                 backgroundColor: Color(0xFF256F46),
                 onPressed: () {
-                  if (store != null)
-                    bottomShett(context, null, false);
+                  name.clear();
+                  desc.clear();
+                  count.clear();
+                  price.clear();
+                  if (store != null) bottomShett(context, null, false);
                 },
                 child: Icon(
                   Icons.add,
@@ -147,25 +150,26 @@ class _StoreHomePageState extends State<StoreHomePage> {
         ),
         body: store == null
             ? Center(
-              child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.lightGreen,
-                    color: Color(0xFF256F46),
-                    strokeWidth: 5,
-                    strokeAlign: 2,
-                  ),
-                  SizedBox(height:20,),
-                  Text(
-                  "در حال بارگذاری!",
-                  textDirection: TextDirection.rtl,
-                    style: TextStyle(fontSize: 30,
-                    color: Color(0xFF256F46)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.lightGreen,
+                      color: Color(0xFF256F46),
+                      strokeWidth: 5,
+                      strokeAlign: 2,
                     ),
-                ],
-              ),
-            )
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "در حال بارگذاری!",
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                    ),
+                  ],
+                ),
+              )
             : _currentIndex == 0
                 ? SingleChildScrollView(
                     child: Column(
@@ -201,7 +205,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                               Column(
                                 children: [
                                   Text(
-                                    global.first_name + " " + global.last_name,
+                                    global.first_name,
                                     style: TextStyle(
                                       fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
@@ -277,7 +281,9 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Orders(store: store!,)));
+                                    builder: (context) => Orders(
+                                          store: store!,
+                                        )));
                           },
                           child: Container(
                             margin: EdgeInsets.only(right: 20, left: 20),
@@ -545,6 +551,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
           name.text = item.name;
           count.text = item.quantity.toString();
           price.text = item.price.toString();
+          desc.text = item.desc;
           bottomShett(context, item, true);
         },
         child: Container(
@@ -636,6 +643,8 @@ class _StoreHomePageState extends State<StoreHomePage> {
       var itemPrice = double.parse(itemData['price']);
       var item = Item(
           id: itemId,
+          rate: itemData['rate'],
+          desc: itemData['name'],
           name: itemName,
           price: itemPrice,
           sotreid: data["store"]["id"].toString(),
@@ -647,6 +656,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     Store s = Store(
         id: data["store"]["id"].toString(),
         name: data["store"]["name"],
+        rate: data["store"]["rate"],
         longitude: double.parse(data["store"]["location"]["longitude"]),
         latitude: double.parse(data["store"]["location"]["latitude"]),
         items: items,
@@ -658,6 +668,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
   }
 
   void bottomShett(context, Item? item, bool edit) {
+
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
@@ -692,6 +703,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   "price": price.text,
                                   "quantity": count.text,
                                   "category_id": "1",
+                                  "product_description": desc.text,
                                   "store_id": store!.id,
                                   "image": _imageFile != null
                                       ? base64Image
@@ -701,6 +713,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   "product_name": name.text,
                                   "price": price.text,
                                   "quantity": count.text,
+                                  "product_description": desc.text,
                                   "category_id": "1",
                                   "store_id": store!.id,
                                   "image": _imageFile != null ? base64Image : ""
@@ -862,7 +875,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 primaryColorDark: Colors.red,
                               ),
                               child: TextField(
-                                // controller: name,
+                                controller: desc,
                                 maxLines: 3,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
