@@ -100,11 +100,9 @@ class Product(models.Model):
 
 class ProductComment(models.Model):
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     comment = models.TextField()
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    comment_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Comment for {self.product.name}"
