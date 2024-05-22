@@ -87,7 +87,7 @@ class Product(models.Model):
     store = models.ForeignKey(Store, related_name='products', on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
-
+    rate = models.DecimalField(max_digits= 3, decimal_places=2)
     def __str__(self):
         return self.name
 
@@ -97,7 +97,7 @@ class ProductComment(models.Model):
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     comment = models.TextField()
     comment_created = models.DateTimeField(auto_now_add=True)
-
+    rate = models.DecimalField(max_digits= 1, decimal_places=0, default=3)
     def __str__(self):
         return f"Comment for {self.product.name}"
 
@@ -118,7 +118,6 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"Chat between {self.customer_support.user.username} and {self.customer.username}"
-
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
