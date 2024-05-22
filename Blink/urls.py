@@ -35,7 +35,7 @@ urlpatterns = [
     path('get_sellers_store/', SellerStoresView.as_view(), name='seller-stores'),
     path('accept_reject_order/', AcceptRejectOrderView.as_view(), name='accept_reject_order'),
     path('order_status/', OrderStatusView.as_view(), name='order_status'),
-    path('delivery_orders/', DeliveryOrdersView.as_view(), name='delivery')
+    path('delivery_orders/', DeliveryOrdersView.as_view(), name='delivery'),
     path('product-comments/', ProductCommentView.as_view(), name='product-comments'),
     path('products/search/', ProductSearchView.as_view(), name='product-search'),
 
