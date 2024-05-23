@@ -22,7 +22,7 @@ from rest_framework import permissions
 
 from .views import SignupView, LoginView, StoreListView, ShoppingCartView, OrderFromCartView, PaymentView, \
     AddProductView, CustomerProfileEdit, LocationView, SellerStoresView, EditProductView, AcceptRejectOrderView, \
-    OrderStatusView, DeliveryOrdersView, ProductSearchView, ProductCommentView, StoreCommentView, ProductListView
+    OrderStatusView, DeliveryOrdersView, ProductCommentView, StoreCommentView, ProductListView
 
 schema_view = get_schema_view(
     openapi.Info(
