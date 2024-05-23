@@ -150,10 +150,10 @@ class _SignupScndPageState extends State<SignupScndPage> {
               Map<String, dynamic> data = await res;
               global.token = data["token"];
               global.tokenbool = true;
-              global.username = data["user"]["username"];
-              global.first_name = data["user"]["first_name"];
-              global.last_name = data["user"]["last_name"];
-              global.email = data["user"]["email"];
+              global.username = data["username"];
+              global.first_name = data["first_name"];
+              global.last_name = data["last_name"];
+              global.email = data["email"];
               global.userkind = data["user_type"];
               global.phone_number = data["phone_number"];
               global.profile_imge = data["image"];

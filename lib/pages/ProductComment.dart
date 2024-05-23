@@ -24,11 +24,11 @@ class _ProductCommentState extends State<ProductComment> {
   _ProductCommentState({required this.item});
 
   Item item;
-
+  bool got_data = true;
   @override
   void initState() {
     // TODO: implement initState
-    _load_comments(item);
+    // _load_comments(item);
     super.initState();
   }
 
@@ -210,7 +210,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                   "   بیخیال   ",
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 25,
+                                                    fontSize: 20,
                                                   ),
                                                 ),
                                                 style: ButtonStyle(
@@ -252,7 +252,8 @@ class _ProductCommentState extends State<ProductComment> {
                                                       },
                                                       "/product-comments/?product_id=" +
                                                           item.id);
-                                                  _load_comments(item);
+                                                  // _load_comments(item);
+                                                  await Future.delayed(Duration(milliseconds: 500));
                                                   _load_comments(item);
                                                   Navigator.push(
                                                       context,
@@ -263,7 +264,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                 child: Text(
                                                   "   ثبت نظر   ",
                                                   style: TextStyle(
-                                                    fontSize: 25,
+                                                    fontSize: 20,
                                                   ),
                                                 ),
                                                 style: ButtonStyle(
@@ -315,420 +316,468 @@ class _ProductCommentState extends State<ProductComment> {
           ),
         ),
         backgroundColor: Color(0xFFEAF3EE),
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(150.0),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 50),
-                  child: Column(
+        body: Stack(
+          children: [
+            PreferredSize(
+                preferredSize: Size.fromHeight(150.0),
+                child: Container(
+                  color: Color(0xFFEAF3EE),
+                  // color: Colors.red,
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: item.image == ""
+                      ? ImageIcon(
+                    AssetImage("images/shop.png"),
+                    size: 250,
+                    color: Color(0xFF949494),
+                  )
+                      : ClipRRect(
+                    // borderRadius: BorderRadius.circular(75),
+                    // Same radius as the CircleAvatar
+                    child: Image.memory(
+                      width: 200,
+                      Uint8List.fromList(
+                          base64Decode(item.image)),
+                      fit: BoxFit.fitWidth, // Adjust the fit as needed
+                    ),
+                  ),
+                )),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 120),
+                  Row(
                     children: [
-                      Expanded(child: Container()),
-                      IconButton(
-                        onPressed: () {
-                          var width = MediaQuery.of(context).size.width * 0.9;
-                          var height = MediaQuery.of(context).size.height * 0.4;
-                          var rate = 0;
-                          var star = AssetImage("images/star.png");
-                          var empty_star = AssetImage("images/star_empty.png");
+                      IconButton(onPressed: (){
 
-                          showDialog(
-                              context: context,
-                              builder: (builder) {
-                                return StatefulBuilder(
-                                    builder: (context, StateSetter setstate2) {
-                                  return Center(
-                                    child: Container(
-                                      width: width,
-                                      height: height,
-                                      child: Material(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 50),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "به این محصول چه امتیازی می‌دهید؟",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                              Expanded(child: Container()),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 35),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          setstate2(() {
-                                                            rate = 1;
-                                                          });
-                                                          // setRate(1);
-                                                        },
-                                                        icon: ImageIcon(
-                                                          rate >= 1
-                                                              ? star
-                                                              : empty_star,
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          size: 50,
-                                                        )),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          setstate2(() {
-                                                            rate = 2;
-                                                          });
-                                                          // setRate(2);
-                                                        },
-                                                        icon: ImageIcon(
-                                                          rate >= 2
-                                                              ? star
-                                                              : empty_star,
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          size: 50,
-                                                        )),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          setstate2(() {
-                                                            rate = 3;
-                                                          });
-                                                          // setRate(3);
-                                                        },
-                                                        icon: ImageIcon(
-                                                          rate >= 3
-                                                              ? star
-                                                              : empty_star,
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          size: 50,
-                                                        )),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          setstate2(() {
-                                                            rate = 4;
-                                                          });
-                                                          // setRate(4);
-                                                        },
-                                                        icon: ImageIcon(
-                                                          rate >= 4
-                                                              ? star
-                                                              : empty_star,
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          size: 50,
-                                                        )),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          setstate2(() {
-                                                            rate = 5;
-                                                          });
-                                                          // setRate(4);
-                                                        },
-                                                        icon: ImageIcon(
-                                                          rate >= 5
-                                                              ? star
-                                                              : empty_star,
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          size: 50,
-                                                        )),
-                                                  ],
+                        var width = MediaQuery.of(context).size.width * 0.9;
+                        var height = MediaQuery.of(context).size.height * 0.4;
+                        var rate = 0;
+                        var star = AssetImage("images/star.png");
+                        var empty_star = AssetImage("images/star_empty.png");
+
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return StatefulBuilder(
+                                  builder: (context, StateSetter setstate2) {
+                                    return Center(
+                                      child: Container(
+                                        width: width,
+                                        height: height,
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(50),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 50),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  "به این محصول چه امتیازی می‌دهید؟",
+                                                  style: TextStyle(fontSize: 20),
                                                 ),
-                                              ),
-                                              Expanded(child: Container()),
-                                              Row(
-                                                mainAxisAlignment:
+                                                Expanded(child: Container()),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 35),
+                                                  child: Row(
+                                                    mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 20,
-                                                            horizontal: 5),
-                                                    child: SizedBox(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.085,
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(
-                                                          "   بیخیال   ",
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 25,
-                                                          ),
-                                                        ),
-                                                        style: ButtonStyle(
-                                                            shape: MaterialStateProperty
-                                                                .all<
-                                                                    RoundedRectangleBorder>(
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              12),
-                                                                  side: BorderSide(
-                                                                      color: Color(
-                                                                          0xFF256F46))),
-                                                            ),
-                                                            backgroundColor:
-                                                                MaterialStateColor
-                                                                    .resolveWith(
-                                                                        (states) =>
-                                                                            Colors.white)),
-                                                      ),
-                                                    ),
+                                                    children: [
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setstate2(() {
+                                                              rate = 1;
+                                                            });
+                                                            // setRate(1);
+                                                          },
+                                                          icon: ImageIcon(
+                                                            rate >= 1
+                                                                ? star
+                                                                : empty_star,
+                                                            color:
+                                                            Color(0xFF256F46),
+                                                            size: 50,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setstate2(() {
+                                                              rate = 2;
+                                                            });
+                                                            // setRate(2);
+                                                          },
+                                                          icon: ImageIcon(
+                                                            rate >= 2
+                                                                ? star
+                                                                : empty_star,
+                                                            color:
+                                                            Color(0xFF256F46),
+                                                            size: 50,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setstate2(() {
+                                                              rate = 3;
+                                                            });
+                                                            // setRate(3);
+                                                          },
+                                                          icon: ImageIcon(
+                                                            rate >= 3
+                                                                ? star
+                                                                : empty_star,
+                                                            color:
+                                                            Color(0xFF256F46),
+                                                            size: 50,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setstate2(() {
+                                                              rate = 4;
+                                                            });
+                                                            // setRate(4);
+                                                          },
+                                                          icon: ImageIcon(
+                                                            rate >= 4
+                                                                ? star
+                                                                : empty_star,
+                                                            color:
+                                                            Color(0xFF256F46),
+                                                            size: 50,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setstate2(() {
+                                                              rate = 5;
+                                                            });
+                                                            // setRate(4);
+                                                          },
+                                                          icon: ImageIcon(
+                                                            rate >= 5
+                                                                ? star
+                                                                : empty_star,
+                                                            color:
+                                                            Color(0xFF256F46),
+                                                            size: 50,
+                                                          )),
+                                                    ],
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 20,
-                                                            horizontal: 5),
-                                                    child: SizedBox(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.085,
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (builder) =>
-                                                                          CommentRateSent()));
-                                                        },
-                                                        child: Text(
-                                                          "   ثبت   ",
-                                                          style: TextStyle(
-                                                            fontSize: 25,
+                                                ),
+                                                Expanded(child: Container()),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 20,
+                                                          horizontal: 5),
+                                                      child: SizedBox(
+                                                        height:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                            0.085,
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            "   بیخیال   ",
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 25,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        style: ButtonStyle(
-                                                            shape: MaterialStateProperty
-                                                                .all<
-                                                                    RoundedRectangleBorder>(
-                                                              RoundedRectangleBorder(
-                                                                borderRadius:
+                                                          style: ButtonStyle(
+                                                              shape: MaterialStateProperty
+                                                                  .all<
+                                                                  RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            12),
+                                                                        12),
+                                                                    side: BorderSide(
+                                                                        color: Color(
+                                                                            0xFF256F46))),
                                                               ),
-                                                            ),
-                                                            backgroundColor:
-                                                                MaterialStateColor
-                                                                    .resolveWith(
-                                                                        (states) =>
-                                                                            Color(0xFF256F46))),
+                                                              backgroundColor:
+                                                              MaterialStateColor
+                                                                  .resolveWith(
+                                                                      (states) =>
+                                                                  Colors.white)),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              // Expanded(child: Container(
-                                            ],
+                                                    Padding(
+                                                      padding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 20,
+                                                          horizontal: 5),
+                                                      child: SizedBox(
+                                                        height:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                            0.085,
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (builder) =>
+                                                                        CommentRateSent()));
+                                                          },
+                                                          child: Text(
+                                                            "   ثبت   ",
+                                                            style: TextStyle(
+                                                              fontSize: 25,
+                                                            ),
+                                                          ),
+                                                          style: ButtonStyle(
+                                                              shape: MaterialStateProperty
+                                                                  .all<
+                                                                  RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                      12),
+                                                                ),
+                                                              ),
+                                                              backgroundColor:
+                                                              MaterialStateColor
+                                                                  .resolveWith(
+                                                                      (states) =>
+                                                                      Color(0xFF256F46))),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                // Expanded(child: Container(
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                });
-                              });
-                        },
-                        iconSize: 40,
-                        icon: ImageIcon(
-                          AssetImage("images/star.png"),
-                          color: Color(0xFF256F46),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "4.1",
-                          style:
-                              TextStyle(fontSize: 25, color: Color(0xFF256F46)),
-                        ),
-                      )
+                                    );
+                                  });
+                            });
+                      }, icon: ImageIcon(AssetImage("images/star.png"), color: Color(0xFF256F46),), iconSize: 35,),
+                      Text(item.rate.toString() + "/5", style: TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
                     ],
                   ),
-                ),
-                Container(
-                    color: Color(0xFFEAF3EE),
-                    // color: Colors.red,
-                    height: 200,
-                    // width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 0),
-                        child: global.profile_imge == ""
-                            ? ImageIcon(
-                                AssetImage("images/shop.png"),
-                                size: 250,
-                                color: Color(0xFF949494),
-                              )
-                            : ClipRRect(
-                                // borderRadius: BorderRadius.circular(75),
-                                // Same radius as the CircleAvatar
-                                child: Image.memory(
-                                  width: 200,
-                                  Uint8List.fromList(
-                                      base64Decode(global.profile_imge)),
-                                  fit: BoxFit
-                                      .fitWidth, // Adjust the fit as needed
-                                ),
-                              ))),
-              ],
-            )),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Container(
-            child: Padding(
-                padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "۳۲۱ امتیاز",
-                          style: TextStyle(fontSize: 20, color: Colors.black54),
-                          textDirection: TextDirection.rtl,
-                        ),
-                        Expanded(child: Container()),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Text(
-                            "نام محصول",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Color(0xFF7CA990), width: 2))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 8.0, right: 10, left: 10),
-                          child: Row(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Container(
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 25, right: 25),
+                          child: Column(
                             children: [
-                              Text(
-                                "۶۵ نظر",
-                                textDirection: TextDirection.rtl,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 18),
-                              ),
-                              Expanded(child: Container()),
-                              Text(
-                                "نظرات کاربران",
-                                style: TextStyle(fontSize: 25),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                      itemCount: item.comments.length,
-                      itemBuilder: (context, i) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    ImageIcon(
-                                      AssetImage("images/star.png"),
-                                      color: Color(0xFF256F46),
-                                      size: 30,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 5),
-                                      child: Text(
-                                        "4.1/5",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Color(0xFF256F46)),
-                                      ),
-                                    ),
-                                    Expanded(child: Container()),
-                                    Text(
-                                      item.comments[i].date,
-                                      textDirection: TextDirection.rtl,
-                                      style:
-                                          TextStyle(color: Colors.black87),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Text(
-                                        item.comments[i].name,
-                                        style: TextStyle(fontSize: 22),
-                                      ),
-                                    )
-                                  ],
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5, bottom: 15),
+                                child: Container(
+                                  width: 100,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(75)
+                                  ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10,
-                                      right: 10,
-                                      bottom: 45,
-                                      top: 20),
-                                  child: Container(
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "۳۲۱ امتیاز",
+                                    style: TextStyle(fontSize: 20, color: Colors.black54),
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                  Expanded(child: Container()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15),
                                     child: Text(
-                                      item.comments[i].comment,
-                                      style: TextStyle(fontSize: 25),
-                                      textDirection: TextDirection.rtl,
+                                      item.name,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF7CA990), width: 2))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 20),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "۶۵ نظر",
+                                          textDirection: TextDirection.rtl,
+                                          style:
+                                              TextStyle(color: Colors.grey, fontSize: 18),
+                                        ),
+                                        Expanded(child: Container()),
+                                        Text(
+                                          "نظرات کاربران",
+                                          style: TextStyle(fontSize: 20),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF7CA990),
-                                        width: 2))),
+                                ),
+                              ),
+                              !got_data? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.2,
+                                    ),
+                                    CircularProgressIndicator(
+                                      backgroundColor: Colors.lightGreen,
+                                      color: Color(0xFF256F46),
+                                      strokeWidth: 5,
+                                      strokeAlign: 2,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      "در حال دریافت کامنت‌ها",
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                                    ),
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.2,
+                                    ),
+                                  ],
+                                ),
+                              ) : item.comments.isEmpty? Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height * 0.3,
+                                  ),
+                                  Center(
+                                    child: Text("کامنتی وجود ندارد",style: TextStyle(fontSize: 20),),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: IconButton(
+                                        onPressed: () async {
+                                          // _load_orders(store);
+                                          await Future.delayed(Duration(milliseconds: 500));
+                                          _load_comments(item);
+                                        },
+                                        icon: Icon(Icons.refresh)),
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height * 0.3,
+                                  ),
+                                ],
+                              ) : ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: item.comments.length,
+                              itemBuilder: (context, i) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            ImageIcon(
+                                              AssetImage("images/star.png"),
+                                              color: Color(0xFF256F46),
+                                              size: 30,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, top: 5),
+                                              child: Text(
+                                                "4.1/5",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Color(0xFF256F46)),
+                                              ),
+                                            ),
+                                            Expanded(child: Container()),
+                                            Text(
+                                              item.comments[i].date,
+                                              textDirection: TextDirection.rtl,
+                                              style:
+                                                  TextStyle(color: Colors.black87),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              child: Text(
+                                                item.comments[i].name,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              bottom: 45,
+                                              top: 20),
+                                          child: Container(
+                                            child: Text(
+                                              item.comments[i].comment,
+                                              style: TextStyle(fontSize: 25),
+                                              textDirection: TextDirection.rtl,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Color(0xFF7CA990),
+                                                width: 2))),
+                                  ),
+                                );
+                              }),
+                            ],
+                          )),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 0),
+                                blurRadius: 10,
+                                spreadRadius: 5)
+                          ]
+                          // border: Border.all(color: Colors.black)
                           ),
-                        );
-                      }),
                     ),
-                  ],
-                )),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50)),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0, 0),
-                      blurRadius: 10,
-                      spreadRadius: 5)
-                ]
-                // border: Border.all(color: Colors.black)
-                ),
-          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ));
   }
 
   Future<void> _load_comments(Item item) async {
+    setState(() {
+      got_data = false;
+    });
     var res = global.getRequest("/product-comments/?product_id=" + item.id);
     List<Map<String, dynamic>> data = await res;
     setState(() {
@@ -740,5 +789,10 @@ class _ProductCommentState extends State<ProductComment> {
             date: element["comment_created"]));
       });
     });
+    setState(() {
+      got_data = true;
+    });
   }
+
+
 }

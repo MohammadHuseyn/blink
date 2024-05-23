@@ -6,6 +6,7 @@ import 'package:blink/pages/LastCheck.dart';
 import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
 import 'package:blink/pages/Payment.dart';
+import 'package:blink/pages/StoreHomPage.dart';
 import 'package:blink/pages/StorePage.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -98,7 +99,7 @@ class _HomeState extends State<Home> {
                               onPressed: () {},
                               icon: Icon(
                                 Icons.notifications,
-                                size: 50,
+                                size: 40,
                                 color: Color(0xFF256F46),
                               )),
                         )
@@ -106,12 +107,12 @@ class _HomeState extends State<Home> {
                     : (_currentIndex == 2)
                         ? [
                             Padding(
-                              padding: const EdgeInsets.only(right: 30),
+                              padding: const EdgeInsets.only(right: 15),
                               child: IconButton(
                                   onPressed: () {},
                                   icon: Icon(
                                     Icons.delete,
-                                    size: 50,
+                                    size: 40,
                                     color: Color(0xFF256F46),
                                   )),
                             )
@@ -123,7 +124,7 @@ class _HomeState extends State<Home> {
                         child: IconButton(
                           icon: Icon(
                             Icons.location_on,
-                            size: 50,
+                            size: 40,
                             color: Color(0xFF256F46),
                           ),
                           onPressed: () {
@@ -502,7 +503,7 @@ class _HomeState extends State<Home> {
                                       Expanded(child: Container()),
                                       Container(
                                         // height: 120,
-                                        width: 120,
+                                        width: 100,
                                         // color: Colors.red,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
@@ -523,13 +524,13 @@ class _HomeState extends State<Home> {
                                         child: Column(
                                           children: [
                                             Image.asset("images/pizza.png",
-                                                height: 120),
+                                                height: 100),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "غذا",
-                                                style: TextStyle(fontSize: 25),
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             )
                                           ],
@@ -554,18 +555,18 @@ class _HomeState extends State<Home> {
                                         ),
 
                                         // height: 120,
-                                        width: 120,
+                                        width: 100,
                                         // color: Colors.red,
                                         child: Column(
                                           children: [
                                             Image.asset("images/arayeshi.png",
-                                                height: 120, fit: BoxFit.cover),
+                                                height: 100, fit: BoxFit.cover),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "آرایشی",
-                                                style: TextStyle(fontSize: 25),
+                                                style: TextStyle(fontSize: 20),
                                                 maxLines: 1,
                                                 textAlign: TextAlign.center,
                                               ),
@@ -576,7 +577,7 @@ class _HomeState extends State<Home> {
                                       Expanded(child: Container()),
                                       Container(
                                         // height: 120,
-                                        width: 120,
+                                        width: 100,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(25)),
@@ -595,13 +596,13 @@ class _HomeState extends State<Home> {
                                         child: Column(
                                           children: [
                                             Image.asset("images/digital.png",
-                                                height: 120, fit: BoxFit.cover),
+                                                height: 100, fit: BoxFit.cover),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "دیجیتال",
-                                                style: TextStyle(fontSize: 25),
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             )
                                           ],
@@ -617,7 +618,7 @@ class _HomeState extends State<Home> {
                                     children: [
                                       Expanded(child: Container()),
                                       Padding(
-                                        padding: const EdgeInsets.all(20),
+                                        padding: const EdgeInsets.all(10),
                                         child: Container(
                                           height: 80,
                                           width: 80,
@@ -653,7 +654,7 @@ class _HomeState extends State<Home> {
                                       Expanded(child: Container()),
                                       Container(
                                         // height: 120,
-                                        width: 120,
+                                        width: 100,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(25)),
@@ -672,13 +673,13 @@ class _HomeState extends State<Home> {
                                         child: Column(
                                           children: [
                                             Image.asset("images/lebas.png",
-                                                height: 120),
+                                                height: 100),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "لباس",
-                                                style: TextStyle(fontSize: 25),
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             )
                                           ],
@@ -687,7 +688,7 @@ class _HomeState extends State<Home> {
                                       Expanded(child: Container()),
                                       Container(
                                         // height: 120,
-                                        width: 120,
+                                        width: 100,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(25)),
@@ -706,13 +707,13 @@ class _HomeState extends State<Home> {
                                         child: Column(
                                           children: [
                                             Image.asset("images/market.png",
-                                                height: 120, fit: BoxFit.cover),
+                                                height: 100, fit: BoxFit.cover),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "مارکت",
-                                                style: TextStyle(fontSize: 25),
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             )
                                           ],
@@ -842,7 +843,7 @@ class _HomeState extends State<Home> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        "4.1/5",
+                                                        "/5",
                                                         style: TextStyle(
                                                             fontSize: 17),
                                                       )
@@ -955,17 +956,18 @@ class _HomeState extends State<Home> {
                         ),
                       )
                     : Container(
+              color: Colors.white,
                         child: Column(
                           children: [
                             Scrollbar(
                               child: Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.black12,
+                                      border: Border.all(color: Color(0xFF256F46), width: 2.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
                                   margin: EdgeInsets.symmetric(horizontal: 20),
                                   height:
-                                      MediaQuery.of(context).size.height * 0.3,
+                                      MediaQuery.of(context).size.height * 0.5,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: global.card.length == 0
@@ -1089,22 +1091,22 @@ class _HomeState extends State<Home> {
                                           ),
                                   )),
                             ),
-                            Expanded(child: Container()),
-                            Text(
-                              global.s == null
-                                  ? "سفارشی ندارید"
-                                  : "سفارش از " + global.s!.name,
-                              textDirection: TextDirection.rtl,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'shabnam',
-                                fontSize: 30,
+                            // Expanded(child: Container()),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                global.s == null
+                                    ? ""
+                                    : "سفارش از " + global.s!.name,
+                                textDirection: TextDirection.rtl,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                            Expanded(child: Container()),
                             Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.all(20.0),
                               child: Table(
                                 border:
                                     TableBorder.all(color: Colors.transparent),
@@ -1115,50 +1117,23 @@ class _HomeState extends State<Home> {
                                       Container(
                                         height: 50,
                                         child: Text(
-                                          'مالیات',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'shabnam',
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 50,
-                                        child: Text(
-                                          'رایگان',
-                                          textDirection: TextDirection.rtl,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'shabnam',
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  TableRow(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        child: Text(
                                           'هزینه ارسال',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'shabnam',
-                                            fontSize: 20,
+                                            fontSize: 18,
                                           ),
                                         ),
                                       ),
                                       Container(
                                         height: 50,
                                         child: Text(
-                                          '۵۰ هزار تومان',
+                                          '۵۰٬۰۰۰ تومان',
                                           textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'shabnam',
-                                            fontSize: 20,
+                                            fontSize: 18,
                                           ),
                                         ),
                                       ),
@@ -1173,18 +1148,19 @@ class _HomeState extends State<Home> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'shabnam',
-                                            fontSize: 25,
+                                            fontSize: 20,
                                           ),
                                         ),
                                       ),
                                       Container(
                                         height: 50,
                                         child: Text(
-                                          (sum + 50000.0).toString(),
+                                          global.toPersianNumbers((sum + 50000.0)) + " تومان",
+                                          textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'shabnam',
-                                            fontSize: 25,
+                                            fontSize: 20,
                                           ),
                                         ),
                                       ),
@@ -1198,7 +1174,7 @@ class _HomeState extends State<Home> {
                               children: [
                                 Expanded(child: Container()),
                                 Container(
-                                  width: 100,
+                                  width: 120,
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       if (global.currentCardPayement) {
@@ -1251,11 +1227,11 @@ class _HomeState extends State<Home> {
                                   width: 120,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      setState(() {
-                                        _currentIndex = 1;
-                                      });
-                                      // Navigator.pop(context);
-                                      // Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+                                      // setState(() {
+                                      //   _currentIndex = 1;
+                                      // });
+                                      if (global.s != null)
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => StorePage(store: global.s)));
                                     },
                                     child: Text(
                                       "ادامه خرید",

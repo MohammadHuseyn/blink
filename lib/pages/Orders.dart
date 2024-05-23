@@ -43,8 +43,9 @@ class _OrdersState extends State<Orders> {
           backgroundColor: Color(0xFF256F46),
           actions: [
             IconButton(
-                onPressed: () {
-                  _load_orders(store);
+                onPressed: () async {
+                  // _load_orders(store);
+                  await Future.delayed(Duration(milliseconds: 500));
                   _load_orders(store);
                 },
                 icon: Icon(Icons.refresh))
