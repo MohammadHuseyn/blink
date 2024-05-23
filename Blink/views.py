@@ -18,6 +18,8 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Avg
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class SignupView(APIView):
@@ -29,16 +31,16 @@ class SignupView(APIView):
                 customer = Customer.objects.get(id=user.id)
 
             except:
-                customer = False
+                customer = None
             try:
                 seller = Seller.objects.get(id=user.id)
 
             except:
-                seller = False
+                seller = None
             try:
                 delivery = Delivery.objects.get(id=user.id)
             except:
-                delivery = False
+                delivery = None
 
             if customer:
                 user_serializer = CustomerDetailSerializer(user)
@@ -64,7 +66,8 @@ class SignupView(APIView):
                 'user_type': user_type
             }, content_type='application/json; charset=utf-8', status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors,content_type='application/json; charset=utf-8', status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, content_type='application/json; charset=utf-8',
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
@@ -122,32 +125,11 @@ class LoginView(APIView):
                 'phone_number': phone_number,
                 'user_type': user_type,
                 'image': image
-            },content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+            }, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
         else:
             return Response({
                 "error": "Invalid credentials"
-            },content_type='application/json; charset=utf-8', status=status.HTTP_401_UNAUTHORIZED)
-
-class ProductListView(APIView) :
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        store_id = request.query_params.get('store_id')
-        if not store_id:
-            return Response(
-                {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        products = Product.objects.filter(store_id=store_id)
-        serializer = ProductSerializer(products, many=True)
-
-        for p in serializer.data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
-                p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
-            else :
-                p['rate'] = float(0)
-        product_dict = {str(p['id']): p for p in serializer.data}
-        return Response(product_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+            }, content_type='application/json; charset=utf-8', status=status.HTTP_401_UNAUTHORIZED)
 
 
 class StoreListView(APIView):
@@ -168,18 +150,12 @@ class StoreListView(APIView):
             # Get all stores (you might want to filter by location or other criteria)
             stores = Store.objects.all()
             serializer = StoreSerializer(stores, many=True)
-            for s in serializer.data :
-                if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) == None):
-                    s['rate'] = float(
-                        StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'])
-                else:
-                    s['rate'] = float(0)
             store_dict = {str(store['id']): store for store in serializer.data}
             return Response(store_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
-                {"error": "Invalid token"},content_type='application/json; charset=utf-8',
+                {"error": "Invalid token"}, content_type='application/json; charset=utf-8',
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
@@ -211,9 +187,11 @@ class ShoppingCartView(APIView):
                 # Optionally, you can perform additional actions here, such as updating product stock
             total_price = sum(item.product.price * item.quantity for item in shopping_cart.items.all()) + 50000
 
-            return Response({"message": "Shopping cart updated successfully","total_price":total_price}, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+            return Response({"message": "Shopping cart updated successfully", "total_price": total_price},
+                            content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, content_type='application/json; charset=utf-8', status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, content_type='application/json; charset=utf-8',
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderFromCartView(APIView):
@@ -269,7 +247,9 @@ class OrderFromCartView(APIView):
         # Optionally, clear the shopping cart after creating the order
         shopping_cart.items.all().delete()
 
-        return Response({"message": "Order placed successfully","order_id":order.id}, content_type='application/json; charset=utf-8', status=status.HTTP_201_CREATED)
+        return Response({"message": "Order placed successfully", "order_id": order.id},
+                        content_type='application/json; charset=utf-8', status=status.HTTP_201_CREATED)
+
 
 class PaymentView(APIView):
     def post(self, request):
@@ -308,7 +288,8 @@ class AddProductView(APIView):
             image = data.get('image')
             description = data.get('product_description')
             if not all([product_name, price, quantity, category_id, store_id]):
-                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST,
+                                content_type='application/json; charset=utf-8')
 
             category, _ = Category.objects.get_or_create(id=category_id)
             store, _ = Store.objects.get_or_create(id=store_id)
@@ -323,10 +304,12 @@ class AddProductView(APIView):
                 description=description
             )
 
-            return Response({'success': 'Product added successfully', 'product_id': product.id}, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8',)
+            return Response({'success': 'Product added successfully', 'product_id': product.id},
+                            status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8', )
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR, content_type='application/json; charset=utf-8')
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content_type='application/json; charset=utf-8')
 
 
 class EditProductView(APIView):
@@ -346,7 +329,8 @@ class EditProductView(APIView):
             description = data.get('product_description')
 
             if not all([product_id, product_name, price, quantity, category_id, store_id]):
-                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8',)
+                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST,
+                                content_type='application/json; charset=utf-8', )
 
             product = Product.objects.get(id=product_id)
 
@@ -362,13 +346,16 @@ class EditProductView(APIView):
             product.description = description
             product.save()
 
-            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
+            return Response({'success': 'Product updated successfully'}, status=status.HTTP_200_OK,
+                            content_type='application/json; charset=utf-8')
 
         except Product.DoesNotExist:
-            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8')
+            return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND,
+                            content_type='application/json; charset=utf-8')
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR, content_type='application/json; charset=utf-8',)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content_type='application/json; charset=utf-8', )
 
 
 class CustomerProfileEdit(APIView):
@@ -394,11 +381,14 @@ class CustomerProfileEdit(APIView):
             if check_password(current_password, user.password):
                 user.password = make_password(password)
             else:
-                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST,
+                                content_type='application/json; charset=utf-8')
 
         user.save()
 
-        return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
+        return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK,
+                        content_type='application/json; charset=utf-8')
+
 
 class LocationView(APIView):
 
@@ -422,8 +412,10 @@ class LocationView(APIView):
                 user_id=customer.id
             )
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8',)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8',)
+            return Response(serializer.data, status=status.HTTP_201_CREATED,
+                            content_type='application/json; charset=utf-8', )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
+                        content_type='application/json; charset=utf-8', )
 
 
 class SellerStoresView(APIView):
@@ -452,7 +444,8 @@ class SellerStoresView(APIView):
                     'store': store_data
                 }
 
-                return Response(response_data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
+                return Response(response_data, status=status.HTTP_200_OK,
+                                content_type='application/json; charset=utf-8')
             else:
                 return Response(
                     {"error": "No store associated with this seller."},
@@ -570,13 +563,26 @@ class DeliveryOrdersView(APIView):
             customer_name = order.customer.first_name + " " + order.customer.last_name
             delivery_location = Location.objects.get(id=order.delivery_location.id).address
             store = Store.objects.get(id=order.store_id)
+            delivery_location = Location.objects.get(id=order.delivery_location.id)
+            store_location = Location.objects.get(id=store.location.id)
+            delivery_address = delivery_location.address
+            delivery_long = delivery_location.longitude
+            delivery_lat = delivery_location.latitude
+            store_address = store_location.address
+            store_long = store_location.longitude
+            store_lat = store_location.latitude
+
+            delivery_price = order.delivery_price
             store_name = store.name
-            store_location = Location.objects.get(id=store.location.id).address
+
             fast_delivery = order.fast_delivery
             json_data.append({"order_id": order.id, 'customer_name': customer_name,
-                              'delivery_location': delivery_location, "status": order.status,
-                              "store_location": store_location, "fast_delivery": fast_delivery,
-                              "store_name": store_name})
+                              "delivery_address": delivery_address, "status": order.status,
+                              "store_address": store_address, "fast_delivery": fast_delivery,
+                              "store_name": store_name, "delivery_price": delivery_price,
+                              "delivery_latitude": delivery_lat, "delivery_longitude": delivery_long,
+                              "store_latitude": store_lat, "store_longitude": store_long
+                              })
 
         return Response(json_data)
 
@@ -632,7 +638,8 @@ class ProductCommentView(APIView):
     def post(self, request):
         product_id = request.query_params.get('product_id')
         if not product_id:
-            return Response({"error": "product_id is required as a query parameter"}, content_type='application/json; charset=utf-8',
+            return Response({"error": "product_id is required as a query parameter"},
+                            content_type='application/json; charset=utf-8',
                             status=status.HTTP_400_BAD_REQUEST)
 
         data = request.data.copy()

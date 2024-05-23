@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Blink',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 
 ]
 
