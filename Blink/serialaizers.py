@@ -4,6 +4,7 @@ from .models import Customer, Seller, Delivery, Store, Location, Product, Shoppi
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment
 from django.db.models import Avg
 
+
 class UserSignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=True)
     password = serializers.CharField(write_only=True, required=True)
@@ -21,6 +22,7 @@ class UserSignupSerializer(serializers.Serializer):
     image = serializers.CharField(max_length=20480000, required=False)
     vehicle_license_plate = serializers.CharField(max_length=20, required=False, allow_blank=True)
     driving_license_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
+
     def create(self, validated_data):
         user_type = validated_data.get('user_type')
         # Create the appropriate user based on user_type
@@ -84,6 +86,7 @@ class UserSignupSerializer(serializers.Serializer):
 
         return user
 
+
 class GeneralUserDetailSerializer(serializers.ModelSerializer):
     # Extend this serializer to capture common fields across all user types
     class Meta:
@@ -110,10 +113,12 @@ class DeliveryDetailSerializer(GeneralUserDetailSerializer):
         fields = GeneralUserDetailSerializer.Meta.fields + ['phone_number', 'vehicle_license_plate',
                                                             'driving_license_number']
 
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'price', 'quantity', 'image', 'category', 'rate']
+
 
 class StoreSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
@@ -130,17 +135,19 @@ class StoreSerializer(serializers.ModelSerializer):
         # Retrieve products related to this store and format as required
         product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
 
-        for p in product_data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
+        for p in product_data:
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None):
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
-            else :
+            else:
                 p['rate'] = float(0)
         product_dict = {str(p['id']): p for p in product_data}
         return product_dict
 
+
 class CartItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     quantity = serializers.IntegerField()
+
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -153,12 +160,13 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+
 class ProductCommentSerializer(serializers.ModelSerializer):
     user_first_name = serializers.CharField(source='user.first_name', read_only=True)
     user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+
     class Meta:
         model = ProductComment
         fields = ['id', 'product', 'user', 'comment', 'user_first_name',
                   'user_last_name', 'comment_created', 'rate']
         read_only_fields = ['user_first_name', 'user_last_name']
-
