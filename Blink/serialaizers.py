@@ -131,10 +131,10 @@ class StoreSerializer(serializers.ModelSerializer):
         product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
 
         for p in product_data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != 0) :
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
             else :
-                p['rate'] = 0
+                p['rate'] = float(0)
         product_dict = {str(p['id']): p for p in product_data}
         return product_dict
 
