@@ -154,9 +154,9 @@ class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        longitude = request.data.get("longitude")
-        latitude = request.data.get("latitude")
+    def get(self, request):
+        longitude = request.query_params.get('longitude')
+        latitude = request.query_params.get('latitude')
 
         if not longitude or not latitude:
             return Response(
