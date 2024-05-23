@@ -1,28 +1,31 @@
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer
+    ProductSerializer, OrderSerializer, ProductCommentSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
 from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem, \
-    Category, ProductComment, StoreComment
+    Category, ProductComment
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import make_password, check_password
-from django.db.models import Avg
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
 class SignupView(APIView):
+    @swagger_auto_schema(
+        operation_description="Users Signup",
+        responses={201: openapi.Response('Created', UserSignupSerializer), 400: 'Bad Request'},
+        request_body=UserSignupSerializer
+    )
+
     def post(self, request):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
@@ -57,6 +60,11 @@ class SignupView(APIView):
                 phone_number = delivery.phone_number
                 image = delivery.image
                 user_type = 'Delivery'
+            else:
+                user_serializer = None
+                phone_number = None
+                image = None
+                user_type = None
             token, created = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
@@ -71,6 +79,21 @@ class SignupView(APIView):
 
 
 class LoginView(APIView):
+    @swagger_auto_schema(
+        operation_description="User Login",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+            },
+            required=['username', 'password']
+        ),
+        responses={
+            200: 'Login Successful',
+            401: 'Invalid Credentials'
+        }
+    )
     def post(self, request):
         # Validate user input
         data = request.data
@@ -136,13 +159,30 @@ class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        longitude = request.query_params.get('longitude')
-        latitude = request.query_params.get('latitude')
+    @swagger_auto_schema(
+        operation_description="Retrieve stores",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'longitude': openapi.Schema(type=openapi.TYPE_STRING, description='Longitude'),
+                'latitude': openapi.Schema(type=openapi.TYPE_STRING, description='Latitude'),
+            },
+            required=['longitude', 'latitude']
+        ),
+        responses={
+            200: StoreSerializer(many=True),
+            400: 'Bad Request',
+            401: 'Unauthorized'
+        }
+    )
+    def post(self, request):
+        longitude = request.data.get("longitude")
+        latitude = request.data.get("latitude")
 
         if not longitude or not latitude:
             return Response(
-                {"error": "Longitude, latitude, and token are required"},content_type='application/json; charset=utf-8',
+                {"error": "Longitude, latitude, and token are required"},
+                content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
@@ -151,6 +191,7 @@ class StoreListView(APIView):
             stores = Store.objects.all()
             serializer = StoreSerializer(stores, many=True)
             store_dict = {str(store['id']): store for store in serializer.data}
+
             return Response(store_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
@@ -164,6 +205,11 @@ class ShoppingCartView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Update shopping cart",
+        responses={200: 'Shopping cart updated successfully', 400: 'Bad Request'},
+        request_body=CartItemSerializer(many=True)
+    )
     def post(self, request):
         data = JSONParser().parse(request)
         serializer = CartItemSerializer(data=data, many=True)
@@ -198,6 +244,18 @@ class OrderFromCartView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Create an order from shopping cart",
+        responses={201: 'Order placed successfully', 400: 'Bad Request'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'location_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Delivery location ID'),
+                'store_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Store ID'),
+                'fast_delivery': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='Fast delivery option')
+            }
+        )
+    )
     def post(self, request):
         # Assuming the user is authenticated and retrieved from the token
         user = request.user
@@ -252,6 +310,23 @@ class OrderFromCartView(APIView):
 
 
 class PaymentView(APIView):
+    @swagger_auto_schema(
+        operation_description="Process a payment for an order",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'order_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID of the order'),
+                'paid': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='Payment status')
+            },
+            required=['order_id', 'paid']
+        ),
+        responses={
+            200: openapi.Response(description='Payment processed successfully', examples={
+                'application/json': {'pay': True, 'order_id': 1}
+            }),
+            400: openapi.Response(description='Bad Request')
+        }
+    )
     def post(self, request):
         order_id = request.data.get('order_id')
         is_paid = request.data.get('paid')  # Assuming you receive 'paid' parameter for payment status
@@ -277,6 +352,17 @@ class AddProductView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Add a new product",
+        request_body=ProductSerializer,
+        responses={
+            201: openapi.Response(description='Product added successfully', examples={
+                'application/json': {'success': 'Product added successfully', 'product_id': 1}
+            }),
+            400: openapi.Response(description='Bad Request'),
+            500: openapi.Response(description='Internal Server Error')
+        }
+    )
     def post(self, request):
         try:
             data = request.data
@@ -316,6 +402,18 @@ class EditProductView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Edit an existing product",
+        request_body=ProductSerializer,
+        responses={
+            200: openapi.Response(description='Product updated successfully', examples={
+                'application/json': {'success': 'Product updated successfully'}
+            }),
+            400: openapi.Response(description='Bad Request'),
+            404: openapi.Response(description='Product not found'),
+            500: openapi.Response(description='Internal Server Error')
+        }
+    )
     def put(self, request):
         try:
             data = request.data
@@ -362,6 +460,28 @@ class CustomerProfileEdit(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Edit customer profile",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='First Name'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Last Name'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='New Password'),
+                'current_password': openapi.Schema(type=openapi.TYPE_STRING, description='Current Password'),
+                'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone Number'),
+                'image': openapi.Schema(type=openapi.TYPE_STRING, description='Profile Image URL'),
+            }
+        ),
+        responses={
+            200: openapi.Response(description='Profile updated successfully', examples={
+                'application/json': {'success': 'Profile updated successfully'}
+            }),
+            400: openapi.Response(description='Bad Request')
+        }
+    )
     def put(self, request):
         user = request.user
         user = Customer.objects.get(id=user.id)
@@ -391,15 +511,29 @@ class CustomerProfileEdit(APIView):
 
 
 class LocationView(APIView):
-
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve user locations",
+        responses={200: LocationSerializer(many=True)}
+    )
     def get(self, request):
         user = request.user
         locations = Location.objects.filter(user_id=user.id)
         serializer = LocationSerializer(locations, many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_description="Add a new location",
+        request_body=LocationSerializer,
+        responses={
+            201: openapi.Response(description='Location added successfully', examples={
+                'application/json': {'success': 'Location added successfully'}
+            }),
+            400: openapi.Response(description='Bad Request')
+        }
+    )
     def post(self, request):
         serializer = LocationSerializer(data=request.data)
         customer = Customer.objects.get(user_ptr_id=request.user.id)
@@ -422,6 +556,13 @@ class SellerStoresView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve seller stores and their products",
+        responses={
+            200: openapi.Response(description='Store details and products retrieved successfully'),
+            404: openapi.Response(description='Seller or store not found')
+        }
+    )
     def get(self, request):
         # Retrieve the seller based on the token
         seller = request.user
@@ -458,12 +599,20 @@ class SellerStoresView(APIView):
                 status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
             )
 
+
 class ProductSearchView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['name']
 
+    @swagger_auto_schema(
+        operation_description="Search products by name and optionally filter by store ID",
+        manual_parameters=[
+            openapi.Parameter('store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER)
+        ],
+        responses={200: ProductSerializer(many=True)}
+    )
     def get_queryset(self):
         queryset = super().get_queryset()
         store_id = self.request.query_params.get('store_id', None)
@@ -476,6 +625,13 @@ class AcceptRejectOrderView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve pending, processing, and waiting orders for a store",
+        manual_parameters=[
+            openapi.Parameter('store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER)
+        ],
+        responses={200: openapi.Response(description="Orders retrieved successfully")}
+    )
     def get(self, request):
         store_id = request.query_params.get('store_id')
         desired_statuses = ['PENDING', 'PROCESSING', 'WAITING']
@@ -506,6 +662,24 @@ class AcceptRejectOrderView(APIView):
 
         return Response(json_data)
 
+    @swagger_auto_schema(
+        operation_description="Accept, reject, or process an order",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'order_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID of the order'),
+                'status': openapi.Schema(type=openapi.TYPE_STRING, description='New status of the order')
+            },
+            required=['order_id', 'status']
+        ),
+        responses={
+            200: openapi.Response(description='Order status updated successfully', examples={
+                'application/json': {'message': 'Order status updated successfully'}
+            }),
+            400: openapi.Response(description='Bad Request'),
+            404: openapi.Response(description='Order not found')
+        }
+    )
     def post(self, request):
         # Parse JSON data
         data = request.data
@@ -544,6 +718,13 @@ class OrderStatusView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve order status",
+        manual_parameters=[
+            openapi.Parameter('order_id', openapi.IN_QUERY, description="ID of the order", type=openapi.TYPE_INTEGER)
+        ],
+        responses={200: OrderSerializer}
+    )
     def get(self, request):
         order_id = request.query_params.get('order_id')
         order = Order.objects.get(id=order_id)
@@ -551,17 +732,21 @@ class OrderStatusView(APIView):
 
         return Response({"order": order_data.data})
 
+
 class DeliveryOrdersView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve dispatched and waiting orders",
+        responses={200: openapi.Response(description="Orders retrieved successfully")}
+    )
     def get(self, request):
         desired_statuses = ['DISPATCHED', 'WAITING']
         orders = Order.objects.filter(status__in=desired_statuses)
         json_data = []
         for order in orders:
             customer_name = order.customer.first_name + " " + order.customer.last_name
-            delivery_location = Location.objects.get(id=order.delivery_location.id).address
             store = Store.objects.get(id=order.store_id)
             delivery_location = Location.objects.get(id=order.delivery_location.id)
             store_location = Location.objects.get(id=store.location.id)
@@ -586,6 +771,24 @@ class DeliveryOrdersView(APIView):
 
         return Response(json_data)
 
+    @swagger_auto_schema(
+        operation_description="Update delivery order status",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'order_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID of the order'),
+                'status': openapi.Schema(type=openapi.TYPE_STRING, description='New status of the order')
+            },
+            required=['order_id', 'status']
+        ),
+        responses={
+            200: openapi.Response(description='Order status updated successfully', examples={
+                'application/json': {'message': 'Order status updated successfully'}
+            }),
+            400: openapi.Response(description='Bad Request'),
+            404: openapi.Response(description='Order not found')
+        }
+    )
     def post(self, request):
         user = request.user
         user = Delivery.objects.get(id=user.id)
@@ -622,10 +825,18 @@ class DeliveryOrdersView(APIView):
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 class ProductCommentView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve comments for a product",
+        manual_parameters=[
+            openapi.Parameter('product_id', openapi.IN_QUERY, description="ID of the product",
+                              type=openapi.TYPE_INTEGER)
+        ],
+        responses={200: ProductCommentSerializer(many=True)}
+    )
     def get(self, request):
         product_id = request.query_params.get('product_id')
         if not product_id:
@@ -635,6 +846,16 @@ class ProductCommentView(APIView):
         serializer = ProductCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
 
+    @swagger_auto_schema(
+        operation_description="Add a comment to a product",
+        request_body=ProductCommentSerializer,
+        responses={
+            201: openapi.Response(description='Comment created successfully', examples={
+                'application/json': {'message': 'Comment created successfully'}
+            }),
+            400: openapi.Response(description='Bad Request')
+        }
+    )
     def post(self, request):
         product_id = request.query_params.get('product_id')
         if not product_id:
@@ -648,32 +869,7 @@ class ProductCommentView(APIView):
         serializer = ProductCommentSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
-
-class StoreCommentView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        store_id = request.query_params.get('store_id')
-        if not store_id:
-            return Response({"error": "store_id is required as a query parameter"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        comments = StoreComment.objects.filter(store_id=store_id)
-        serializer = StoreCommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
-
-    def post(self, request):
-        store_id = request.query_params.get('store_id')
-        if not store_id:
-            return Response({"error": "store_id is required as a query parameter"}, content_type='application/json; charset=utf-8',
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        data = request.data.copy()
-        data['store'] = store_id
-        data['user'] = request.user.id
-        serializer = StoreCommentSerializer(data=data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+            return Response(serializer.data, status=status.HTTP_201_CREATED,
+                            content_type='application/json; charset=utf-8')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
+                        content_type='application/json; charset=utf-8')
