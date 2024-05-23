@@ -25,6 +25,7 @@ class SignupView(APIView):
         responses={201: openapi.Response('Created', UserSignupSerializer), 400: 'Bad Request'},
         request_body=UserSignupSerializer
     )
+
     def post(self, request):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
