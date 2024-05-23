@@ -640,75 +640,74 @@ class _ProductCommentState extends State<ProductComment> {
                         ),
                       ),
                     ),
-                    Container(
-                        child: Expanded(
+                    Expanded(
                       child: ListView.builder(
-                          itemCount: item.comments.length,
-                          itemBuilder: (context, i) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Container(
-                                child: Column(
+                      itemCount: item.comments.length,
+                      itemBuilder: (context, i) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        ImageIcon(
-                                          AssetImage("images/star.png"),
-                                          color: Color(0xFF256F46),
-                                          size: 30,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, top: 5),
-                                          child: Text(
-                                            "4.1/5",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Color(0xFF256F46)),
-                                          ),
-                                        ),
-                                        Expanded(child: Container()),
-                                        Text(
-                                          item.comments[i].date,
-                                          textDirection: TextDirection.rtl,
-                                          style:
-                                              TextStyle(color: Colors.black87),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Text(
-                                            item.comments[i].name,
-                                            style: TextStyle(fontSize: 22),
-                                          ),
-                                        )
-                                      ],
+                                    ImageIcon(
+                                      AssetImage("images/star.png"),
+                                      color: Color(0xFF256F46),
+                                      size: 30,
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          bottom: 45,
-                                          top: 20),
-                                      child: Container(
-                                        child: Text(
-                                          item.comments[i].comment,
-                                          style: TextStyle(fontSize: 25),
-                                          textDirection: TextDirection.rtl,
-                                        ),
+                                          left: 10, top: 5),
+                                      child: Text(
+                                        "4.1/5",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Color(0xFF256F46)),
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                    Text(
+                                      item.comments[i].date,
+                                      textDirection: TextDirection.rtl,
+                                      style:
+                                          TextStyle(color: Colors.black87),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                        item.comments[i].name,
+                                        style: TextStyle(fontSize: 22),
                                       ),
                                     )
                                   ],
                                 ),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF7CA990),
-                                            width: 2))),
-                              ),
-                            );
-                          }),
-                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10,
+                                      right: 10,
+                                      bottom: 45,
+                                      top: 20),
+                                  child: Container(
+                                    child: Text(
+                                      item.comments[i].comment,
+                                      style: TextStyle(fontSize: 25),
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF7CA990),
+                                        width: 2))),
+                          ),
+                        );
+                      }),
+                    ),
                   ],
                 )),
             decoration: BoxDecoration(

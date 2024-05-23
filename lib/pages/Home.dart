@@ -1316,9 +1316,10 @@ class _HomeState extends State<Home> {
 
   loadStores() async {
     // print("TOKEN" + global.token)
-    var res = global.postRequest(
-        {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
-        "/stores/");
+    // var res = global.postRequest(
+    //     {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
+    //     "/stores/");
+    var res = global.getRequestmap("/stores/?longitude=35.7219&latitude=51.3347");
     Map<String, dynamic> data = await res;
 
     data.forEach((storeId, storeData) {
@@ -1328,22 +1329,6 @@ class _HomeState extends State<Home> {
       var longitude = storeData['location']['longitude'];
       var latitude = storeData['location']['latitude'];
 
-      // Extract item details
-      List<Item> items = [];
-      (storeData['products'] as Map<String, dynamic>)
-          .forEach((String itemId, itemData) {
-        var itemName = itemData['name'];
-        var itemPrice = double.parse(itemData['price']);
-        var item = Item(
-            id: itemId,
-            desc: itemData['name'],
-            name: itemName,
-            rate: itemData['rate'],
-            price: itemPrice,
-            sotreid: storeId,
-            image: "");
-        items.add(item);
-      });
 
       // Create Store object and add it to the list
       var store = Store(
@@ -1352,7 +1337,7 @@ class _HomeState extends State<Home> {
           name: name,
           longitude: double.parse(longitude),
           latitude: double.parse(latitude),
-          items: items,
+          items: [],
           image: storeData["image"]);
       setState(() {
         stores.add(store);

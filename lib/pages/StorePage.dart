@@ -23,9 +23,16 @@ class StorePage extends StatefulWidget {
 
 class _StorePageState extends State<StorePage> {
   Store store;
-
+  bool got_data = false;
+  var search = TextEditingController();
   _StorePageState({required this.store});
 
+  @override
+  void initState() {
+    _load_items(store: store, filter: "");
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +74,20 @@ class _StorePageState extends State<StorePage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 0),
             child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 0),
+                        blurRadius: 10,
+                        spreadRadius: 5)
+                  ]
+                  // border: Border.all(color: Colors.black)
+                  ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
                 child: Column(
@@ -107,7 +128,7 @@ class _StorePageState extends State<StorePage> {
                                             store: store,
                                           )));
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(Icons.arrow_back_ios_rounded),
                                 Text(
@@ -135,10 +156,14 @@ class _StorePageState extends State<StorePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 15, bottom: 15),
                       child: TextField(
+                        controller: search,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25),
+                        onChanged: (changed) {
+                          _load_items(store: store, filter: changed);
+                        },
                         decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.search_rounded,
                               size: 35,
                               color: Color(0xFF2E8B57),
@@ -153,7 +178,27 @@ class _StorePageState extends State<StorePage> {
                                     color: Color(0xFF2E8B57), width: 2.0))),
                       ),
                     ),
-                    Container(
+                    !got_data? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.lightGreen,
+                            color: Color(0xFF256F46),
+                            strokeWidth: 5,
+                            strokeAlign: 2,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "در حال دریافت محصولات",
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                          ),
+                        ],
+                      ),
+                    ): Container(
                       height: MediaQuery.of(context).size.height * 0.535853,
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -176,20 +221,6 @@ class _StorePageState extends State<StorePage> {
                   ],
                 ),
               ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, 0),
-                        blurRadius: 10,
-                        spreadRadius: 5)
-                  ]
-                  // border: Border.all(color: Colors.black)
-                  ),
             ),
           ),
         ));
@@ -648,6 +679,33 @@ class _StorePageState extends State<StorePage> {
       return '0' + value.toRadixString(16);
     }
     return value.toRadixString(16);
+  }
+
+  Future<void> _load_items({required Store store, required String filter}) async {
+    setState(() {
+      got_data = false;
+    });
+    var res = global.getRequestmap("/products/?store_id=" + store.id + "&search=" + filter);
+    Map<String, dynamic> data = await res;
+    List<Item> items = [];
+    data.forEach((key, value) {
+
+      Item item = Item(
+          sotreid: store.id,
+          name: value["name"],
+          id: key,
+          image: value["image"],
+          desc: "",
+          price: double.parse(value["price"]),
+          rate: value["rate"]
+      );
+      item.quantity = value["quantity"];
+        items.add(item);
+    });
+    setState(() {
+      store.items = items;
+      got_data = true;
+    });
   }
 
 }
