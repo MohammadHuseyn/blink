@@ -56,7 +56,6 @@ urlpatterns = [
     path('order_status/', OrderStatusView.as_view(), name='order_status'),
     path('delivery_orders/', DeliveryOrdersView.as_view(), name='delivery'),
     path('product-comments/', ProductCommentView.as_view(), name='product-comments'),
-    path('products/search/', ProductSearchView.as_view(), name='product-search'),
     path('store-comments/', StoreCommentView.as_view(), name='store-comments'),
     path('products/', ProductListView.as_view(), name='product-list'),
 ]
