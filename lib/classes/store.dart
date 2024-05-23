@@ -6,7 +6,7 @@ class Store {
   late String name;
   late double longitude;
   late double latitude;
-  double rate;
+  // double rate;
   late List<Item> items;
   List<Comment> comments = [];
   String image = "";
@@ -14,7 +14,7 @@ class Store {
       {required this.id,
       required this.name,
         required this.longitude,
-        required this.rate,
+        // required this.rate,
       required this.latitude,
         required this.image,
       List<Item>? items})

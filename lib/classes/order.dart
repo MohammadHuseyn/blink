@@ -1,3 +1,5 @@
+import 'package:latlong2/latlong.dart';
+
 import 'item.dart';
 
 class Order {
@@ -5,7 +7,7 @@ class Order {
   String customer;
   String address;
   String? delivery_person = null;
-  int? delivery_price = null;
+  double? delivery_price = null;
   String? discount;
   double? discount_value;
   double total_price;
@@ -13,12 +15,16 @@ class Order {
   String store_name;
   String store_address;
   bool fast;
+  LatLng origin;
+  LatLng goal;
   List<Item> items = [];
 
   Order({
     required this.address,
     required this.order_id,
     required this.customer,
+    required this.origin,
+    required this.goal,
     required this.total_price,
     required this.discount_value,
     required this.discount,

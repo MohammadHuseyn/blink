@@ -656,7 +656,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     Store s = Store(
         id: data["store"]["id"].toString(),
         name: data["store"]["name"],
-        rate: data["store"]["rate"],
+        // rate: data["store"]["rate"],
         longitude: double.parse(data["store"]["location"]["longitude"]),
         latitude: double.parse(data["store"]["location"]["latitude"]),
         items: items,

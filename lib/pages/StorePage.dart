@@ -435,13 +435,13 @@ class _StorePageState extends State<StorePage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: Text(
-                              "4.1/5",
+                              item.rate.toString() + "/5",
                               style: TextStyle(fontSize: 17),
                             ),
                           ),
                           Expanded(child: Container()),
                           Text(
-                            "نام محصول",
+                            item.name,
                             style: TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.bold),
                           )
@@ -473,7 +473,7 @@ class _StorePageState extends State<StorePage> {
                           ),
                           Expanded(child: Container()),
                           Text(
-                            "نام فروشگاه",
+                            store.name,
                             style: TextStyle(fontSize: 20),
                           ),
                           Padding(
@@ -509,7 +509,7 @@ class _StorePageState extends State<StorePage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 25, vertical: 25),
                         child: Text(
-                          "توضیحات",
+                          item.desc,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(fontSize: 20, color: Colors.grey),
                         ),

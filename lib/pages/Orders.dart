@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:blink/classes/order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../classes/item.dart';
 import '../global.dart' as global;
 import '../classes/store.dart';
@@ -41,7 +42,12 @@ class _OrdersState extends State<Orders> {
         appBar: AppBar(
           backgroundColor: Color(0xFF256F46),
           actions: [
-            IconButton(onPressed: () {_load_orders(store);_load_orders(store);}, icon: Icon(Icons.refresh))
+            IconButton(
+                onPressed: () {
+                  _load_orders(store);
+                  _load_orders(store);
+                },
+                icon: Icon(Icons.refresh))
           ],
         ),
         body: !got_data
@@ -94,9 +100,10 @@ class _OrdersState extends State<Orders> {
                             color: Color(0xFF256F46),
                             borderRadius: BorderRadius.circular(50)),
                         child: IconButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              await Future.delayed(Duration(milliseconds: 500));
                               _load_orders(store);
-                              _load_orders(store);
+                              // _load_orders(store);
                             },
                             icon: Icon(
                               Icons.refresh,
@@ -124,7 +131,7 @@ class _OrdersState extends State<Orders> {
         Item item = Item(
             image: element["image"],
             rate: 2.5,
-            desc:"[not needed]",
+            desc: "[not needed]",
             id: element["product_id"].toString(),
             name: element["product_name"],
             sotreid: store.id,
@@ -135,7 +142,9 @@ class _OrdersState extends State<Orders> {
       setState(() {
         orders.clear();
         orders.add(Order(
-          store_address: element["store_location"],
+            origin: LatLng(0, 0),
+            goal: LatLng(0, 0),
+            store_address: "[not needed]",
             address: element["delivery_location"],
             order_id: element["order_id"],
             customer: element["customer_name"],
@@ -178,12 +187,14 @@ class _OrdersState extends State<Orders> {
                               children: [
                                 IconButton(
                                     iconSize: 30,
-                                    onPressed: () {
+                                    onPressed: () async {
                                       global.postRequest({
                                         "order_id": order.order_id,
                                         "status": "Rejected"
                                       }, "/accept_reject_order/");
-                                      _load_orders(store);
+                                      await Future.delayed(
+                                          Duration(milliseconds: 500));
+                                      // _load_orders(store);
                                       _load_orders(store);
                                     },
                                     icon: ImageIcon(
@@ -237,22 +248,25 @@ class _OrdersState extends State<Orders> {
                       ),
                     ],
                   ),
-                  order.fast? Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "images/fast.png",
-                          width: 40,
-                        ),
-                        Text(
-                          "تحویل فوری!",
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(color: Colors.red, fontSize: 15),
+                  order.fast
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                "images/fast.png",
+                                width: 40,
+                              ),
+                              Text(
+                                "تحویل فوری!",
+                                textDirection: TextDirection.rtl,
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 15),
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  ) : Container()
+                      : Container()
                 ],
               ),
               Padding(
@@ -262,7 +276,9 @@ class _OrdersState extends State<Orders> {
                       ? "در انتظار فروشنده"
                       : order.status == "PROCESSING"
                           ? "در دست فروشنده"
-                          : order.status == "WAITING"? "در انتظار پیک":"در دست پیک",
+                          : order.status == "WAITING"
+                              ? "در انتظار پیک"
+                              : "در دست پیک",
                   style: TextStyle(
                       fontSize: 20,
                       color: Color(0xFF256F46),
@@ -343,14 +359,16 @@ class _OrdersState extends State<Orders> {
                             children: [
                               IconButton(
                                   iconSize: 60,
-                                  onPressed: () {
+                                  onPressed: () async {
                                     global.postRequest({
                                       "order_id": order.order_id,
                                       "status": order.status == "PENDING"
                                           ? "Accepted"
                                           : "Processed"
                                     }, "/accept_reject_order/");
-                                    _load_orders(store);
+                                    await Future.delayed(
+                                        Duration(milliseconds: 500));
+                                    // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },
@@ -361,12 +379,14 @@ class _OrdersState extends State<Orders> {
                               Expanded(child: Container()),
                               IconButton(
                                   iconSize: 60,
-                                  onPressed: () {
+                                  onPressed: () async {
                                     global.postRequest({
                                       "order_id": order.order_id,
                                       "status": "Rejected"
                                     }, "/accept_reject_order/");
-                                    _load_orders(store);
+                                    await Future.delayed(
+                                        Duration(milliseconds: 500));
+                                    // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },

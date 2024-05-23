@@ -29,7 +29,7 @@ var _currentIndex = 1;
 var sum = 0.0;
 List<Store> stores = [
   Store(
-      id: "1", name: "baq gilas",rate: 2.5, longitude: 12554, latitude: 98455, image: ""),
+      id: "1", name: "baq gilas", longitude: 12554, latitude: 98455, image: ""),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
@@ -1348,7 +1348,7 @@ class _HomeState extends State<Home> {
       // Create Store object and add it to the list
       var store = Store(
           id: id,
-          rate: storeData['rate'],
+          // rate: storeData['rate'],
           name: name,
           longitude: double.parse(longitude),
           latitude: double.parse(latitude),
