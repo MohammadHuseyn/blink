@@ -4,19 +4,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer, OrderSerializer, ProductCommentSerializer
+    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem, \
-    Category, ProductComment
+    Category, ProductComment, StoreComment
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import make_password, check_password
+from django.db.models import Avg
 
 
 class SignupView(APIView):
@@ -146,9 +147,14 @@ class StoreListView(APIView):
             # Get all stores (you might want to filter by location or other criteria)
             stores = Store.objects.all()
             serializer = StoreSerializer(stores, many=True)
+            for s in serializer.data :
+                if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) == None):
+                    s['rate'] = float(
+                        StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'])
+                else:
+                    s['rate'] = float(0)
             store_dict = {str(store['id']): store for store in serializer.data}
-
-            return Response(store_dict,content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+            return Response(store_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
@@ -612,6 +618,33 @@ class ProductCommentView(APIView):
         data['product'] = product_id
         data['user'] = request.user.id
         serializer = ProductCommentSerializer(data=data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+
+class StoreCommentView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        store_id = request.query_params.get('store_id')
+        if not store_id:
+            return Response({"error": "store_id is required as a query parameter"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        comments = StoreComment.objects.filter(store_id=store_id)
+        serializer = StoreCommentSerializer(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
+
+    def post(self, request):
+        store_id = request.query_params.get('store_id')
+        if not store_id:
+            return Response({"error": "store_id is required as a query parameter"}, content_type='application/json; charset=utf-8',
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['store'] = store_id
+        data['user'] = request.user.id
+        serializer = StoreCommentSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')

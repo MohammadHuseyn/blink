@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, Order, OrderItem
+from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, Order, OrderItem, \
+    StoreComment
 from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment
 from django.db.models import Avg
 
@@ -162,3 +163,11 @@ class ProductCommentSerializer(serializers.ModelSerializer):
                   'user_last_name', 'comment_created', 'rate']
         read_only_fields = ['user_first_name', 'user_last_name']
 
+class StoreCommentSerializer(serializers.ModelSerializer):
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    class Meta:
+        model = StoreComment
+        fields = ['id', 'store', 'user', 'comment', 'user_first_name',
+                  'user_last_name', 'comment_created', 'rate']
+        read_only_fields = ['user_first_name', 'user_last_name']

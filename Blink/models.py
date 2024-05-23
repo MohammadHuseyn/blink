@@ -76,8 +76,17 @@ class Store(models.Model):
     location = models.ForeignKey("Location", related_name='stores', on_delete=models.SET_NULL, null=True, blank=True)
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
+    rate = models.DecimalField(max_digits= 3, decimal_places=2)
     def __str__(self):
         return self.name
+class StoreComment(models.Model):
+    store = models.ForeignKey(Store, related_name='store_comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='store_comments', on_delete=models.CASCADE)
+    comment = models.TextField()
+    comment_created = models.DateTimeField(auto_now_add=True)
+    rate = models.DecimalField(max_digits= 1, decimal_places=0, default=3)
+    def __str__(self):
+        return f"Comment for {self.store.name}"
 
 
 class Product(models.Model):
@@ -88,7 +97,6 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, null=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
     description = models.TextField(blank=True, max_length=100)
-
     rate = models.DecimalField(max_digits= 3, decimal_places=2)
     def __str__(self):
         return self.name
