@@ -362,7 +362,6 @@ class AddProductView(APIView):
             500: openapi.Response(description='Internal Server Error')
         }
     )
-
     def post(self, request):
         try:
             data = request.data
@@ -482,7 +481,6 @@ class CustomerProfileEdit(APIView):
             400: openapi.Response(description='Bad Request')
         }
     )
-
     def put(self, request):
         user = request.user
         user = Customer.objects.get(id=user.id)
@@ -564,7 +562,6 @@ class SellerStoresView(APIView):
             404: openapi.Response(description='Seller or store not found')
         }
     )
-
     def get(self, request):
         # Retrieve the seller based on the token
         seller = request.user
