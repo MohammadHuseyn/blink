@@ -157,7 +157,7 @@ class StoreListView(APIView):
     def get(self, request):
         longitude = request.query_params.get('longitude')
         latitude = request.query_params.get('latitude')
-
+        print(1)
         if not longitude or not latitude:
             return Response(
                 {"error": "Longitude, latitude, and token are required"},content_type='application/json; charset=utf-8',
