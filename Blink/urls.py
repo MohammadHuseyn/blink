@@ -25,16 +25,16 @@ from .views import SignupView, LoginView, StoreListView, ShoppingCartView, Order
     OrderStatusView, DeliveryOrdersView, ProductSearchView, ProductCommentView, StoreCommentView, ProductListView
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Blink API",
-      default_version='v1',
-      description="API documentation for Blink Project",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@yourproject.local"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+    openapi.Info(
+        title="Blink API",
+        default_version='v1',
+        description="API documentation for Blink Project",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@yourproject.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny),
 )
 
 urlpatterns = [
@@ -44,7 +44,7 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('stores/', StoreListView.as_view(), name='store-list'),
-    path('cart/',ShoppingCartView.as_view(), name='cart'),
+    path('cart/', ShoppingCartView.as_view(), name='cart'),
     path('makeorder/', OrderFromCartView.as_view(), name='makeorder'),
     path('payment/', PaymentView.as_view(), name='payment'),
     path('add_product/', AddProductView.as_view(), name='add_product'),

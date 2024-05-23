@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, Order, OrderItem, \
-    StoreComment
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment
+from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment, Order, StoreComment
 from django.db.models import Avg
 
 class UserSignupSerializer(serializers.Serializer):
@@ -117,6 +115,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'price', 'quantity', 'image', 'category', 'rate']
 
 class StoreSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
 
     class Meta:
