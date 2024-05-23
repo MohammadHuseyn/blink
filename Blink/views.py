@@ -133,11 +133,9 @@ class ProductListView(APIView) :
     permission_classes = [IsAuthenticated]
     def get(self, request):
         store_id = request.query_params.get('store_id')
-        longitude = request.query_params.get('longitude')
-        latitude = request.query_params.get('latitude')
-        if not longitude or not latitude or not store_id:
+        if not store_id:
             return Response(
-                {"error": "Longitude, latitude, store_id and token are required"},content_type='application/json; charset=utf-8',
+                {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
         products = Product.objects.filter(store_id=store_id)
