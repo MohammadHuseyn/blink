@@ -1,21 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:blink/classes/store.dart';
 import 'package:blink/pages/Address.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-// import 'classes/store.dart';
+
+import 'classes/item.dart';
+import 'classes/order.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-var url ='http://172.20.10.5:8000';
+var url ='http://192.168.124.31:8000';
 List<addres_data> addresses = [];
 var s = null;
 var token = "";
 var currentCardPayement = false;
 var tokenbool = false;
 var username = "username";
-var userkind = "Seller";
+var userkind = "";
 var storeName = "باغ گیلاس";
+var store_id = "";
+// var order_id;
 var order_id;
 var first_name = "محسین";
 String profile_imge = "";
@@ -25,8 +29,16 @@ var email = "mahsein@mail.com";
 // var address_name = "آدرس ۱";
 var addressIndex = null;
 List<Item> card = [];
-var headerA = {"Content-Type": "application/json", "Authorization": 'Token $token'};
-var header = {"Content-Type": "application/json"};
+
+void toast(context, String txt) {
+  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    content: Text("txt"),
+  ));
+}
+
+
+var headerA = {"Content-Type": "application/json; charset=UTF-8", "Authorization": 'Token $token'};
+var header = {"Content-Type": "application/json; charset=UTF-8"};
 Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
   var body = json.encode(data);
@@ -52,7 +64,7 @@ Future<List<Map<String, dynamic>>> getRequest(String endpoint) async {
   // Check if the response status code is OK (200)
   if (response.statusCode == 200) {
     // Parse the response body from JSON to List<Map<String, dynamic>>
-    List<dynamic> responseDataList = json.decode(response.body);
+    List<dynamic> responseDataList = json.decode(utf8.decode(response.bodyBytes));
 
     // Convert the List<dynamic> to List<Map<String, dynamic>>
     List<Map<String, dynamic>> responseData = [];
@@ -78,7 +90,7 @@ Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
   // Check if the response status code is OK (200)
   if (response.statusCode == 200) {
     // Parse the response body from JSON to Map<String, dynamic>
-    Map<String, dynamic> responseData = json.decode(response.body);
+    Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
 
     // Ensure that the response is indeed a Map
     if (responseData is Map<String, dynamic>) {

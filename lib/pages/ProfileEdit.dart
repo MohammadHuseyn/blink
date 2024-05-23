@@ -1,5 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+// import 'dart:html';
+import 'package:image/image.dart' as img;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../global.dart' as global;
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -19,6 +25,10 @@ var duppass = TextEditingController();
 var showPass = false;
 var currPass = TextEditingController();
 class _ProfileEditState extends State<ProfileEdit> {
+  File? _imageFile;
+  String? base64Image = "";
+  final ImagePicker _picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     username.text = global.username;
@@ -72,11 +82,77 @@ class _ProfileEditState extends State<ProfileEdit> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: ImageIcon(
-                  AssetImage('images/account.png'),
-                  color: Color(0xFF618771),
-                  size: 80,
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 75, // Adjust the radius as needed
+                      backgroundColor: Colors.transparent, // Make the background transparent
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
+                        child: Container(
+                          width: 150, // Width of the IconButton
+                          height: 150, // Height of the IconButton
+                          child: IconButton(
+                            padding: EdgeInsets.zero, // Remove padding around the icon
+                            icon: _imageFile != null
+                                ? Image.file(
+                              _imageFile!,
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover, // Ensure the image fills the IconButton
+                            )
+                                : global.profile_imge == ""? ImageIcon(
+                              AssetImage("images/addimage.png"),
+                              color: Color(0xFF1c5334),
+                              size: 150, // Size of the ImageIcon
+                            ) : ClipRRect(
+                              borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
+                              child: Image.memory(
+                                width: 150,
+                                Uint8List.fromList(
+                                    base64Decode(global.profile_imge)),
+                                fit: BoxFit
+                                    .cover, // Adjust the fit as needed
+                              ),
+                            ),
+                            onPressed: () async {
+                                final XFile? image = await _picker.pickImage(
+                                    source: ImageSource.gallery);
+
+                                if (image != null) {
+                                  (await cropImageToSquare(
+                                      File(image.path))) as File?;
+                                  // If you need the base64 string for any purpose
+                                  List<int> imageBytes = await _imageFile!
+                                      .readAsBytes();
+                                  base64Image = base64Encode(imageBytes);
+                                } else {
+                                  print('No image selected.');
+                                }
+                            },
+                            iconSize: 150, // Size of the IconButton
+                          ),
+                        ),
+                      ),
+                    ),
+                    _imageFile != null || global.profile_imge != ""? IconButton(
+                      icon: Icon(
+                        Icons.highlight_remove_rounded, // Use any icon you prefer for deleting the image
+                        color: Colors.red, // Change the color if needed
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (global.profile_imge != "")
+                            global.profile_imge = "";
+                           // Set _imageFile to null
+                        else _imageFile = null;
+                        });
+                      },
+                      iconSize: 30, // Adjust the size of the icon as needed
+                    ) : Container(),
+                  ],
                 ),
               ),
               Padding(
@@ -324,4 +400,31 @@ class _ProfileEditState extends State<ProfileEdit> {
       ),
     );
   }
+  Future<File> cropImageToSquare(File imageFile) async {
+    final imageBytes = await imageFile.readAsBytes();
+    final img.Image? image = img.decodeImage(imageBytes);
+
+    if (image == null) {
+      throw Exception("Could not decode image.");
+    }
+
+    int shortestSide = image.width < image.height ? image.width : image.height;
+    int xOffset = (image.width - shortestSide) ~/ 2;
+    int yOffset = (image.height - shortestSide) ~/ 2;
+
+    final img.Image croppedImage = img.copyCrop(
+      image,
+      x: xOffset,
+      y: yOffset,
+      width: shortestSide,
+      height: shortestSide,
+    );
+
+    final croppedFile = await imageFile.writeAsBytes(img.encodePng(croppedImage));
+    setState(() {
+      _imageFile = croppedFile;
+    });
+    return croppedFile;
+  }
+
 }

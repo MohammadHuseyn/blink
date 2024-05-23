@@ -1,22 +1,24 @@
+import 'comment.dart';
+import 'item.dart';
+
 class Store {
   late String id;
   late String name;
   late double longitude;
   late double latitude;
+  // double rate;
   late List<Item> items;
-  Store({required this.id, required this.name, required this.longitude, required this.latitude, List<Item>? items})
+  List<Comment> comments = [];
+  String image = "";
+  Store(
+      {required this.id,
+      required this.name,
+        required this.longitude,
+        // required this.rate,
+      required this.latitude,
+        required this.image,
+      List<Item>? items})
       : items = items ?? [];
-
-
 }
 
-class Item {
-  int count = 0;
-  int quantity = 0;
-  late String sotreid;
-  late String id;
-  late String name;
-  late double price;
-  Item({required this.sotreid, required this.id, required this.name, required this.price});
 
-}

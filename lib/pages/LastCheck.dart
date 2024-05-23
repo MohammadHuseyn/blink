@@ -3,9 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as gloabl;
 
-class LastCheck extends StatelessWidget {
+class LastCheck extends StatefulWidget {
   LastCheck({required this.sum});
-  String sum;
+  double sum;
+
+  @override
+  State<LastCheck> createState() => _LastCheckState();
+}
+
+class _LastCheckState extends State<LastCheck> {
+  bool fast = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +25,9 @@ class LastCheck extends StatelessWidget {
             onPressed: () async {
               // try {
                 var res = await gloabl.postRequest({
-                  "location_id" : "1",
+                  "location_id" : gloabl.addresses[gloabl.addressIndex].id,
+                  "store_id" : gloabl.store_id,
+                  "fast_delivery" : fast
                 }, "/makeorder/");
                 Map<String, dynamic> data = await res;
                 gloabl.order_id = data["order_id"];
@@ -46,114 +56,150 @@ class LastCheck extends StatelessWidget {
         child: Container(
           color: Colors.white,
           padding: EdgeInsets.all(20.0),
-          child: Table(
-            border: TableBorder.all(color: Colors.transparent),
-            textDirection: TextDirection.rtl,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TableRow(
+              Table(
+                border: TableBorder.all(color: Colors.transparent),
+                textDirection: TextDirection.rtl,
                 children: [
-                  Container(
-                    height: 50,
-                    child: Text(
-                      'نام',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 20,
+                  TableRow(
+                    children: [
+                      Container(
+                        height: 50,
+                        child: Text(
+                          'نام',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    child: Text(
-                      gloabl.first_name + " " + gloabl.last_name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 20,
+                      Container(
+                        height: 50,
+                        child: Text(
+                          gloabl.first_name + " " + gloabl.last_name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Container(
-                    height: 50,
-                    child: Text(
-                      'شماره تلفن',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 20,
+                  TableRow(
+                    children: [
+                      Container(
+                        height: 50,
+                        child: Text(
+                          'شماره تلفن',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    child: Text(
-                      'قیمت',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 20,
+                      Container(
+                        height: 50,
+                        child: Text(
+                          'قیمت',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
 
-              TableRow(
-                children: [
-                  Container(
-                    height: 50,
-                    child: Text(
-                      'آدرس',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 25,
+                  TableRow(
+                    children: [
+                      Container(
+                        height: 50,
+                        child: Text(
+                          'آدرس',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 25,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    child: Text(
-                      gloabl.addresses[gloabl.addressIndex].name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 25,
+                      Container(
+                        height: 50,
+                        child: Text(
+                          gloabl.addresses[gloabl.addressIndex].name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 25,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  TableRow(
+                    children: [
+                      Container(
+                        height: 50,
+                        child: Text(
+                          'جمع کل',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        child: Text(
+                          (widget.sum + (fast? 50000 : 0)).toString() + " تومان",
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'shabnam',
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
-              TableRow(
-                children: [
-                  Container(
-                    height: 50,
-                    child: Text(
-                      'جمع کل',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 25,
-                      ),
+              // Expanded(child: Container()),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "تحویل فوری؟",
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 25),
                     ),
-                  ),
-                  Container(
-                    height: 50,
-                    child: Text(
-                      sum,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'shabnam',
-                        fontSize: 25,
-                      ),
-                    ),
-                  ),
-                ],
+                    Checkbox(
+                        focusColor: Color(0xFF256F46),
+                        activeColor: Color(0xFF256F46),
+                        value: fast,
+                        onChanged: (value) {
+                          setState(() {
+                            fast = value ?? false;
+                          });
+                        }),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Text("با انتخاب گزینه بالا هزینه ارسال دوبرابر می‌شود\n اما سفارش در زمان کمتری به دستتان می‌رسد.",
+                textDirection: TextDirection.rtl,
+                  style: TextStyle(fontSize: 18),
+                ),
               )
             ],
           ),

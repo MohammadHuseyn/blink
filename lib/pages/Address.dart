@@ -19,6 +19,7 @@ class addres_data {
 }
 
 var name = TextEditingController();
+var address = TextEditingController();
 var latlngLocal = null;
 
 class Address extends StatefulWidget {
@@ -176,6 +177,34 @@ class _AddressState extends State<Address> {
                             ),
                           )),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, right: 20, left: 20, bottom: 20),
+                      child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Theme(
+                            data: ThemeData(
+                              primaryColor: Colors.redAccent,
+                              primaryColorDark: Colors.red,
+                            ),
+                            child: TextField(
+                              maxLines: 3,
+                              controller: address,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.teal),
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                                labelText: 'آدرس',
+                                floatingLabelStyle: TextStyle(fontSize: 25),
+                                floatingLabelBehavior:
+                                FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                    fontSize: 25, fontFamily: 'shabnam'),
+                              ),
+                            ),
+                          )),
+                    ),
                     Container(
                       height: MediaQuery.of(builder).size.height * 0.30,
                       child: Scaffold(
@@ -276,7 +305,7 @@ class _AddressState extends State<Address> {
       "latitude" : latLng.latitude,
       "longitude" : latLng.longitude,
       "id":-1,
-      "address"  : "this is a desc"
+      "address"  : address.text
     }, "/locations/");
 
 

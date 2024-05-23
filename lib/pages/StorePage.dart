@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'dart:typed_data';
+import 'package:image/image.dart' as img;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/ProductComment.dart';
 import 'package:blink/pages/StoreComment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import '../classes/item.dart';
 import '../global.dart' as global;
 import '../classes/store.dart';
 
@@ -20,13 +23,27 @@ class StorePage extends StatefulWidget {
 
 class _StorePageState extends State<StorePage> {
   Store store;
-
+  bool got_data = false;
+  var search = TextEditingController();
   _StorePageState({required this.store});
 
+  @override
+  void initState() {
+    _load_items(store: store, filter: "");
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFEAF3EE),
+      // backgroundColor:,
+        // backgroundColor: Image.memory(
+        //   width: 100,
+        //   Uint8List.fromList(
+        //       base64Decode(global.profile_imge)),
+        //   fit: BoxFit.contain, // Adjust the fit as needed
+        // ),
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(150.0),
             child: Container(
@@ -35,18 +52,42 @@ class _StorePageState extends State<StorePage> {
               height: 200,
               width: MediaQuery.of(context).size.width,
               child: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: ImageIcon(
-                  AssetImage("images/shop.png"),
-                  size: 250,
-                  color: Color(0xFF949494),
-                ),
-              ),
+                  padding: const EdgeInsets.only(top: 0),
+                  child: store.image == ""
+                      ? ImageIcon(
+                          AssetImage("images/shop.png"),
+                          size: 250,
+                          color: Color(0xFF949494),
+                        )
+                      : ClipRRect(
+                          // borderRadius: BorderRadius.circular(75),
+                          // Same radius as the CircleAvatar
+                          child: Image.memory(
+                            width: 200,
+                            Uint8List.fromList(
+                                base64Decode(store.image)),
+                            fit: BoxFit.fitWidth, // Adjust the fit as needed
+                          ),
+                        )),
             )),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 0),
             child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 0),
+                        blurRadius: 10,
+                        spreadRadius: 5)
+                  ]
+                  // border: Border.all(color: Colors.black)
+                  ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
                 child: Column(
@@ -80,9 +121,14 @@ class _StorePageState extends State<StorePage> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (builder) => StoreComment(store: store,)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => StoreComment(
+                                            store: store,
+                                          )));
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(Icons.arrow_back_ios_rounded),
                                 Text(
@@ -110,10 +156,14 @@ class _StorePageState extends State<StorePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 15, bottom: 15),
                       child: TextField(
+                        controller: search,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25),
+                        onChanged: (changed) {
+                          _load_items(store: store, filter: changed);
+                        },
                         decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.search_rounded,
                               size: 35,
                               color: Color(0xFF2E8B57),
@@ -128,19 +178,42 @@ class _StorePageState extends State<StorePage> {
                                     color: Color(0xFF2E8B57), width: 2.0))),
                       ),
                     ),
-                    Container(
+                    !got_data? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.lightGreen,
+                            color: Color(0xFF256F46),
+                            strokeWidth: 5,
+                            strokeAlign: 2,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "در حال دریافت محصولات",
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                          ),
+                        ],
+                      ),
+                    ): Container(
                       height: MediaQuery.of(context).size.height * 0.535853,
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemCount: store.items.length,
                           itemBuilder: (cntx, i) {
-                            if (i != 0)
-                              i++;
+                            if (i != 0) i++;
                             return Row(
                               children: [
-                                i < store.items.length? prodcut(15, 0, store.items[i++]) : Container(),
-                                i < store.items.length? prodcut(15, 0, store.items[i++]) : Container(),
+                                i < store.items.length
+                                    ? prodcut(15, 0, store.items[i++])
+                                    : Container(),
+                                i < store.items.length
+                                    ? prodcut(15, 0, store.items[i++])
+                                    : Container(),
                               ],
                             );
                           }),
@@ -148,20 +221,6 @@ class _StorePageState extends State<StorePage> {
                   ],
                 ),
               ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, 0),
-                        blurRadius: 10,
-                        spreadRadius: 5)
-                  ]
-                  // border: Border.all(color: Colors.black)
-                  ),
             ),
           ),
         ));
@@ -213,15 +272,33 @@ class _StorePageState extends State<StorePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-                child: ImageIcon(
-                  AssetImage("images/product.png"),
-                  color: Color(0xFF517360),
-                  size: 60,
+              item.image == ""
+                  ? Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8, vertical: 20),
+                  child: ImageIcon(
+                    AssetImage("images/product.png"),
+                    color: Color(0xFF517360),
+                    size: 60,
+                  ),
+              ) : Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
+                  child: Image.memory(
+                    width: 100,
+                    Uint8List.fromList(
+                        base64Decode(item.image)),
+                    fit: BoxFit
+                        .cover, // Adjust the fit as needed
+                  ),
                 ),
               ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              //   child:
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: global.card.contains(item)
@@ -256,6 +333,7 @@ class _StorePageState extends State<StorePage> {
                                   setState(() {
                                     item.count += 1;
                                   });
+                                  global.store_id = store.id;
                                 },
                                 icon: ImageIcon(
                                   AssetImage("images/plus.png"),
@@ -272,6 +350,8 @@ class _StorePageState extends State<StorePage> {
                                 item.count += 1;
                                 _add_to_cart(item);
                               });
+                              global.store_id = store.id;
+
                             },
                             icon: ImageIcon(AssetImage("images/plus.png"),
                                 color: Color(0xFF2E8B57))),
@@ -337,152 +417,154 @@ class _StorePageState extends State<StorePage> {
         context: context,
         backgroundColor: Colors.transparent,
         builder: (builder) {
-          return StatefulBuilder(
-            builder: (context, StateSetter setState) {
-              return Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(25),
-                    topLeft: Radius.circular(25))),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.85,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: Color(0xFFEAF3EE)
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25))),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: Color(0xFFEAF3EE)
                               // color: Colors.red
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 35),
-                              child: ImageIcon(
-                                AssetImage("images/product.png"),
-                                color: Color(0xFF5E846E),
-                                size: 95,
                               ),
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.star_rate_rounded,
-                              size: 32,
-                              color: Color(0xFF256f46),
+                          child: item.image == ""? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 35),
+                            child: ImageIcon(
+                              AssetImage("images/product.png"),
+                              color: Color(0xFF5E846E),
+                              size: 95,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                "4.1/5",
-                                style: TextStyle(fontSize: 17),
-                              ),
+                          ): ClipRRect(
+                            borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
+                            child: Image.memory(
+                              width: 100,
+                              Uint8List.fromList(
+                                  base64Decode(item.image)),
+                              fit: BoxFit
+                                  .fitWidth, // Adjust the fit as needed
                             ),
-                            Expanded(child: Container()),
-                            Text(
-                              "نام محصول",
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.arrow_back_ios_rounded)),
-                                  Text(
-                                    "مشاهده نظرات",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (builder)=>ProductComment()));
-                              },
-                            ),
-                            Expanded(child: Container()),
-                            Text(
-                              "نام فروشگاه",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15),
-                              child: ImageIcon(
-                                AssetImage("images/shop.png"),
-                                size: 50,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 200,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.85,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color(0xFF518C6B),
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: Offset(0, -2)),
-                              BoxShadow(
-                                  color: Color(0xFF518C6B),
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: Offset(0, 2))
-                            ],
-                            color: Colors.white,
-                            // color: Colors.red,
-                            borderRadius: BorderRadius.circular(35)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 25),
-                          child: Text(
-                            "توضیحات",
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.star_rate_rounded,
+                            size: 32,
+                            color: Color(0xFF256f46),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Text(
+                              item.rate.toString() + "/5",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Text(
+                            item.name,
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.arrow_back_ios_rounded)),
+                                Text(
+                                  "مشاهده نظرات",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => ProductComment(item: item,)));
+                            },
+                          ),
+                          Expanded(child: Container()),
+                          Text(
+                            store.name,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: ImageIcon(
+                              AssetImage("images/shop.png"),
+                              size: 50,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Color(0xFF518C6B),
+                                spreadRadius: 0,
+                                blurRadius: 0,
+                                offset: Offset(0, -2)),
+                            BoxShadow(
+                                color: Color(0xFF518C6B),
+                                spreadRadius: 0,
+                                blurRadius: 0,
+                                offset: Offset(0, 2))
+                          ],
+                          color: Colors.white,
+                          // color: Colors.red,
+                          borderRadius: BorderRadius.circular(35)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 25),
+                        child: Text(
+                          item.desc,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
                         ),
                       ),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 35, right: 35, top: 20),
-                        child: Row(
-                            children: [
-                              Text("تومان ",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 22,
-                                      fontFamily: 'shabnam')),
-                              Text(item.price.toString(),
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontFamily: 'shabnam',
-                                      color: Colors.black)),
-                              Expanded(child: Container()),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15),
-                                child: global.card.contains(item)
-                                    ? Padding(
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 35, right: 35, top: 20),
+                      child: Row(children: [
+                        Text("تومان ",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 22,
+                                fontFamily: 'shabnam')),
+                        Text(item.price.toString(),
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'shabnam',
+                                color: Colors.black)),
+                        Expanded(child: Container()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: global.card.contains(item)
+                              ? Padding(
                                   padding: const EdgeInsets.only(bottom: 10),
                                   child: Row(
                                     children: [
@@ -500,11 +582,12 @@ class _StorePageState extends State<StorePage> {
                                                 "images/remove.png",
                                               ),
                                               color: Colors.red
-                                            // color: Colors.black,
-                                          )),
+                                              // color: Colors.black,
+                                              )),
                                       // Expanded(child: Container()),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Text(
                                           item.count.toString(),
                                           style: TextStyle(fontSize: 20),
@@ -516,6 +599,7 @@ class _StorePageState extends State<StorePage> {
                                             setState(() {
                                               item.count += 1;
                                             });
+                                            global.store_id = store.id;
                                           },
                                           icon: ImageIcon(
                                             AssetImage("images/plus.png"),
@@ -524,53 +608,104 @@ class _StorePageState extends State<StorePage> {
                                     ],
                                   ),
                                 )
-                                    : ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        item.count += 1;
-                                        _add_to_cart(item);
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Text(
-                                        "  افزودن  ",
-                                        style: TextStyle(
-                                            fontSize: 25, color: Color(0xFF256F46)),
-                                      ),
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      item.count += 1;
+                                      _add_to_cart(item);
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      "  افزودن  ",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: Color(0xFF256F46)),
                                     ),
-                                    style: ButtonStyle(
-                                        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(18.0),
-                                                side: BorderSide(color: Color(0xFF256F46),width: 2)
-                                            )
-                                        )
-                                    )
-                                ),
-                              ),
-                            ]),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      )
-                    ],
-                  ),
+                                  ),
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateColor.resolveWith(
+                                              (states) => Colors.white),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: BorderSide(
+                                                  color: Color(0xFF256F46),
+                                                  width: 2))))),
+                        ),
+                      ]),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
-              );
-            }
-          );
+              ),
+            );
+          });
         });
   }
+
   void add_count(Item item) {
     setState(() {
       item.count += 1;
     });
   }
+
   void minus_count(Item item) {
     setState(() {
       item.count -= 1;
     });
   }
+  img.Pixel getBackgroundColor(img.Image image) {
+    // Sample a pixel from a corner, assuming it's representative of the background
+    return image.getPixel(0, 0); // Top-left corner
+  }
+
+  String pixelToHex(img.Pixel pixel) {
+    final r = _toHex(pixel.r.toInt());
+    final g = _toHex(pixel.g.toInt());
+    final b = _toHex(pixel.b.toInt());
+    return '#$r$g$b';
+  }
+
+  String _toHex(int value) {
+    if (value < 16) {
+      return '0' + value.toRadixString(16);
+    }
+    return value.toRadixString(16);
+  }
+
+  Future<void> _load_items({required Store store, required String filter}) async {
+    setState(() {
+      got_data = false;
+    });
+    var res = global.getRequestmap("/products/?store_id=" + store.id + "&search=" + filter);
+    Map<String, dynamic> data = await res;
+    List<Item> items = [];
+    data.forEach((key, value) {
+
+      Item item = Item(
+          sotreid: store.id,
+          name: value["name"],
+          id: key,
+          image: value["image"],
+          desc: "",
+          price: double.parse(value["price"]),
+          rate: value["rate"]
+      );
+      item.quantity = value["quantity"];
+        items.add(item);
+    });
+    setState(() {
+      store.items = items;
+      got_data = true;
+    });
+  }
+
 }
