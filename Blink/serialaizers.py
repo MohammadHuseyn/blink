@@ -117,27 +117,14 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'price', 'quantity', 'image', 'category', 'rate']
 
 class StoreSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'location', 'products', 'image']
+        fields = ['id', 'name', 'location', 'image']
 
     def get_location(self, obj):
         return LocationSerializer(obj.location).data
-
-    def get_products(self, obj):
-        # Retrieve products related to this store and format as required
-        product_data = ProductSerializer(obj.products.all(), many=True).data  # Get all products for this store
-
-        for p in product_data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
-                p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
-            else :
-                p['rate'] = float(0)
-        product_dict = {str(p['id']): p for p in product_data}
-        return product_dict
 
 class CartItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()

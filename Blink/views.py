@@ -128,6 +128,29 @@ class LoginView(APIView):
                 "error": "Invalid credentials"
             },content_type='application/json; charset=utf-8', status=status.HTTP_401_UNAUTHORIZED)
 
+class ProductListView(APIView) :
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        store_id = request.query_params.get('store_id')
+        longitude = request.query_params.get('longitude')
+        latitude = request.query_params.get('latitude')
+        if not longitude or not latitude or not store_id:
+            return Response(
+                {"error": "Longitude, latitude, store_id and token are required"},content_type='application/json; charset=utf-8',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        products = Product.objects.filter(store_id=store_id)
+        serializer = ProductSerializer(products, many=True)
+
+        for p in serializer :
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
+                p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
+            else :
+                p['rate'] = float(0)
+        product_dict = {str(p['id']): p for p in serializer}
+        return product_dict
+
 
 class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
