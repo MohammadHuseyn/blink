@@ -141,13 +141,13 @@ class ProductListView(APIView) :
         products = Product.objects.filter(store_id=store_id)
         serializer = ProductSerializer(products, many=True)
 
-        for p in serializer :
+        for p in serializer.data :
             if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
             else :
                 p['rate'] = float(0)
-        product_dict = {str(p['id']): p for p in serializer}
-        return product_dict
+        product_dict = {str(p['id']): p for p in serializer.data}
+        return Response(product_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
 
 class StoreListView(APIView):
