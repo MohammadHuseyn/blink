@@ -115,7 +115,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'price', 'quantity', 'image', 'category', 'rate']
 
 class StoreSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
 
     class Meta:
