@@ -12,8 +12,6 @@ from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, Ca
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
-from rest_framework.filters import SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Avg
 from drf_yasg.utils import swagger_auto_schema
