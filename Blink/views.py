@@ -159,12 +159,21 @@ class ProductListView(APIView) :
     permission_classes = [IsAuthenticated]
     def get(self, request):
         store_id = request.query_params.get('store_id')
+        search = True
+        filter = None
+        try :
+            filter = request.query_params.get('search')
+        except :
+            search = False
         if not store_id:
             return Response(
                 {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
-        products = Product.objects.filter(store_id=store_id)
+        if search:
+            products = Product.objects.filter(store_id=store_id, name__icontains=filter)
+        else :
+            products = Product.objects.filter(store_id=store_id)
         serializer = ProductSerializer(products, many=True)
 
         for p in serializer.data :
@@ -609,28 +618,6 @@ class SellerStoresView(APIView):
                 {"error": "Seller does not exist."},
                 status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
             )
-
-
-class ProductSearchView(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
-
-    @swagger_auto_schema(
-        operation_description="Search products by name and optionally filter by store ID",
-        manual_parameters=[
-            openapi.Parameter('store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER)
-        ],
-        responses={200: ProductSerializer(many=True)}
-    )
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        store_id = self.request.query_params.get('store_id', None)
-        if store_id:
-            queryset = queryset.filter(store_id=store_id)
-        return queryset
-
 
 class AcceptRejectOrderView(APIView):
     authentication_classes = [TokenAuthentication]
