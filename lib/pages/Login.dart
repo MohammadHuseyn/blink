@@ -1,4 +1,6 @@
+import 'dart:ffi';
 import 'dart:ui';
+import 'package:blink/classes/item.dart';
 import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/StoreHomPage.dart';
 
@@ -47,7 +49,8 @@ class _LoginState extends State<Login> {
                 global.email = data["user"]["email"];
                 global.userkind = data["user_type"];
                 global.phone_number = data["phone_number"];
-                global.profile_imge = data["image"];
+                global.profile_imge =
+                    data["image"] == null ? "" : data["image"];
                 switch (global.userkind) {
                   case "Seller":
                     {
@@ -60,6 +63,7 @@ class _LoginState extends State<Login> {
                     break;
                   case "Customer":
                     {
+                      _load_order();
                       Navigator.pop(context);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Home()));
@@ -352,7 +356,6 @@ class _LoginState extends State<Login> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.75,
                     height: MediaQuery.of(context).size.height * 0.1,
-
                     child: Material(
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 15, right: 10),
@@ -464,5 +467,32 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
+  }
+
+  Future<void> _load_order() async {
+    var res = global.getRequest("/customer_orders/");
+    List<Map<String, dynamic>> data = await res;
+    if (data.isEmpty) {
+      global.card.clear();
+      global.currentCardPayement = false;
+    }
+    Map<String, dynamic> order = data[0];
+    global.order_id = order["order_id"];
+    List<Map<String, dynamic>> items = List<Map<String, dynamic>>.from(order["order_items"]);
+    items.forEach((element) {
+      Item item = Item(
+          sotreid: order["store_id"].toString(),
+          id: element["id"].toString(),
+          rate: double.parse(element["product"]["rate"]),
+          name: element["product"]["name"],
+          desc: "",
+          image: element["product"]["image"],
+          price: double.parse(element["product"]["price"]));
+      item.count = element["quantity"];
+      global.card.add(item);
+    });
+    global.currentCardPayement = true;
+    global.currentley_running_order = true;
+    global.sum = order["total_price"];
   }
 }

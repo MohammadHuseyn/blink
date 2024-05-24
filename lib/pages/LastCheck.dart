@@ -158,12 +158,12 @@ class _LastCheckState extends State<LastCheck> {
                       Container(
                         height: 50,
                         child: Text(
-                          (widget.sum + (fast? 50000 : 0)).toString() + " تومان",
+                          gloabl.toPersianNumbers(widget.sum + (fast? 50000 : 0)) + " تومان",
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'shabnam',
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                       ),

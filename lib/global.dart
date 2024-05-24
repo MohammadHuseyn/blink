@@ -9,16 +9,16 @@ import 'classes/item.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-// var url ='http://192.168.124.31:8000';
+var url ='http://62.60.205.58:8001';
 // var url ='http://172.20.174.125:8000';
-
-
-var url ='http://localhost:8000';
+// var url ='http://localhost:8000';
 List<addres_data> addresses = [];
 var s = null;
 var token = "";
 var currentCardPayement = false;
 var tokenbool = false;
+var sum = 0.0;
+bool currentley_running_order = false;
 var username = "username";
 var userkind = "";
 var storeName = "باغ گیلاس";

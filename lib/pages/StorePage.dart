@@ -30,9 +30,9 @@ class _StorePageState extends State<StorePage> {
   @override
   void initState() {
     // uncomment the below line / debug
-    // _load_items(store: store, filter: "");
+    _load_items(store: store, filter: "");
     // comment the below line / debug
-    got_data = true;
+    // got_data = true;
     // TODO: implement initState
     super.initState();
   }
@@ -324,6 +324,8 @@ class _StorePageState extends State<StorePage> {
                                     if (item.count == 0) {
                                       _remove_from_cart(item);
                                     }
+                                    global.sum += item.price;
+
                                   },
                                   icon: const ImageIcon(
                                       AssetImage(
@@ -344,6 +346,7 @@ class _StorePageState extends State<StorePage> {
                                       item.count += 1;
                                     });
                                     global.store_id = store.id;
+                                    global.sum += item.price;
                                   },
                                   icon: const ImageIcon(
                                     AssetImage("images/plus.png"),
@@ -361,7 +364,7 @@ class _StorePageState extends State<StorePage> {
                                   _add_to_cart(item);
                                 });
                                 global.store_id = store.id;
-
+                                global.sum += item.price;
                               },
                               icon: ImageIcon(AssetImage("images/plus.png"),
                                   color: Color(0xFF2E8B57))),
@@ -604,6 +607,8 @@ class _StorePageState extends State<StorePage> {
                                         if (item.count == 0) {
                                           _remove_from_cart(item);
                                         }
+                                        global.sum -= item.price;
+
                                       },
                                       icon: ImageIcon(
                                           AssetImage(

@@ -27,10 +27,9 @@ class Home extends StatefulWidget {
 }
 
 var _currentIndex = 1;
-var sum = 0.0;
 List<Store> stores = [
   Store(
-      id: "1", name: "baq gilas", longitude: 12554, latitude: 98455, image: ""),
+      id: "1", name: "baq gilas", category: "دیجیتال", longitude: 12554, latitude: 98455, image: "", rate: 0.0),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
@@ -145,9 +144,6 @@ class _HomeState extends State<Home> {
                   IconThemeData(color: Color(0xFF256F46), size: 50),
               currentIndex: _currentIndex,
               onTap: (index) {
-                global.card.forEach((element) {
-                  sum += element.price;
-                });
                 changeBottomIndex(index);
               },
               items: [
@@ -392,6 +388,10 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Login()));
+                            global.card.clear();
+                            global.sum = 0.0;
+                            global.currentley_running_order = false;
+                            global.currentCardPayement = false;
                           },
                           child: Container(
                             margin: EdgeInsets.only(
@@ -843,7 +843,7 @@ class _HomeState extends State<Home> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        "/5",
+                                                        stores[i].rate.toString() + "/5",
                                                         style: TextStyle(
                                                             fontSize: 17),
                                                       )
@@ -991,10 +991,11 @@ class _HomeState extends State<Home> {
                                                       ? IconButton(
                                                           onPressed: () {
                                                             setState(() {
+
                                                               if (global.card[i]
                                                                       .count >
                                                                   0) {
-                                                                sum -= global
+                                                                global.sum -= global
                                                                     .card[i]
                                                                     .price;
                                                                 global.card[i]
@@ -1028,7 +1029,7 @@ class _HomeState extends State<Home> {
                                                       ? IconButton(
                                                           onPressed: () {
                                                             setState(() {
-                                                              sum += global
+                                                              global.sum += global
                                                                   .card[i]
                                                                   .price;
                                                               global.card[i]
@@ -1155,7 +1156,7 @@ class _HomeState extends State<Home> {
                                       Container(
                                         height: 50,
                                         child: Text(
-                                          global.toPersianNumbers((sum + 50000.0)) + " تومان",
+                                          global.toPersianNumbers((global.sum + 50000.0)) + " تومان",
                                           textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -1308,13 +1309,15 @@ class _HomeState extends State<Home> {
 
       // Create Store object and add it to the list
       var store = Store(
+        rate: storeData["rate"],
+          category: storeData["category"],
           id: id,
           // rate: storeData['rate'],
           name: name,
           longitude: double.parse(longitude),
           latitude: double.parse(latitude),
           items: [],
-          image: storeData["image"]);
+          image: storeData["image"] == null? "" : storeData["image"]);
       setState(() {
         stores.add(store);
       });

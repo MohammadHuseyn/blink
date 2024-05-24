@@ -9,10 +9,11 @@ class OrderStatus extends StatefulWidget {
 }
 
 class _OrderStatusState extends State<OrderStatus> {
-  String delivery_price = "۰";
+  double delivery_price = 0.0;
+  bool fast = false;
   String status = "";
   String? discount = "۰";
-  String total_price = "۰";
+  double total_price = 0.0;
   bool got_data = false;
 
   @override
@@ -81,7 +82,7 @@ class _OrderStatusState extends State<OrderStatus> {
                   children: [
                     ImageIcon(
                       AssetImage("images/deliverd.png"),
-                      size: 50,
+                      size: 40,
                       color: status == "DELIVERED"
                           ? Color(0xFF256f46)
                           : Color(0xFFCFDED6),
@@ -89,7 +90,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     Text(
                       " ... ",
                       style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 30,
                         color: status == "DELIVERED"
                             ? Color(0xFF256f46)
                             : Color(0xFFCFDED6),
@@ -97,7 +98,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     ),
                     ImageIcon(
                       AssetImage("images/delivery.png"),
-                      size: 50,
+                      size: 40,
                       color: status == "DELIVERED" || status == "DISPATCHED"
                           ? Color(0xFF256f46)
                           : Color(0xFFCFDED6),
@@ -105,7 +106,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     Text(
                       " ... ",
                       style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 30,
                         color: status == "DELIVERED" || status == "DISPATCHED"
                             ? Color(0xFF256f46)
                             : Color(0xFFCFDED6),
@@ -113,7 +114,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     ),
                     ImageIcon(
                       AssetImage("images/packing.png"),
-                      size: 50,
+                      size: 40,
                       color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
                               status == "PROCESSING"
@@ -123,7 +124,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     Text(
                       " ... ",
                       style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 30,
                           color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
                               status == "PROCESSING"
@@ -132,7 +133,7 @@ class _OrderStatusState extends State<OrderStatus> {
                     ),
                     ImageIcon(
                       AssetImage("images/boxing.png"),
-                      size: 50,
+                      size: 40,
                       color:
                       status == "DELIVERED" ||
                           status == "DISPATCHED" ||
@@ -231,7 +232,7 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
-                                delivery_price,
+                                global.toPersianNumbers(delivery_price),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'shabnam',
@@ -257,7 +258,7 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
-                                '✓',
+                                fast? '✓' : '╳',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'shabnam',
@@ -283,7 +284,7 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
-                                discount == null ? "۰ تومان" : discount!,
+                                discount == null ? "۰ تومان" : global.toPersianNumbers(double.parse(discount!)),
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -310,7 +311,7 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
-                                total_price,
+                                global.toPersianNumbers(total_price + delivery_price),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'shabnam',
@@ -338,11 +339,18 @@ class _OrderStatusState extends State<OrderStatus> {
         global.getRequestmap("/order_status/?order_id=" + order_id.toString());
     Map<String, dynamic> data = await res;
     setState(() {
-      delivery_price = data["order"]["delivery_price"].toString();
+      delivery_price = double.parse(data["order"]["delivery_price"]);
+      fast = data["order"]["fast_delivery"];
       discount = data["order"]["discount_value"];
-      total_price = data["order"]["total_price"].toString();
+      total_price = double.parse(data["order"]["total_price"]);
       status = data["order"]["status"];
       got_data = true;
     });
+    if (data["order"]["status"] == "DELIVERED") {
+      global.currentCardPayement = false;
+      global.card.clear();
+      global.sum = 0.0;
+      global.order_id = null;
+    }
   }
 }

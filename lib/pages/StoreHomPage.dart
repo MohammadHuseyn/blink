@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:blink/pages/ProductComment.dart';
+import 'package:blink/pages/StoreComment.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../classes/item.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
+import 'Home.dart';
 import 'Login.dart';
 import 'Orders.dart';
 import 'ProfileEdit.dart';
@@ -21,11 +24,13 @@ class StoreHomePage extends StatefulWidget {
 }
 
 var _currentIndex = 1;
+bool got_data = false;
 Store? store = null;
 var name = TextEditingController();
 var price = TextEditingController();
 var count = TextEditingController();
 var desc = TextEditingController();
+var search = TextEditingController();
 
 class _StoreHomePageState extends State<StoreHomePage> {
   // _StoreHomePageState({required this.store});
@@ -39,13 +44,13 @@ class _StoreHomePageState extends State<StoreHomePage> {
   void initState() {
     // TODO: implement initState
     load_store();
+    // wait();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // store = stores[0];
-    // load_store();
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Color(0xFF256F46),
@@ -163,7 +168,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                       height: 20,
                     ),
                     Text(
-                      "در حال بارگذاری!",
+                      "در حال بارگذاری",
                       textDirection: TextDirection.rtl,
                       style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
                     ),
@@ -384,140 +389,189 @@ class _StoreHomePageState extends State<StoreHomePage> {
                     ),
                   )
                 : _currentIndex == 1
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
-                              child: Container(
-                                height: 120,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            IconButton(
-                                                onPressed: () {},
-                                                iconSize: 40,
-                                                icon: ImageIcon(
-                                                  AssetImage(
-                                                      "images/notification.png"),
-                                                  color: Color(0xFF2E8B57),
-                                                )),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8.0),
-                                                  child: IconButton(
-                                                    onPressed: () {},
-                                                    iconSize: 25,
-                                                    icon: ImageIcon(
-                                                      AssetImage(
-                                                          "images/star.png"),
-                                                      color: Color(0xFF256F46),
+                    ? SingleChildScrollView(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                child: Container(
+                                  height: 120,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              IconButton(
+                                                  onPressed: () {},
+                                                  iconSize: 40,
+                                                  icon: ImageIcon(
+                                                    AssetImage(
+                                                        "images/notification.png"),
+                                                    color: Color(0xFF2E8B57),
+                                                  )),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 8.0),
+                                                    child: IconButton(
+                                                      onPressed: () {},
+                                                      iconSize: 25,
+                                                      icon: ImageIcon(
+                                                        AssetImage(
+                                                            "images/star.png"),
+                                                        color: Color(0xFF256F46),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  "4.1/5",
-                                                  style:
-                                                      TextStyle(fontSize: 17),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(child: Container()),
-                                        Text(
-                                          store!.name,
-                                          style: TextStyle(fontSize: 25),
-                                        ),
-                                        Expanded(child: Container()),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              // color: Color(0xffEAF3EE),
-                                              boxShadow: [
-                                                const BoxShadow(
-                                                  color: Colors.grey,
-                                                ),
-                                                const BoxShadow(
-                                                  color: Color(0xffEAF3EE),
-                                                  spreadRadius: -0.2,
-                                                  blurRadius: 5.0,
-                                                ),
-                                              ],
-                                              // color: Colors.red,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15))),
-                                          child: global.profile_imge == ""
-                                              ? Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 15),
-                                                  child: ImageIcon(
-                                                    AssetImage(
-                                                        "images/shop.png"),
-                                                    size: 50,
-                                                  ))
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  // Same radius as the CircleAvatar
-                                                  child: Image.memory(
-                                                    width: 100,
-                                                    Uint8List.fromList(
-                                                        base64Decode(global
-                                                            .profile_imge)),
-                                                    fit: BoxFit
-                                                        .cover, // Adjust the fit as needed
+                                                  Text(
+                                                    global.toPersianNumbers(store!.rate) + "/۵",
+                                                    style:
+                                                        TextStyle(fontSize: 17),
                                                   ),
-                                                ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(child: Container()),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                store!.name,
+                                                style: TextStyle(fontSize: 25),
+                                              ),
+                                              Text(
+                                                store!.category,
+                                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(child: Container()),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                // color: Color(0xffEAF3EE),
+                                                boxShadow: [
+                                                  const BoxShadow(
+                                                    color: Colors.grey,
+                                                  ),
+                                                  const BoxShadow(
+                                                    color: Color(0xffEAF3EE),
+                                                    spreadRadius: -0.2,
+                                                    blurRadius: 5.0,
+                                                  ),
+                                                ],
+                                                // color: Colors.red,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            child: global.profile_imge == ""
+                                                ? Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 15),
+                                                    child: ImageIcon(
+                                                      AssetImage(
+                                                          "images/shop.png"),
+                                                      size: 50,
+                                                    ))
+                                                : ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(15),
+                                                    // Same radius as the CircleAvatar
+                                                    child: Image.memory(
+                                                      width: 100,
+                                                      Uint8List.fromList(
+                                                          base64Decode(global
+                                                              .profile_imge)),
+                                                      fit: BoxFit
+                                                          .cover, // Adjust the fit as needed
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 15, left: 15),
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 25),
-                                decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.search_rounded,
-                                      size: 35,
-                                      color: Color(0xFF2E8B57),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFF2E8B57),
-                                            width: 2.0)),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFF2E8B57),
-                                            width: 2.0))),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 15),
+                                child: GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (builder)=>StoreComment(store: store!)));
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF256F46),),
+                                      Text("مشاهده نظرات", style: TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              height: MediaQuery.of(context).size.height *
-                                  0.4599999999,
-                              child: ListView.builder(
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 15, left: 15),
+                                child: TextField(
+                                  controller: search,
+                                  textAlign: TextAlign.center,
+                                  onChanged: (changed) {
+                                    _load_items(store, changed);
+                                  },
+                                  style: TextStyle(fontSize: 25),
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.search_rounded,
+                                        size: 35,
+                                        color: Color(0xFF2E8B57),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                          borderSide: BorderSide(
+                                              color: Color(0xFF2E8B57),
+                                              width: 2.0)),
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                          borderSide: BorderSide(
+                                              color: Color(0xFF2E8B57),
+                                              width: 2.0))),
+                                ),
+                              ),
+                              !got_data?Padding(
+                                padding: const EdgeInsets.only(top: 30),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        backgroundColor: Colors.lightGreen,
+                                        color: Color(0xFF256F46),
+                                        strokeWidth: 5,
+                                        strokeAlign: 2,
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        "در حال دریافت کالاها",
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ) : ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: store!.items.length,
@@ -535,17 +589,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                             : Container(),
                                       ],
                                     );
-                                  }),
-                            )
-                          ],
+                                  })
+                            ],
+                          ),
                         ),
-                      )
+                    )
                     : Container());
   }
 
   prodcut(double left, double right, Item item) {
     return Padding(
-      padding: EdgeInsets.only(left: left, right: right, top: 20),
+      padding: EdgeInsets.only(left: left, right: right, top: 10, bottom: 10),
       child: GestureDetector(
         onTap: () {
           name.text = item.name;
@@ -634,70 +688,306 @@ class _StoreHomePageState extends State<StoreHomePage> {
   }
 
   Future<void> load_store() async {
-    var res = global.getRequestmap('/get_sellers_store/');
-    Map<String, dynamic> data = await res;
-    List<Item> items = [];
-    (data["store"]["products"] as Map<String, dynamic>)
-        .forEach((String itemId, itemData) {
-      var itemName = itemData['name'];
-      var itemPrice = double.parse(itemData['price']);
-      var item = Item(
-          id: itemId,
-          rate: itemData['rate'],
-          desc: itemData['name'],
-          name: itemName,
-          price: itemPrice,
-          sotreid: data["store"]["id"].toString(),
-          image: itemData["image"]);
-      item.quantity = itemData["quantity"];
-      items.add(item);
+    setState(() {
+      got_data = false;
     });
+    var res = global.getRequestmap('/sellers_store/');
+    Map<String, dynamic> data = await res;
 
     Store s = Store(
+      rate: data["store"]["rate"],
+        category: data["category"],
         id: data["store"]["id"].toString(),
         name: data["store"]["name"],
         // rate: data["store"]["rate"],
         longitude: double.parse(data["store"]["location"]["longitude"]),
         latitude: double.parse(data["store"]["location"]["latitude"]),
-        items: items,
-        image: data["store"]["image"]);
+        items: [],
+        image: data["store"]["image"] == null? "" : data["store"]["image"]);
     setState(() {
       store = s;
+      got_data = true;
     });
+    _load_items(s, "");
     // return store;
   }
 
+  Future<void> _load_items(Store? store, String filter) async {
+    setState(() {
+      got_data = false;
+    });
+    var res = global.getRequestmap("/sellers_product/?search="+filter);
+    Map<String,dynamic> data = await res;
+    List<Item> items = [];
+    data.forEach((key, value) {
+      var itemPrice = double.parse(value['price']);
+      var item = Item(
+          id: value["id"].toString(),
+          rate: value['rate'],
+          desc: value['name'],
+          name: value['name'],
+          price: itemPrice,
+          sotreid: "",
+          image: value["image"]);
+      item.quantity = value["quantity"];
+      items.add(item);
+    });
+    setState(() {
+      store!.items = items;
+      got_data = true;
+    });
+  }
   void bottomShett(context, Item? item, bool edit) {
-
     showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (builder) {
-          return StatefulBuilder(builder: (context, StateSetter setState) {
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
             return Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(25),
-                      topLeft: Radius.circular(25))),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                bottomNavigationBar: Container(
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        offset: Offset(0, 0),
-                        color: Colors.grey,
-                        spreadRadius: 7,
-                        blurRadius: 7)
-                  ]),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.085,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          edit
-                              ? global.putRequest({
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(25),
+                  topLeft: Radius.circular(25),
+                ),
+              ),
+              child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return SingleChildScrollView(
+                    controller: scrollController,
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            final XFile? image = await _picker.pickImage(
+                                source: ImageSource.gallery);
+
+                            if (image != null) {
+                              (await cropImageToSquare(File(image.path)))
+                              as File?;
+                              // If you need the base64 string for any purpose
+                              List<int> imageBytes =
+                              await _imageFile!.readAsBytes();
+                              setState(() {
+                                base64Image = base64Encode(imageBytes);
+                              });
+                            } else {
+                              print('No image selected.');
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 25),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width * 0.6,
+                                  height: MediaQuery.of(context).size.width * 0.6,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: Color(0xFFEAF3EE)
+                                    // color: Colors.red
+                                  ),
+                                  child: _imageFile != null
+                                      ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(25),
+                                    // Same radius as the CircleAvatar
+                                    child: Image.file(
+                                      _imageFile!,
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit
+                                          .fitWidth, // Ensure the image fills the IconButton
+                                    ),
+                                  )
+                                      : item == null || item.image == ""
+                                      ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 35),
+                                    child: ImageIcon(
+                                      AssetImage("images/product.png"),
+                                      color: Color(0xFF5E846E),
+                                      size: 95,
+                                    ),
+                                  )
+                                      : ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(75),
+                                    // Same radius as the CircleAvatar
+                                    child: Image.memory(
+                                      width: 150,
+                                      Uint8List.fromList(
+                                          base64Decode(item.image)),
+                                      fit: BoxFit
+                                          .fitHeight, // Adjust the fit as needed
+                                    ),
+                                  ),
+                                ),
+                                _imageFile != null ||
+                                    (item != null && item.image != "")
+                                    ? IconButton(
+                                  icon: Icon(
+                                    Icons.highlight_remove_rounded,
+                                    // Use any icon you prefer for deleting the image
+                                    color: Colors
+                                        .red, // Change the color if needed
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (item != null && item.image != "")
+                                        item.image = "";
+                                      else
+                                        _imageFile =
+                                        null; // Set _imageFile to null
+                                    });
+                                  },
+                                  iconSize:
+                                  30, // Adjust the size of the icon as needed
+                                )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (builder)=>ProductComment(item: item!,)));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF256F46),),
+                                Text("مشاهده نظرات", style: TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 20, left: 20, bottom: 20),
+                          child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Theme(
+                                data: ThemeData(
+                                  primaryColor: Colors.redAccent,
+                                  primaryColorDark: Colors.red,
+                                ),
+                                child: TextField(
+                                  controller: name,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(color: Colors.teal),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    labelText: '  نام محصول  ',
+                                    floatingLabelStyle: TextStyle(fontSize: 25),
+                                    floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                    labelStyle: TextStyle(
+                                        fontSize: 25, fontFamily: 'shabnam'),
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 20, left: 20, bottom: 20),
+                          child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Theme(
+                                data: ThemeData(
+                                  primaryColor: Colors.redAccent,
+                                  primaryColorDark: Colors.red,
+                                ),
+                                child: TextField(
+                                  controller: desc,
+                                  maxLines: 3,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(color: Colors.teal),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    labelText: '  توضیحات محصول  ',
+                                    floatingLabelStyle: TextStyle(fontSize: 25),
+                                    floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                    labelStyle: TextStyle(
+                                        fontSize: 25, fontFamily: 'shabnam'),
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 20, left: 20, bottom: 20),
+                          child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Theme(
+                                data: ThemeData(
+                                  primaryColor: Colors.redAccent,
+                                  primaryColorDark: Colors.red,
+                                ),
+                                child: TextField(
+                                  controller: count,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(color: Colors.teal),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    labelText: '  تعداد  ',
+                                    floatingLabelStyle: TextStyle(fontSize: 25),
+                                    floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                    labelStyle: TextStyle(
+                                        fontSize: 25, fontFamily: 'shabnam'),
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 20, left: 20, bottom: 20),
+                          child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Theme(
+                                data: ThemeData(
+                                  primaryColor: Colors.redAccent,
+                                  primaryColorDark: Colors.red,
+                                ),
+                                child: TextField(
+                                  controller: price,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(color: Colors.teal),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    labelText: '  قیمت  ',
+                                    floatingLabelStyle: TextStyle(fontSize: 25),
+                                    floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                    labelStyle: TextStyle(
+                                        fontSize: 25, fontFamily: 'shabnam'),
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.085,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                edit
+                                    ? global.putRequest({
                                   "product_id": item!.id.toString(),
                                   "product_name": name.text,
                                   "price": price.text,
@@ -709,7 +999,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                       ? base64Image
                                       : item.image
                                 }, '/edit_product/')
-                              : global.postRequest({
+                                    : global.postRequest({
                                   "product_name": name.text,
                                   "price": price.text,
                                   "quantity": count.text,
@@ -718,245 +1008,40 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   "store_id": store!.id,
                                   "image": _imageFile != null ? base64Image : ""
                                 }, '/add_product/');
-                          load_store();
-                          load_store();
-                          load_store();
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "   افزودن محصول   ",
-                          style: TextStyle(
-                            fontSize: 25,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                // load_store();
+                                // load_store();
+                                wait();
+                                load_store();
+                                Navigator.pop(context);
+                              },
+                              child: Text( edit?
+                                "   ویرایش محصول   ":"   افزودن محصول   ",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                ),
                               ),
-                            ),
-                            backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => Color(0xFF256F46))),
-                      ),
-                    ),
-                  ),
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          final XFile? image = await _picker.pickImage(
-                              source: ImageSource.gallery);
-
-                          if (image != null) {
-                            (await cropImageToSquare(File(image.path)))
-                                as File?;
-                            // If you need the base64 string for any purpose
-                            List<int> imageBytes =
-                                await _imageFile!.readAsBytes();
-                            setState(() {
-                              base64Image = base64Encode(imageBytes);
-                            });
-                          } else {
-                            print('No image selected.');
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 25),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height: MediaQuery.of(context).size.width * 0.6,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: Color(0xFFEAF3EE)
-                                    // color: Colors.red
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                child: _imageFile != null
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(25),
-                                        // Same radius as the CircleAvatar
-                                        child: Image.file(
-                                          _imageFile!,
-                                          width: 150,
-                                          height: 150,
-                                          fit: BoxFit
-                                              .fitWidth, // Ensure the image fills the IconButton
-                                        ),
-                                      )
-                                    : item == null || item.image == ""
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 35),
-                                            child: ImageIcon(
-                                              AssetImage("images/product.png"),
-                                              color: Color(0xFF5E846E),
-                                              size: 95,
-                                            ),
-                                          )
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(75),
-                                            // Same radius as the CircleAvatar
-                                            child: Image.memory(
-                                              width: 150,
-                                              Uint8List.fromList(
-                                                  base64Decode(item.image)),
-                                              fit: BoxFit
-                                                  .fitHeight, // Adjust the fit as needed
-                                            ),
-                                          ),
-                              ),
-                              _imageFile != null ||
-                                      (item != null && item.image != "")
-                                  ? IconButton(
-                                      icon: Icon(
-                                        Icons.highlight_remove_rounded,
-                                        // Use any icon you prefer for deleting the image
-                                        color: Colors
-                                            .red, // Change the color if needed
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (item != null && item.image != "")
-                                            item.image = "";
-                                          else
-                                            _imageFile =
-                                                null; // Set _imageFile to null
-                                        });
-                                      },
-                                      iconSize:
-                                          30, // Adjust the size of the icon as needed
-                                    )
-                                  : Container(),
-                            ],
+                                  ),
+                                  backgroundColor: MaterialStateColor.resolveWith(
+                                          (states) => Color(0xFF256F46))),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, right: 20, left: 20, bottom: 20),
-                        child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Theme(
-                              data: ThemeData(
-                                primaryColor: Colors.redAccent,
-                                primaryColorDark: Colors.red,
-                              ),
-                              child: TextField(
-                                controller: name,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.teal),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  labelText: '  نام محصول  ',
-                                  floatingLabelStyle: TextStyle(fontSize: 25),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontSize: 25, fontFamily: 'shabnam'),
-                                ),
-                              ),
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, right: 20, left: 20, bottom: 20),
-                        child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Theme(
-                              data: ThemeData(
-                                primaryColor: Colors.redAccent,
-                                primaryColorDark: Colors.red,
-                              ),
-                              child: TextField(
-                                controller: desc,
-                                maxLines: 3,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.teal),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  labelText: '  توضیحات محصول  ',
-                                  floatingLabelStyle: TextStyle(fontSize: 25),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontSize: 25, fontFamily: 'shabnam'),
-                                ),
-                              ),
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, right: 20, left: 20, bottom: 20),
-                        child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Theme(
-                              data: ThemeData(
-                                primaryColor: Colors.redAccent,
-                                primaryColorDark: Colors.red,
-                              ),
-                              child: TextField(
-                                controller: count,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.teal),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  labelText: '  تعداد  ',
-                                  floatingLabelStyle: TextStyle(fontSize: 25),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontSize: 25, fontFamily: 'shabnam'),
-                                ),
-                              ),
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, right: 20, left: 20, bottom: 20),
-                        child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Theme(
-                              data: ThemeData(
-                                primaryColor: Colors.redAccent,
-                                primaryColorDark: Colors.red,
-                              ),
-                              child: TextField(
-                                controller: price,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.teal),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  labelText: '  قیمت  ',
-                                  floatingLabelStyle: TextStyle(fontSize: 25),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontSize: 25, fontFamily: 'shabnam'),
-                                ),
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
+                      ],
+                    ),
+                  );
+                },
               ),
             );
-          });
-        });
+          },
+        );
+      },
+    );
   }
 
   Future<File> cropImageToSquare(File imageFile) async {
@@ -986,4 +1071,9 @@ class _StoreHomePageState extends State<StoreHomePage> {
     });
     return croppedFile;
   }
+
+  Future<void> wait() async {
+    await Future.delayed(Duration(milliseconds: 500));
+  }
+
 }

@@ -35,7 +35,7 @@ class _ProductCommentState extends State<ProductComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: Container(
+        bottomNavigationBar: global.userkind == "Seller"? null :Container(
           decoration: BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(
                 color: Colors.grey,
@@ -355,7 +355,7 @@ class _ProductCommentState extends State<ProductComment> {
                         var rate = 0;
                         var star = AssetImage("images/star.png");
                         var empty_star = AssetImage("images/star_empty.png");
-
+                        if (global.userkind != "Seller")
                         showDialog(
                             context: context,
                             builder: (builder) {
@@ -575,6 +575,20 @@ class _ProductCommentState extends State<ProductComment> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 0),
+                                blurRadius: 10,
+                                spreadRadius: 5)
+                          ]
+                          // border: Border.all(color: Colors.black)
+                          ),
                       child: Padding(
                           padding: const EdgeInsets.only(top: 5, left: 25, right: 25),
                           child: Column(
@@ -683,6 +697,7 @@ class _ProductCommentState extends State<ProductComment> {
                                   ),
                                 ],
                               ) : ListView.builder(
+    shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: item.comments.length,
                               itemBuilder: (context, i) {
@@ -709,12 +724,6 @@ class _ProductCommentState extends State<ProductComment> {
                                               ),
                                             ),
                                             Expanded(child: Container()),
-                                            Text(
-                                              item.comments[i].date,
-                                              textDirection: TextDirection.rtl,
-                                              style:
-                                                  TextStyle(color: Colors.black87),
-                                            ),
                                             Padding(
                                               padding: const EdgeInsets.symmetric(
                                                   horizontal: 10),
@@ -724,6 +733,15 @@ class _ProductCommentState extends State<ProductComment> {
                                               ),
                                             )
                                           ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                          child: Text(
+                                            item.comments[i].date,
+                                            textDirection: TextDirection.rtl,
+                                            style:
+                                            TextStyle(color: Colors.black87),
+                                          ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -738,7 +756,8 @@ class _ProductCommentState extends State<ProductComment> {
                                               textDirection: TextDirection.rtl,
                                             ),
                                           ),
-                                        )
+                                        ),
+
                                       ],
                                     ),
                                     decoration: BoxDecoration(
@@ -751,20 +770,6 @@ class _ProductCommentState extends State<ProductComment> {
                               }),
                             ],
                           )),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              topRight: Radius.circular(50)),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                offset: Offset(0, 0),
-                                blurRadius: 10,
-                                spreadRadius: 5)
-                          ]
-                          // border: Border.all(color: Colors.black)
-                          ),
                     ),
                   ),
                 ],
@@ -783,7 +788,7 @@ class _ProductCommentState extends State<ProductComment> {
     setState(() {
       data.forEach((element) {
         item.comments.add(Comment(
-          rate: element["rate"],
+          rate: double.parse(element["rate"]),
             comment: element["comment"],
             name: element["user_first_name"] + " " + element["user_last_name"],
             date: element["comment_created"]));
