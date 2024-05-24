@@ -77,6 +77,8 @@ class Store(models.Model):
     discount_codes = models.ManyToManyField(DiscountCode, related_name='stores', blank=True)
     image = models.CharField(max_length=2048, null=True, blank=True)
     rate = models.DecimalField(max_digits= 3, decimal_places=2)
+    category = models.ForeignKey(Category, related_name='stores', on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         return self.name
 class StoreComment(models.Model):
