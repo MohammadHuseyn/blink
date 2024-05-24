@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment, Order, StoreComment
-from django.db.models import Avg
+from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment, Order, \
+    StoreComment, Category
+
 
 class UserSignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=True)
@@ -12,17 +13,23 @@ class UserSignupSerializer(serializers.Serializer):
     phone_number = serializers.CharField(required=False, allow_blank=True)
     user_type = serializers.ChoiceField(
         choices=[('customer', 'Customer'), ('seller', 'Seller'), ('delivery', 'Delivery')])
-    # Additional fields for seller store information
+
     store_name = serializers.CharField(max_length=100, required=False)
-    latitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)  # For new location
-    longitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)  # For new location
+    category = serializers.CharField(max_length=25, required=False)
+    latitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)
+    longitude = serializers.DecimalField(max_digits=25, decimal_places=15, required=False)
     location_name = serializers.CharField(max_length=20, required=False, allow_blank=True)
-    image = serializers.CharField(max_length=20480000, required=False)
+    image = serializers.CharField(max_length=20480000, required=False, allow_null=True, allow_blank=True)
     vehicle_license_plate = serializers.CharField(max_length=20, required=False, allow_blank=True)
     driving_license_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
+
     def create(self, validated_data):
         user_type = validated_data.get('user_type')
-        # Create the appropriate user based on user_type
+
+        image = validated_data.get('image', None)
+        if image == '':
+            image = None
+
         if user_type == 'customer':
             user = Customer.objects.create_user(
                 username=validated_data.get('username', ''),
@@ -31,7 +38,7 @@ class UserSignupSerializer(serializers.Serializer):
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
                 phone_number=validated_data.get('phone_number', ''),
-                image=validated_data.get('image', '')
+                image=image
             )
 
         elif user_type == 'seller':
@@ -43,24 +50,32 @@ class UserSignupSerializer(serializers.Serializer):
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
                 phone_number=validated_data.get('phone_number', ''),
-                image=validated_data.get('image', '')
+                image=image
             )
             store_name = validated_data.pop('store_name', None)
-            user1 = User.objects.get(id=user.id)
+            category = Category.objects.create(
+                name=validated_data.pop('category', None)
+            )
+            seller = User.objects.get(id=user.id)
+
             if not store_name:
                 raise serializers.ValidationError("Store name is required")
+            if not store_name:
+                raise serializers.ValidationError("Store category is required")
+
             location = Location.objects.create(
                 latitude=validated_data.pop('latitude'),
                 longitude=validated_data.pop('longitude'),
                 name=validated_data.pop('location_name', ''),
                 address=validated_data.pop('address', ''),
-                user_id=user1.id
+                user_id=seller.id
             )
-            print(location.latitude)
             store = Store.objects.create(
                 name=store_name,
                 location=location,
-                image=validated_data.get('image', '')
+                image=image,
+                category=category,
+                rate = 0
             )
             user.store = store
             user.save()
@@ -119,7 +134,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'location', 'image']
+        fields = ['id', 'name', 'location', 'image','category', 'rate', 'category']
 
     def get_location(self, obj):
         return LocationSerializer(obj.location).data

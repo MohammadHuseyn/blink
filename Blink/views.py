@@ -19,13 +19,13 @@ from django.db.models import Avg
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+
 class SignupView(APIView):
     @swagger_auto_schema(
         operation_description="Users Signup",
         responses={201: openapi.Response('Created', UserSignupSerializer), 400: 'Bad Request'},
         request_body=UserSignupSerializer
     )
-
     def post(self, request):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
@@ -99,8 +99,9 @@ class LoginView(APIView):
         data = request.data
         username = data.get("username")
         password = data.get("password")
-        phone_number = ''
-        user_type = ''
+        phone_number = None
+        user_type = None
+        image = None
 
         # Authenticate the user
         user = authenticate(username=username, password=password)
@@ -154,23 +155,25 @@ class LoginView(APIView):
                 "error": "Invalid credentials"
             }, content_type='application/json; charset=utf-8', status=status.HTTP_401_UNAUTHORIZED)
 
-class ProductListView(APIView) :
+
+class ProductListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         store_id = request.query_params.get('store_id')
         if not store_id:
             return Response(
-                {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
+                {"error": "Store_id and token are required"}, content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
         products = Product.objects.filter(store_id=store_id)
         serializer = ProductSerializer(products, many=True)
 
-        for p in serializer.data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
+        for p in serializer.data:
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None):
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
-            else :
+            else:
                 p['rate'] = float(0)
         product_dict = {str(p['id']): p for p in serializer.data}
         return Response(product_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
@@ -195,13 +198,17 @@ class StoreListView(APIView):
             # Get all stores (you might want to filter by location or other criteria)
             stores = Store.objects.all()
             serializer = StoreSerializer(stores, many=True)
-            for s in serializer.data :
+            for s in serializer.data:
+                print(s)
+                category = Category.objects.get(id=s['category'])
+                s['category'] = category.name
                 if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) == None):
                     s['rate'] = float(
                         StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'])
                 else:
                     s['rate'] = float(0)
             store_dict = {str(store['id']): store for store in serializer.data}
+
 
             return Response(store_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
@@ -583,6 +590,7 @@ class SellerStoresView(APIView):
 
             # Get the seller's store
             store = seller_profile.store
+            category = store.category
 
             if store:
                 # Get all products for the store
@@ -593,7 +601,8 @@ class SellerStoresView(APIView):
                 products_data = ProductSerializer(products, many=True).data
 
                 response_data = {
-                    'store': store_data
+                    'store': store_data,
+                    'category': category.name
                 }
 
                 return Response(response_data, status=status.HTTP_200_OK,
@@ -880,12 +889,16 @@ class ProductCommentView(APIView):
         serializer = ProductCommentSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+            return Response(serializer.data, status=status.HTTP_201_CREATED,
+                            content_type='application/json; charset=utf-8')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
+                        content_type='application/json; charset=utf-8')
+
 
 class StoreCommentView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         store_id = request.query_params.get('store_id')
         if not store_id:
@@ -898,7 +911,8 @@ class StoreCommentView(APIView):
     def post(self, request):
         store_id = request.query_params.get('store_id')
         if not store_id:
-            return Response({"error": "store_id is required as a query parameter"}, content_type='application/json; charset=utf-8',
+            return Response({"error": "store_id is required as a query parameter"},
+                            content_type='application/json; charset=utf-8',
                             status=status.HTTP_400_BAD_REQUEST)
 
         data = request.data.copy()
@@ -907,5 +921,7 @@ class StoreCommentView(APIView):
         serializer = StoreCommentSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, content_type='application/json; charset=utf-8')
+            return Response(serializer.data, status=status.HTTP_201_CREATED,
+                            content_type='application/json; charset=utf-8')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
+                        content_type='application/json; charset=utf-8')
