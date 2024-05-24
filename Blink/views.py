@@ -571,15 +571,60 @@ class LocationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
                         content_type='application/json; charset=utf-8', )
 
+class SellerProductsView(APIView) :
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve seller products",
+        responses={
+            200: openapi.Response(description='Products retrieved successfully'),
+            404: openapi.Response(description='Seller or store or products not found')
+        }
+    )
+    def get(self, request):
+        seller = request.user
+        seller_profile = Seller.objects.get(id=seller.id)
+
+        store_id = seller_profile.store
+        search = True
+        filter = None
+        try:
+            filter = request.query_params.get('search')
+        except:
+            search = False
+
+        if not store_id:
+            return Response(
+                {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if search:
+            products = Product.objects.filter(store_id=store_id, name__icontains=filter)
+        else :
+            products = Product.objects.filter(store_id=store_id)
+        serializer = ProductSerializer(products, many=True)
+
+        for p in serializer.data :
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
+                p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
+            else :
+                p['rate'] = float(0)
+        product_dict = {str(p['id']): p for p in serializer.data}
+
+        return Response(product_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+
+
+
 
 class SellerStoresView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="Retrieve seller stores and their products",
+        operation_description="Retrieve seller stores",
         responses={
-            200: openapi.Response(description='Store details and products retrieved successfully'),
+            200: openapi.Response(description='Store details retrieved successfully'),
             404: openapi.Response(description='Seller or store not found')
         }
     )
@@ -594,16 +639,18 @@ class SellerStoresView(APIView):
             store = seller_profile.store
 
             if store:
-                # Get all products for the store
-                products = Product.objects.filter(store=store)
 
                 # Serialize the store and its products
-                store_data = StoreSerializer(store).data
-                products_data = ProductSerializer(products, many=True).data
-
+                serializer = StoreSerializer(store)
                 response_data = {
-                    'store': store_data
+                    'store': serializer.data
                 }
+
+                if (StoreComment.objects.filter(store_id=store).aggregate(Avg('rate')) == None):
+                    response_data['store']['rate'] = float(
+                        StoreComment.objects.filter(store_id=store).aggregate(Avg('rate'))['rate__avg'])
+                else:
+                    response_data['store']['rate'] = float(0)
 
                 return Response(response_data, status=status.HTTP_200_OK,
                                 content_type='application/json; charset=utf-8')
