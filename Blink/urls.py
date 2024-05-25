@@ -22,7 +22,8 @@ from rest_framework import permissions
 
 from .views import SignupView, LoginView, StoreListView, ShoppingCartView, OrderFromCartView, PaymentView, \
     AddProductView, CustomerProfileEdit, LocationView, SellerStoresView, EditProductView, AcceptRejectOrderView, \
-    OrderStatusView, DeliveryOrdersView, ProductCommentView, StoreCommentView, ProductListView, SellerProductsView
+    OrderStatusView, DeliveryOrdersView, ProductCommentView, StoreCommentView, ProductListView, SellerProductsView, \
+    CustomerOrdersView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -59,4 +60,6 @@ urlpatterns = [
     path('product-comments/', ProductCommentView.as_view(), name='product-comments'),
     path('store-comments/', StoreCommentView.as_view(), name='store-comments'),
     path('products/', ProductListView.as_view(), name='product-list'),
+    path('customer_orders/', CustomerOrdersView.as_view(), name='customer_orders'),
+
 ]
