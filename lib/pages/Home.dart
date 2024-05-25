@@ -5,12 +5,9 @@ import 'package:blink/pages/Chat.dart';
 import 'package:blink/pages/LastCheck.dart';
 import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
-import 'package:blink/pages/Payment.dart';
-import 'package:blink/pages/StoreHomPage.dart';
 import 'package:blink/pages/StorePage.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../classes/item.dart';
+import '../classes/address.dart';
 import '../classes/store.dart';
 import 'package:blink/pages/Address.dart';
 import 'package:blink/pages/Login.dart';
@@ -41,9 +38,10 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     _loadAddresses();
-    if (global.addressIndex != null) loadStores();
+    loadStores();
 
     super.initState();
+
   }
 
   @override
@@ -392,6 +390,7 @@ class _HomeState extends State<Home> {
                             global.sum = 0.0;
                             global.currentley_running_order = false;
                             global.currentCardPayement = false;
+                            stores.clear();
                           },
                           child: Container(
                             margin: EdgeInsets.only(
@@ -799,154 +798,153 @@ class _HomeState extends State<Home> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 500,
-                                child: ListView.builder(
-                                    itemCount: stores.length,
-                                    itemBuilder: (context, i) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StorePage(
-                                                          store: stores[i])));
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: Color(0xFF256f46),
-                                                      width: 1.5))),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                  itemCount: stores.length,
+                                  itemBuilder: (context, i) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    StorePage(
+                                                        store: stores[i])));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: Color(0xFF256f46),
+                                                    width: 1.5))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 15),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Row(
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 8.0),
-                                                        child: ImageIcon(
-                                                          AssetImage(
-                                                              "images/star.png"),
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                        ),
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 15),
+                                            child: Row(
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets
+                                                              .only(
+                                                              bottom: 8.0),
+                                                      child: ImageIcon(
+                                                        AssetImage(
+                                                            "images/star.png"),
+                                                        color:
+                                                            Color(0xFF256F46),
                                                       ),
-                                                      Text(
-                                                        stores[i].rate.toString() + "/5",
+                                                    ),
+                                                    Text(
+                                                      stores[i].rate.toString() + "/5",
+                                                      style: TextStyle(
+                                                          fontSize: 17),
+                                                    )
+                                                  ],
+                                                ),
+                                                Expanded(child: Container()),
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets
+                                                              .only(
+                                                              bottom: 8.0),
+                                                      child: Text(
+                                                        stores[i].name,
                                                         style: TextStyle(
-                                                            fontSize: 17),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Expanded(child: Container()),
-                                                  Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 8.0),
-                                                        child: Text(
-                                                          stores[i].name,
-                                                          style: TextStyle(
-                                                              fontSize: 20),
-                                                        ),
+                                                            fontSize: 20),
                                                       ),
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                              "  آدرس انتخاب شده"),
-                                                          ImageIcon(
-                                                            AssetImage(
-                                                                "images/location.png"),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                            "  آدرس انتخاب شده"),
+                                                        ImageIcon(
+                                                          AssetImage(
+                                                              "images/location.png"),
+                                                          color: Color(
+                                                              0xFF97b9a7),
+                                                          size: 30,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        // color: Color(0xffEAF3EE),
+                                                        boxShadow: [
+                                                          const BoxShadow(
+                                                            color:
+                                                                Colors.grey,
+                                                          ),
+                                                          const BoxShadow(
                                                             color: Color(
-                                                                0xFF97b9a7),
-                                                            size: 30,
+                                                                0xffEAF3EE),
+                                                            spreadRadius:
+                                                                -0.2,
+                                                            blurRadius: 5.0,
                                                           ),
                                                         ],
-                                                      ),
-                                                    ],
+                                                        // color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius
+                                                                    .circular(
+                                                                        15))),
+                                                    child: stores[i].image ==
+                                                            ""
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15,
+                                                                    vertical:
+                                                                        15),
+                                                            child: ImageIcon(
+                                                              AssetImage(
+                                                                  "images/shop.png"),
+                                                              size: 50,
+                                                            ))
+                                                        : ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            // Same radius as the CircleAvatar
+                                                            child:
+                                                                Image.memory(
+                                                              width: 80,
+                                                              height: 80,
+                                                              Uint8List.fromList(
+                                                                  base64Decode(
+                                                                      stores[i]
+                                                                          .image)),
+                                                              fit: BoxFit
+                                                                  .cover, // Adjust the fit as needed
+                                                            ),
+                                                          ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 15),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          // color: Color(0xffEAF3EE),
-                                                          boxShadow: [
-                                                            const BoxShadow(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            const BoxShadow(
-                                                              color: Color(
-                                                                  0xffEAF3EE),
-                                                              spreadRadius:
-                                                                  -0.2,
-                                                              blurRadius: 5.0,
-                                                            ),
-                                                          ],
-                                                          // color: Colors.red,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          15))),
-                                                      child: stores[i].image ==
-                                                              ""
-                                                          ? Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          15,
-                                                                      vertical:
-                                                                          15),
-                                                              child: ImageIcon(
-                                                                AssetImage(
-                                                                    "images/shop.png"),
-                                                                size: 50,
-                                                              ))
-                                                          : ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15),
-                                                              // Same radius as the CircleAvatar
-                                                              child:
-                                                                  Image.memory(
-                                                                width: 100,
-                                                                height: 100,
-                                                                Uint8List.fromList(
-                                                                    base64Decode(
-                                                                        stores[i]
-                                                                            .image)),
-                                                                fit: BoxFit
-                                                                    .cover, // Adjust the fit as needed
-                                                              ),
-                                                            ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                      );
-                                    }),
-                              ),
+                                      ),
+                                    );
+                                  }),
                               SizedBox(
                                 height: 5,
                               )
@@ -1186,12 +1184,12 @@ class _HomeState extends State<Home> {
                                                     OrderStatus()));
                                       } else {
                                         var req = [];
-                                        global.card.forEach((element) {
+                                        for (var element in global.card) {
                                           req.add({
                                             "product_id": element.id,
                                             "quantity": element.count
                                           });
-                                        });
+                                        }
                                         // req.addAll();
                                         var res =
                                             global.postRequest(req, "/cart/");
@@ -1278,7 +1276,7 @@ class _HomeState extends State<Home> {
   Future<void> _loadAddresses() async {
     var res = global.getRequest("/locations/");
     List<Map<String, dynamic>> data = await res;
-    data.forEach((element) {
+    for (var element in data) {
       setState(() {
         global.addressIndex = global.addresses.length;
         global.addresses.add(addres_data(
@@ -1288,7 +1286,7 @@ class _HomeState extends State<Home> {
             id: element["id"],
             desc: element["address"]));
       });
-    });
+    }
   }
 
   loadStores() async {
@@ -1296,7 +1294,7 @@ class _HomeState extends State<Home> {
     // var res = global.postRequest(
     //     {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
     //     "/stores/");
-    var res = global.getRequestmap("/stores/?longitude=35.7219&latitude=51.3347");
+    var res = global.getRequestMap("/stores/?longitude=35.7219&latitude=51.3347");
     Map<String, dynamic> data = await res;
 
     data.forEach((storeId, storeData) {
@@ -1322,12 +1320,6 @@ class _HomeState extends State<Home> {
         stores.add(store);
       });
     });
-  }
-
-  sendcart() async {
-    // print("TOKEN" + global.token)
-    var res = global.postRequest({}, "/sendcart/");
-    Map<String, dynamic> data = await res;
   }
 
   prodcut() {

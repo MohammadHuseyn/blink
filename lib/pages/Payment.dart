@@ -2,7 +2,6 @@ import 'package:blink/pages/OrderSubmitted.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as global;
-import 'Home.dart';
 
 class PaymentPage extends StatefulWidget {
   PaymentPage({super.key, required this.sum});
@@ -20,7 +19,7 @@ class _PaymentPageState extends State<PaymentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
@@ -32,10 +31,6 @@ class _PaymentPageState extends State<PaymentPage> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },
-                  child:Text("   انصراف   ",
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),),
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -44,16 +39,20 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                       backgroundColor: MaterialStateColor.resolveWith((states) => Colors.red)
                   ),
+                  child:const Text("   انصراف   ",
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),),
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
                   onPressed: (){
-                    var res = global.postRequest({
+                    global.postRequest({
                       "paid" : true,
                       "order_id" : global.order_id
                     }, '/payment/');
@@ -62,20 +61,20 @@ class _PaymentPageState extends State<PaymentPage> {
                     });
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderSubmitted()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSubmitted()));
                   },
-                  child:Text("   پرداخت   ",
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),),
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
+                      backgroundColor: MaterialStateColor.resolveWith((states) => const Color(0xFF256F46))
                   ),
+                  child:const Text("   پرداخت   ",
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),),
                 ),
               ),
             ),
@@ -97,12 +96,12 @@ class _PaymentPageState extends State<PaymentPage> {
                 child: Text("مبلغ قابل پرداخت: " + widget.sum + " تومان",
                   textAlign: TextAlign.center,
                   textDirection: TextDirection.rtl,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 25
                   ),),
               ),
-              Padding(
-                padding: const EdgeInsets.all(25),
+              const Padding(
+                padding: EdgeInsets.all(25),
                 child: Text("شماره کارت",
                 style: TextStyle(
                   fontSize: 25
@@ -120,13 +119,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           data: Theme.of(context).copyWith(splashColor: Colors.transparent),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                                borderSide: const BorderSide(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(20)
                               )
                             ),
@@ -141,13 +140,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           data: Theme.of(context).copyWith(splashColor: Colors.transparent),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -162,13 +161,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           data: Theme.of(context).copyWith(splashColor: Colors.transparent),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -183,13 +182,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           data: Theme.of(context).copyWith(splashColor: Colors.transparent),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -213,13 +212,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           child: TextField(
                             keyboardType: TextInputType.number,
 
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -228,11 +227,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                     Expanded(child: Container()),
-                    Padding(
-                      padding: const EdgeInsets.all(25),
+                    const Padding(
+                      padding: EdgeInsets.all(25),
                       child: Text("رمز اینترنتی",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],
@@ -250,13 +249,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -265,11 +264,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                     Expanded(child: Container()),
-                    Padding(
-                      padding: const EdgeInsets.all(25),
+                    const Padding(
+                      padding: EdgeInsets.all(25),
                       child: Text("cvv2",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],
@@ -287,13 +286,13 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: TextField(
                           keyboardType: TextInputType.number,
 
-                          style: TextStyle(fontSize: 25),
+                          style: const TextStyle(fontSize: 25),
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(20)
                               )
                           ),
@@ -310,13 +309,13 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: TextField(
                           keyboardType: TextInputType.number,
 
-                          style: TextStyle(fontSize: 25),
+                          style: const TextStyle(fontSize: 25),
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(20)
                               )
                           ),
@@ -324,11 +323,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(25),
+                  const Padding(
+                    padding: EdgeInsets.all(25),
                     child: Text("تاریخ انقضا",
                       style: TextStyle(
-                          fontSize: 25
+                          fontSize: 20
                       ),),
                   ),
                 ],
@@ -345,14 +344,14 @@ class _PaymentPageState extends State<PaymentPage> {
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: TextField(
                             keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 25),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               hintText: "اختیاری",
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(20)
                                 )
                             ),
@@ -361,11 +360,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                     Expanded(child: Container()),
-                    Padding(
-                      padding: const EdgeInsets.all(25),
+                    const Padding(
+                      padding: EdgeInsets.all(25),
                       child: Text("ایمیل",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],

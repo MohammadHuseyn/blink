@@ -1,12 +1,8 @@
 import 'dart:ui';
-
-import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Login.dart';
 import 'package:blink/pages/SignupScndPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../global.dart' as global;
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -14,7 +10,7 @@ class Signup extends StatefulWidget {
   @override
   State<Signup> createState() => _SignupState();
 }
-
+bool _show_pass = false;
 var username = TextEditingController();
 var password = TextEditingController();
 var check = TextEditingController();
@@ -25,7 +21,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
@@ -40,7 +36,7 @@ class _SignupState extends State<Signup> {
 
 
             },
-            child: Text(
+            child: const Text(
               "  ثبت نام   ",
               style: TextStyle(
                 fontSize: 25,
@@ -53,7 +49,7 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Color(0xFF256F46))),
+                    (states) => const Color(0xFF256F46))),
           ),
         ),
       ),
@@ -75,14 +71,14 @@ class _SignupState extends State<Signup> {
                           builder: (_) => BackdropFilter(
                                 filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                                 child: AlertDialog(
-                                  shape: RoundedRectangleBorder(
+                                  shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(50))),
                                   elevation: 5.0,
                                   backgroundColor: Colors.white,
-                                  insetPadding: EdgeInsets.symmetric(
+                                  insetPadding: const EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 100),
-                                  contentPadding: EdgeInsets.all(20),
-                                  title: ImageIcon(
+                                  contentPadding: const EdgeInsets.all(20),
+                                  title: const ImageIcon(
                                     AssetImage('images/logo.png'),
                                     size: 120,
                                     color: Color(0xFF256F46),
@@ -94,10 +90,10 @@ class _SignupState extends State<Signup> {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.45,
-                                      child: Column(
+                                      child: const Column(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: Text(
                                               "بلینک برای شما امکان خرید آسان و امن محصولات متنوع را فراهم می‌کند.",
@@ -111,7 +107,7 @@ class _SignupState extends State<Signup> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: Text(
                                               "از لباس و الکترونیک تا آرایشی و بهداشتی، همه چیز در یک مکان قابل دسترس است.",
@@ -125,7 +121,7 @@ class _SignupState extends State<Signup> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: Row(
                                               mainAxisAlignment:
@@ -146,7 +142,7 @@ class _SignupState extends State<Signup> {
                                                 ),
                                                 // Expanded(child: Container()),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 5),
+                                                  padding: EdgeInsets.only(left: 5),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'images/seller.png'),
@@ -158,7 +154,7 @@ class _SignupState extends State<Signup> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: Row(
                                               mainAxisAlignment:
@@ -179,7 +175,7 @@ class _SignupState extends State<Signup> {
                                                 ),
                                                 // Expanded(child: Container()),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 5),
+                                                  padding: EdgeInsets.only(left: 5),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'images/people.png'),
@@ -191,7 +187,7 @@ class _SignupState extends State<Signup> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: Row(
                                               mainAxisAlignment:
@@ -212,7 +208,7 @@ class _SignupState extends State<Signup> {
                                                 ),
                                                 // Expanded(child: Container()),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 8.0),
+                                                  padding: EdgeInsets.only(left: 8.0),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'images/motorbike.png'),
@@ -239,7 +235,7 @@ class _SignupState extends State<Signup> {
                     width: 100,
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: Text(
+                      child: const Text(
                         "ثبت نام",
                         style: TextStyle(
                             fontFamily: 'shabnam',
@@ -247,9 +243,9 @@ class _SignupState extends State<Signup> {
                             color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF256F46),
+                        backgroundColor: const Color(0xFF256F46),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -266,9 +262,9 @@ class _SignupState extends State<Signup> {
                       onPressed: () {
                         Navigator.pop(context);
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login()));
+                            MaterialPageRoute(builder: (context) => const Login()));
                       },
-                      child: Text(
+                      child: const Text(
                         "ورود",
                         style: TextStyle(
                             fontFamily: 'shabnam',
@@ -276,12 +272,12 @@ class _SignupState extends State<Signup> {
                             color: Color(0xFF256F46)),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFFFFFFF),
+                        backgroundColor: const Color(0xFFFFFFFF),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(color: Color(0xFF256F46))),
+                            side: const BorderSide(color: Color(0xFF256F46))),
                         shadowColor: Colors.transparent,
                       ),
                     ),
@@ -289,7 +285,7 @@ class _SignupState extends State<Signup> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             // Expanded(child: Container()),
@@ -335,7 +331,7 @@ class _SignupState extends State<Signup> {
                             decoration: BoxDecoration(
                                 boxShadow: selectedicon == "p"
                                     ? [
-                                        BoxShadow(
+                                        const BoxShadow(
                                           color: Colors.grey,
                                           blurRadius: 30,
                                           spreadRadius: -5,
@@ -344,7 +340,7 @@ class _SignupState extends State<Signup> {
                                       ]
                                     : null),
                           ),
-                          Text(
+                          const Text(
                             "   پیک   ",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
@@ -354,7 +350,7 @@ class _SignupState extends State<Signup> {
                         ],
                       ),
                       Expanded(child: Container()),
-                      SizedBox(
+                      const SizedBox(
                         height: 130,
                         child: VerticalDivider(
                           color: Colors.green,
@@ -369,7 +365,7 @@ class _SignupState extends State<Signup> {
                             decoration: BoxDecoration(
                                 boxShadow: selectedicon == "m"
                                     ? [
-                                        BoxShadow(
+                                        const BoxShadow(
                                           color: Colors.grey,
                                           blurRadius: 30,
                                           spreadRadius: -5,
@@ -385,7 +381,7 @@ class _SignupState extends State<Signup> {
                               },
                             ),
                           ),
-                          Text(
+                          const Text(
                             "مشتری",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
@@ -395,7 +391,7 @@ class _SignupState extends State<Signup> {
                         ],
                       ),
                       Expanded(child: Container()),
-                      SizedBox(
+                      const SizedBox(
                         height: 130,
                         child: VerticalDivider(
                           color: Colors.green,
@@ -410,7 +406,7 @@ class _SignupState extends State<Signup> {
                             decoration: BoxDecoration(
                                 boxShadow: selectedicon == "f"
                                     ? [
-                                        BoxShadow(
+                                        const BoxShadow(
                                           color: Colors.grey,
                                           blurRadius: 30,
                                           spreadRadius: -5,
@@ -427,7 +423,7 @@ class _SignupState extends State<Signup> {
                               },
                             ),
                           ),
-                          Text(
+                          const Text(
                             "فروشنده",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
@@ -468,15 +464,15 @@ class _SignupState extends State<Signup> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
-                              padding: EdgeInsets.only(top: 15, right: 10),
+                              padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
                                 controller: username,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),
@@ -522,31 +518,47 @@ class _SignupState extends State<Signup> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
-                              padding: EdgeInsets.only(top: 15, right: 10),
+                              padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                obscureText: !_show_pass,
                                 controller: password,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      _show_pass
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      // color: Theme.of(context).primaryColorDark,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _show_pass = !_show_pass;
+                                      });
+                                    },
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),
                                     borderSide: BorderSide(
                                         color: Color(0xFF256F46), width: 2.0),
                                   ),
                                   hintText: 'رمز عبور',
-                                  hintStyle: TextStyle(
+                                  hintStyle: const TextStyle(
                                     height: 1.5,
                                     fontFamily: 'shabnam',
                                     fontSize: 20,
                                     color: Colors.grey,
                                   ),
                                   filled: true,
-                                  fillColor: Color(0xFFEAF3EE),
-                                  border: OutlineInputBorder(
+                                  fillColor: const Color(0xFFEAF3EE),
+                                  border: const OutlineInputBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(17)),
                                       borderSide: BorderSide(
@@ -575,31 +587,47 @@ class _SignupState extends State<Signup> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
-                              padding: EdgeInsets.only(top: 15, right: 10),
+                              padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                obscureText: !_show_pass,
                                 controller: check,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
                                 decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      _show_pass
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      // color: Theme.of(context).primaryColorDark,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _show_pass = !_show_pass;
+                                      });
+                                    },
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),
                                     borderSide: BorderSide(
                                         color: Color(0xFF256F46), width: 2.0),
                                   ),
                                   hintText: 'تکرار رمز عبور',
-                                  hintStyle: TextStyle(
+                                  hintStyle: const TextStyle(
                                     height: 1.5,
                                     fontFamily: 'shabnam',
                                     fontSize: 20,
                                     color: Colors.grey,
                                   ),
                                   filled: true,
-                                  fillColor: Color(0xFFEAF3EE),
-                                  border: OutlineInputBorder(
+                                  fillColor: const Color(0xFFEAF3EE),
+                                  border: const OutlineInputBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(17)),
                                       borderSide: BorderSide(

@@ -1,43 +1,70 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'package:blink/pages/Address.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'classes/address.dart';
 import 'classes/item.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-var url ='http://62.60.205.58:8001';
-// var url ='http://172.20.174.125:8000';
-// var url ='http://localhost:8000';
-List<addres_data> addresses = [];
-var s = null;
-var token = "";
-var currentCardPayement = false;
-var tokenbool = false;
-var sum = 0.0;
-bool currentley_running_order = false;
-var username = "username";
-var userkind = "";
-var storeName = "باغ گیلاس";
-var store_id = "";
-// var order_id;
-var order_id;
-var first_name = "محسین";
-String profile_imge = "";
-var phone_number = "09156130018";
-var last_name = "امینی";
-var email = "mahsein@mail.com";
-// var address_name = "آدرس ۱";
-var addressIndex = null;
-List<Item> card = [];
+var url ='http://192.168.124.45:8000';
+// var url = 'http://62.60.205.58:8001';
 
+
+
+
+List<addres_data> addresses = [];
+
+var s;
+
+var token = "";
+
+var currentCardPayement = false;
+
+var tokenbool = false;
+
+var sum = 0.0;
+
+bool currentley_running_order = false;
+
+var username = "";
+
+var userKind = "";
+
+var storeName = "";
+
+var store_id = "";
+
+var order_id;
+
+var first_name = "محسین";
+
+String profile_imge = "";
+
+var phone_number = "";
+
+var last_name = "";
+
+var email = "";
+
+var addressIndex = null;
+
+List<Item> card = [];
 
 String toPersianNumbers(double number) {
   // Define the Persian numerals
-  const List<String> persianNumerals = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  const List<String> persianNumerals = [
+    '۰',
+    '۱',
+    '۲',
+    '۳',
+    '۴',
+    '۵',
+    '۶',
+    '۷',
+    '۸',
+    '۹'
+  ];
 
   // Convert the number to string, removing the decimal part
   String numberStr = number.toStringAsFixed(0);
@@ -79,22 +106,44 @@ String toPersianNumbers(double number) {
 }
 
 
-void toast(context, String txt) {
-  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    content: Text("txt"),
+void toast(context, String txt, Color? bgColor) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: bgColor ?? Color(0xFF01913f),
+    behavior: SnackBarBehavior.floating,
+
+    shape: RoundedRectangleBorder(
+      // side: BorderSide(color: Colors.red, width: 1),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    content: Text(
+      txt,
+      textDirection: TextDirection.rtl,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 20,
+        fontFamily: 'shabnam'
+      ),
+    ),
   ));
 }
 
 
-var headerA = {"Content-Type": "application/json; charset=UTF-8", "Authorization": 'Token $token'};
+
+
+var headerA = {
+  "Content-Type": "application/json; charset=UTF-8",
+  "Authorization": 'Token $token'
+};
 var header = {"Content-Type": "application/json; charset=UTF-8"};
+
+Future<void> wait(ms) async {
+  await Future.delayed(Duration(milliseconds: ms));
+}
 Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
   var body = json.encode(data);
   var response = await http.post(Uri.parse(url + endpoint),
-      headers: tokenbool? headerA:header,
-      body: body
-  );
+      headers: tokenbool ? headerA : header, body: body);
 
   // Check if the response status code is OK (200)
   if (response.statusCode == 200 || response.statusCode == 201) {
@@ -107,13 +156,19 @@ Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
     throw Exception('Failed to post data: ${response.statusCode}');
   }
 }
+
+
+
+
 Future<List<Map<String, dynamic>>> getRequest(String endpoint) async {
-  var response = await http.get(Uri.parse(url + endpoint), headers: tokenbool ? headerA : header);
+  var response = await http.get(Uri.parse(url + endpoint),
+      headers: tokenbool ? headerA : header);
 
   // Check if the response status code is OK (200)
   if (response.statusCode == 200) {
     // Parse the response body from JSON to List<Map<String, dynamic>>
-    List<dynamic> responseDataList = json.decode(utf8.decode(response.bodyBytes));
+    List<dynamic> responseDataList =
+        json.decode(utf8.decode(response.bodyBytes));
 
     // Convert the List<dynamic> to List<Map<String, dynamic>>
     List<Map<String, dynamic>> responseData = [];
@@ -130,7 +185,10 @@ Future<List<Map<String, dynamic>>> getRequest(String endpoint) async {
     throw Exception('Failed to get data: ${response.statusCode}');
   }
 }
-Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
+
+
+
+Future<Map<String, dynamic>> getRequestMap(String endpoint) async {
   var response = await http.get(
     Uri.parse(url + endpoint),
     headers: tokenbool ? headerA : header,
@@ -139,7 +197,8 @@ Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
   // Check if the response status code is OK (200)
   if (response.statusCode == 200) {
     // Parse the response body from JSON to Map<String, dynamic>
-    Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
+    Map<String, dynamic> responseData =
+        json.decode(utf8.decode(response.bodyBytes));
 
     // Ensure that the response is indeed a Map
     if (responseData is Map<String, dynamic>) {
@@ -154,6 +213,7 @@ Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
     throw Exception('Failed to get data: ${response.statusCode}');
   }
 }
+
 Future<Map<String, dynamic>> putRequest(dynamic data, String endpoint) async {
   // Encode Map to JSON
   var body = json.encode(data);
@@ -176,5 +236,3 @@ Future<Map<String, dynamic>> putRequest(dynamic data, String endpoint) async {
     throw Exception('Failed to put data: ${response.statusCode}');
   }
 }
-
-

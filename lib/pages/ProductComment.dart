@@ -2,15 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:blink/classes/comment.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../classes/item.dart';
-import '../classes/store.dart';
 import '../global.dart' as global;
 import 'CommentRateSent.dart';
 
 class ProductComment extends StatefulWidget {
-  ProductComment({required this.item});
+  ProductComment({super.key, required this.item});
 
   Item item;
 
@@ -35,8 +33,8 @@ class _ProductCommentState extends State<ProductComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: global.userkind == "Seller"? null :Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        bottomNavigationBar: global.userKind == "Seller"? null :Container(
+          decoration: const BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0, 0),
@@ -44,7 +42,7 @@ class _ProductCommentState extends State<ProductComment> {
                 spreadRadius: 7)
           ]),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.085,
               child: ElevatedButton(
@@ -52,15 +50,15 @@ class _ProductCommentState extends State<ProductComment> {
                   var width = MediaQuery.of(context).size.width * 0.9;
                   var height = MediaQuery.of(context).size.height * 0.8;
                   var rate = 0;
-                  var star = AssetImage("images/star.png");
-                  var empty_star = AssetImage("images/star_empty.png");
+                  var star = const AssetImage("images/star.png");
+                  var emptyStar = const AssetImage("images/star_empty.png");
                   showDialog(
                       context: context,
                       builder: (builder) {
                         return StatefulBuilder(
                             builder: (context, StateSetter setstate2) {
                           return Center(
-                            child: Container(
+                            child: SizedBox(
                               width: width,
                               height: height,
                               child: Material(
@@ -85,8 +83,8 @@ class _ProductCommentState extends State<ProductComment> {
                                                   // setRate(1);
                                                 },
                                                 icon: ImageIcon(
-                                                  rate >= 1 ? star : empty_star,
-                                                  color: Color(0xFF256F46),
+                                                  rate >= 1 ? star : emptyStar,
+                                                  color: const Color(0xFF256F46),
                                                   size: 50,
                                                 )),
                                             IconButton(
@@ -97,8 +95,8 @@ class _ProductCommentState extends State<ProductComment> {
                                                   // setRate(2);
                                                 },
                                                 icon: ImageIcon(
-                                                  rate >= 2 ? star : empty_star,
-                                                  color: Color(0xFF256F46),
+                                                  rate >= 2 ? star : emptyStar,
+                                                  color: const Color(0xFF256F46),
                                                   size: 50,
                                                 )),
                                             IconButton(
@@ -109,8 +107,8 @@ class _ProductCommentState extends State<ProductComment> {
                                                   // setRate(3);
                                                 },
                                                 icon: ImageIcon(
-                                                  rate >= 3 ? star : empty_star,
-                                                  color: Color(0xFF256F46),
+                                                  rate >= 3 ? star : emptyStar,
+                                                  color: const Color(0xFF256F46),
                                                   size: 50,
                                                 )),
                                             IconButton(
@@ -121,8 +119,8 @@ class _ProductCommentState extends State<ProductComment> {
                                                   // setRate(4);
                                                 },
                                                 icon: ImageIcon(
-                                                  rate >= 4 ? star : empty_star,
-                                                  color: Color(0xFF256F46),
+                                                  rate >= 4 ? star : emptyStar,
+                                                  color: const Color(0xFF256F46),
                                                   size: 50,
                                                 )),
                                             IconButton(
@@ -133,15 +131,15 @@ class _ProductCommentState extends State<ProductComment> {
                                                   // setRate(4);
                                                 },
                                                 icon: ImageIcon(
-                                                  rate >= 5 ? star : empty_star,
-                                                  color: Color(0xFF256F46),
+                                                  rate >= 5 ? star : emptyStar,
+                                                  color: const Color(0xFF256F46),
                                                   size: 50,
                                                 )),
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
                                             vertical: 35),
                                         child: Text(
                                           "نظر خود را بنویسید",
@@ -163,11 +161,11 @@ class _ProductCommentState extends State<ProductComment> {
                                               keyboardType:
                                                   TextInputType.multiline,
                                               controller: comment,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 20.0,
                                                   height: 2.0,
                                                   color: Colors.black),
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 // contentPadding: EdgeInsets.symmetric(vertical: 50,horizontal: 10),
                                                 border: OutlineInputBorder(
                                                     borderSide: BorderSide(
@@ -195,7 +193,7 @@ class _ProductCommentState extends State<ProductComment> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 20, horizontal: 5),
                                             child: SizedBox(
                                               height: MediaQuery.of(context)
@@ -206,7 +204,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                 onPressed: () async {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "   بیخیال   ",
                                                   style: TextStyle(
                                                     color: Colors.black,
@@ -221,7 +219,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(12),
-                                                          side: BorderSide(
+                                                          side: const BorderSide(
                                                               color: Color(
                                                                   0xFF256F46))),
                                                     ),
@@ -235,7 +233,7 @@ class _ProductCommentState extends State<ProductComment> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 20, horizontal: 5),
                                             child: SizedBox(
                                               height: MediaQuery.of(context)
@@ -253,15 +251,15 @@ class _ProductCommentState extends State<ProductComment> {
                                                       "/product-comments/?product_id=" +
                                                           item.id);
                                                   // _load_comments(item);
-                                                  await Future.delayed(Duration(milliseconds: 500));
+                                                  await Future.delayed(const Duration(milliseconds: 500));
                                                   _load_comments(item);
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (builder) =>
-                                                              CommentRateSent()));
+                                                              const CommentRateSent()));
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "   ثبت نظر   ",
                                                   style: TextStyle(
                                                     fontSize: 20,
@@ -280,7 +278,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                     backgroundColor:
                                                         MaterialStateColor
                                                             .resolveWith(
-                                                                (states) => Color(
+                                                                (states) => const Color(
                                                                     0xFF256F46))),
                                               ),
                                             ),
@@ -297,7 +295,7 @@ class _ProductCommentState extends State<ProductComment> {
                         });
                       });
                 },
-                child: Text(
+                child: const Text(
                   "   ثبت نظر   ",
                   style: TextStyle(
                     fontSize: 25,
@@ -310,23 +308,23 @@ class _ProductCommentState extends State<ProductComment> {
                       ),
                     ),
                     backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => Color(0xFF256F46))),
+                        (states) => const Color(0xFF256F46))),
               ),
             ),
           ),
         ),
-        backgroundColor: Color(0xFFEAF3EE),
+        backgroundColor: const Color(0xFFEAF3EE),
         body: Stack(
           children: [
             PreferredSize(
-                preferredSize: Size.fromHeight(150.0),
+                preferredSize: const Size.fromHeight(150.0),
                 child: Container(
-                  color: Color(0xFFEAF3EE),
+                  color: const Color(0xFFEAF3EE),
                   // color: Colors.red,
                   height: 200,
                   width: MediaQuery.of(context).size.width,
                   child: item.image == ""
-                      ? ImageIcon(
+                      ? const ImageIcon(
                     AssetImage("images/shop.png"),
                     size: 250,
                     color: Color(0xFF949494),
@@ -353,16 +351,16 @@ class _ProductCommentState extends State<ProductComment> {
                         var width = MediaQuery.of(context).size.width * 0.9;
                         var height = MediaQuery.of(context).size.height * 0.4;
                         var rate = 0;
-                        var star = AssetImage("images/star.png");
-                        var empty_star = AssetImage("images/star_empty.png");
-                        if (global.userkind != "Seller")
+                        var star = const AssetImage("images/star.png");
+                        var emptyStar = const AssetImage("images/star_empty.png");
+                        if (global.userKind != "Seller")
                         showDialog(
                             context: context,
                             builder: (builder) {
                               return StatefulBuilder(
                                   builder: (context, StateSetter setstate2) {
                                     return Center(
-                                      child: Container(
+                                      child: SizedBox(
                                         width: width,
                                         height: height,
                                         child: Material(
@@ -372,7 +370,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                 vertical: 50),
                                             child: Column(
                                               children: [
-                                                Text(
+                                                const Text(
                                                   "به این محصول چه امتیازی می‌دهید؟",
                                                   style: TextStyle(fontSize: 20),
                                                 ),
@@ -395,9 +393,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                           icon: ImageIcon(
                                                             rate >= 1
                                                                 ? star
-                                                                : empty_star,
+                                                                : emptyStar,
                                                             color:
-                                                            Color(0xFF256F46),
+                                                            const Color(0xFF256F46),
                                                             size: 50,
                                                           )),
                                                       IconButton(
@@ -410,9 +408,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                           icon: ImageIcon(
                                                             rate >= 2
                                                                 ? star
-                                                                : empty_star,
+                                                                : emptyStar,
                                                             color:
-                                                            Color(0xFF256F46),
+                                                            const Color(0xFF256F46),
                                                             size: 50,
                                                           )),
                                                       IconButton(
@@ -425,9 +423,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                           icon: ImageIcon(
                                                             rate >= 3
                                                                 ? star
-                                                                : empty_star,
+                                                                : emptyStar,
                                                             color:
-                                                            Color(0xFF256F46),
+                                                            const Color(0xFF256F46),
                                                             size: 50,
                                                           )),
                                                       IconButton(
@@ -440,9 +438,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                           icon: ImageIcon(
                                                             rate >= 4
                                                                 ? star
-                                                                : empty_star,
+                                                                : emptyStar,
                                                             color:
-                                                            Color(0xFF256F46),
+                                                            const Color(0xFF256F46),
                                                             size: 50,
                                                           )),
                                                       IconButton(
@@ -455,9 +453,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                           icon: ImageIcon(
                                                             rate >= 5
                                                                 ? star
-                                                                : empty_star,
+                                                                : emptyStar,
                                                             color:
-                                                            Color(0xFF256F46),
+                                                            const Color(0xFF256F46),
                                                             size: 50,
                                                           )),
                                                     ],
@@ -470,7 +468,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                      EdgeInsets.symmetric(
+                                                      const EdgeInsets.symmetric(
                                                           vertical: 20,
                                                           horizontal: 5),
                                                       child: SizedBox(
@@ -484,7 +482,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                             Navigator.pop(
                                                                 context);
                                                           },
-                                                          child: Text(
+                                                          child: const Text(
                                                             "   بیخیال   ",
                                                             style: TextStyle(
                                                               color: Colors.black,
@@ -500,7 +498,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                                     BorderRadius
                                                                         .circular(
                                                                         12),
-                                                                    side: BorderSide(
+                                                                    side: const BorderSide(
                                                                         color: Color(
                                                                             0xFF256F46))),
                                                               ),
@@ -514,7 +512,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                     ),
                                                     Padding(
                                                       padding:
-                                                      EdgeInsets.symmetric(
+                                                      const EdgeInsets.symmetric(
                                                           vertical: 20,
                                                           horizontal: 5),
                                                       child: SizedBox(
@@ -530,9 +528,9 @@ class _ProductCommentState extends State<ProductComment> {
                                                                 MaterialPageRoute(
                                                                     builder:
                                                                         (builder) =>
-                                                                        CommentRateSent()));
+                                                                        const CommentRateSent()));
                                                           },
-                                                          child: Text(
+                                                          child: const Text(
                                                             "   ثبت   ",
                                                             style: TextStyle(
                                                               fontSize: 25,
@@ -553,7 +551,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                               MaterialStateColor
                                                                   .resolveWith(
                                                                       (states) =>
-                                                                      Color(0xFF256F46))),
+                                                                      const Color(0xFF256F46))),
                                                         ),
                                                       ),
                                                     ),
@@ -568,14 +566,14 @@ class _ProductCommentState extends State<ProductComment> {
                                     );
                                   });
                             });
-                      }, icon: ImageIcon(AssetImage("images/star.png"), color: Color(0xFF256F46),), iconSize: 35,),
-                      Text(item.rate.toString() + "/5", style: TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
+                      }, icon: const ImageIcon(AssetImage("images/star.png"), color: Color(0xFF256F46),), iconSize: 35,),
+                      Text(item.rate.toString() + "/5", style: const TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
                     ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(50),
@@ -606,7 +604,7 @@ class _ProductCommentState extends State<ProductComment> {
                               ),
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "۳۲۱ امتیاز",
                                     style: TextStyle(fontSize: 20, color: Colors.black54),
                                     textDirection: TextDirection.rtl,
@@ -616,7 +614,7 @@ class _ProductCommentState extends State<ProductComment> {
                                     padding: const EdgeInsets.only(right: 15),
                                     child: Text(
                                       item.name,
-                                      style: TextStyle(fontSize: 20),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   )
                                 ],
@@ -624,7 +622,7 @@ class _ProductCommentState extends State<ProductComment> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 20),
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Color(0xFF7CA990), width: 2))),
@@ -632,14 +630,14 @@ class _ProductCommentState extends State<ProductComment> {
                                     padding: const EdgeInsets.only(bottom: 20),
                                     child: Row(
                                       children: [
-                                        Text(
+                                        const Text(
                                           "۶۵ نظر",
                                           textDirection: TextDirection.rtl,
                                           style:
                                               TextStyle(color: Colors.grey, fontSize: 18),
                                         ),
                                         Expanded(child: Container()),
-                                        Text(
+                                        const Text(
                                           "نظرات کاربران",
                                           style: TextStyle(fontSize: 20),
                                         )
@@ -655,16 +653,16 @@ class _ProductCommentState extends State<ProductComment> {
                                     SizedBox(
                                       height: MediaQuery.of(context).size.height * 0.2,
                                     ),
-                                    CircularProgressIndicator(
+                                    const CircularProgressIndicator(
                                       backgroundColor: Colors.lightGreen,
                                       color: Color(0xFF256F46),
                                       strokeWidth: 5,
                                       strokeAlign: 2,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 20,
                                     ),
-                                    Text(
+                                    const Text(
                                       "در حال دریافت کامنت‌ها",
                                       textDirection: TextDirection.rtl,
                                       style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
@@ -679,7 +677,7 @@ class _ProductCommentState extends State<ProductComment> {
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height * 0.3,
                                   ),
-                                  Center(
+                                  const Center(
                                     child: Text("کامنتی وجود ندارد",style: TextStyle(fontSize: 20),),
                                   ),
                                   Padding(
@@ -687,10 +685,10 @@ class _ProductCommentState extends State<ProductComment> {
                                     child: IconButton(
                                         onPressed: () async {
                                           // _load_orders(store);
-                                          await Future.delayed(Duration(milliseconds: 500));
+                                          await Future.delayed(const Duration(milliseconds: 500));
                                           _load_comments(item);
                                         },
-                                        icon: Icon(Icons.refresh)),
+                                        icon: const Icon(Icons.refresh)),
                                   ),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height * 0.3,
@@ -708,13 +706,13 @@ class _ProductCommentState extends State<ProductComment> {
                                       children: [
                                         Row(
                                           children: [
-                                            ImageIcon(
+                                            const ImageIcon(
                                               AssetImage("images/star.png"),
                                               color: Color(0xFF256F46),
                                               size: 30,
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
+                                            const Padding(
+                                              padding: EdgeInsets.only(
                                                   left: 10, top: 5),
                                               child: Text(
                                                 "4.1/5",
@@ -729,7 +727,7 @@ class _ProductCommentState extends State<ProductComment> {
                                                   horizontal: 10),
                                               child: Text(
                                                 item.comments[i].name,
-                                                style: TextStyle(fontSize: 22),
+                                                style: const TextStyle(fontSize: 22),
                                               ),
                                             )
                                           ],
@@ -740,7 +738,7 @@ class _ProductCommentState extends State<ProductComment> {
                                             item.comments[i].date,
                                             textDirection: TextDirection.rtl,
                                             style:
-                                            TextStyle(color: Colors.black87),
+                                            const TextStyle(color: Colors.black87),
                                           ),
                                         ),
                                         Padding(
@@ -752,7 +750,7 @@ class _ProductCommentState extends State<ProductComment> {
                                           child: Container(
                                             child: Text(
                                               item.comments[i].comment,
-                                              style: TextStyle(fontSize: 25),
+                                              style: const TextStyle(fontSize: 25),
                                               textDirection: TextDirection.rtl,
                                             ),
                                           ),
@@ -760,7 +758,7 @@ class _ProductCommentState extends State<ProductComment> {
 
                                       ],
                                     ),
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         border: Border(
                                             bottom: BorderSide(
                                                 color: Color(0xFF7CA990),

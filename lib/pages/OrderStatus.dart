@@ -1,6 +1,4 @@
-import 'package:blink/classes/order.dart';
 import 'package:blink/global.dart' as global;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatus extends StatefulWidget {
@@ -107,7 +105,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       " ... ",
                       style: TextStyle(
                         fontSize: 30,
-                        color: status == "DELIVERED" || status == "DISPATCHED"
+                        color: status == "DELIVERED" || status == "DISPATCHED" || status == "WAITING"
                             ? Color(0xFF256f46)
                             : Color(0xFFCFDED6),
                       ),
@@ -117,7 +115,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       size: 40,
                       color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
-                              status == "PROCESSING"
+                              status == "PROCESSING"  || status == "WAITING"
                           ? Color(0xFF256f46)
                           : Color(0xFFCFDED6),
                     ),
@@ -127,7 +125,7 @@ class _OrderStatusState extends State<OrderStatus> {
                           fontSize: 30,
                           color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
-                              status == "PROCESSING"
+                              status == "PROCESSING"  || status == "WAITING"
                               ? Color(0xFF256f46)
                               : Color(0xFFCFDED6)),
                     ),
@@ -135,7 +133,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       AssetImage("images/boxing.png"),
                       size: 40,
                       color:
-                      status == "DELIVERED" ||
+                      status == "DELIVERED" ||  status == "WAITING" ||
                           status == "DISPATCHED" ||
                           status == "PROCESSING" || status == "PENDING"? Color(0xFF256f46) : Color(0xFFCFDED6),
                     )
@@ -149,7 +147,7 @@ class _OrderStatusState extends State<OrderStatus> {
                           ? "در حال آماده‌سازی محصول"
                           : status == "DISPATCHED"
                               ? "ارسال محصول توسط پیک"
-                              : "تحویل داده شد",
+                              : status == "WAITING"? "در جستجوی پیک" : "تحویل داده شد",
                   style: TextStyle(fontSize: 25, color: Color(0xFF256F46)),
                 ),
                 Expanded(child: Container()),
@@ -336,7 +334,7 @@ class _OrderStatusState extends State<OrderStatus> {
       got_data = false;
     });
     var res =
-        global.getRequestmap("/order_status/?order_id=" + order_id.toString());
+        global.getRequestMap("/order_status/?order_id=$order_id");
     Map<String, dynamic> data = await res;
     setState(() {
       delivery_price = double.parse(data["order"]["delivery_price"]);

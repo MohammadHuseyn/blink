@@ -1,16 +1,12 @@
-import 'dart:ffi';
 import 'dart:ui';
 import 'package:blink/classes/item.dart';
 import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/StoreHomPage.dart';
-
 import '../global.dart' as global;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'StorePage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,8 +17,17 @@ class Login extends StatefulWidget {
 
 var username = TextEditingController();
 var password = TextEditingController();
+bool _show_pass = false;
+bool got_data = true;
 
 class _LoginState extends State<Login> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    username.text = "";
+    password.text = "";
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,54 +41,70 @@ class _LoginState extends State<Login> {
               //   Navigator.pop(context);
               //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
               // }
-              var res = global.postRequest(
-                  {'username': username.text, 'password': password.text},
-                  "/login/");
+              setState(() {
+                got_data = false;
+              });
               try {
-                Map<String, dynamic> data = await res;
-                global.token = data["token"];
-                global.tokenbool = true;
-                global.username = data["user"]["username"];
-                global.first_name = data["user"]["first_name"];
-                global.last_name = data["user"]["last_name"];
-                global.email = data["user"]["email"];
-                global.userkind = data["user_type"];
-                global.phone_number = data["phone_number"];
-                global.profile_imge =
-                    data["image"] == null ? "" : data["image"];
-                switch (global.userkind) {
-                  case "Seller":
-                    {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StoreHomePage()));
-                    }
-                    break;
-                  case "Customer":
-                    {
-                      _load_order();
-                      Navigator.pop(context);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
-                    }
-                    break;
-                  case "Delivery":
-                    {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DeliveryHomePage()));
-                    }
-                    break;
+                var res = global.postRequest(
+                    {'username': username.text, 'password': password.text},
+                    "/login/");
+                try {
+                  Map<String, dynamic> data = await res;
+                  global.token = data["token"];
+                  global.tokenbool = true;
+                  global.username = data["user"]["username"];
+                  global.first_name = data["user"]["first_name"];
+                  global.last_name = data["user"]["last_name"];
+                  global.email = data["user"]["email"];
+                  global.userKind = data["user_type"];
+                  global.phone_number = data["phone_number"];
+                  global.profile_imge =
+                  data["image"] == null ? "" : data["image"];
+                  switch (global.userKind) {
+                    case "Seller":
+                      {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoreHomePage()));
+                      }
+                      break;
+                    case "Customer":
+                      {
+                        _load_order();
+                        global.wait(1500);
+                        Navigator.pop(context);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      }
+                      break;
+                    case "Delivery":
+                      {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DeliveryHomePage()));
+                      }
+                      break;
+                  }
+                } catch (e) {
+                  print('Error: $e');
+                  global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد", Colors.red);
+
                 }
-              } catch (e) {
-                print('Error: $e');
+              } on Exception {
+                global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد", Colors.red);
+                // TODO
               }
+              setState(() {
+                got_data = true;
+              });
             },
-            child: Text(
+            child: !got_data? CircularProgressIndicator(
+              color: Colors.white,
+            ): Text(
               "   ورود   ",
               style: TextStyle(
                 fontSize: 25,
@@ -413,6 +434,7 @@ class _LoginState extends State<Login> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
+                          obscureText: !_show_pass,
                           controller: password,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -420,6 +442,21 @@ class _LoginState extends State<Login> {
                             fontFamily: 'shabnam',
                           ),
                           decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _show_pass
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                // color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                // Update the state i.e. toogle the state of passwordVisible variable
+                                setState(() {
+                                  _show_pass = !_show_pass;
+                                });
+                              },
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(17)),
@@ -475,24 +512,26 @@ class _LoginState extends State<Login> {
     if (data.isEmpty) {
       global.card.clear();
       global.currentCardPayement = false;
+    } else {
+      Map<String, dynamic> order = data[0];
+      global.order_id = order["order_id"];
+      List<Map<String, dynamic>> items =
+      List<Map<String, dynamic>>.from(order["order_items"]);
+      items.forEach((element) {
+        Item item = Item(
+            sotreid: order["store_id"].toString(),
+            id: element["id"].toString(),
+            rate: double.parse(element["product"]["rate"]),
+            name: element["product"]["name"],
+            desc: "",
+            image: element["product"]["image"],
+            price: double.parse(element["product"]["price"]));
+        item.count = element["quantity"];
+        global.card.add(item);
+      });
+      global.currentCardPayement = true;
+      global.currentley_running_order = true;
+      global.sum = order["total_price"];
     }
-    Map<String, dynamic> order = data[0];
-    global.order_id = order["order_id"];
-    List<Map<String, dynamic>> items = List<Map<String, dynamic>>.from(order["order_items"]);
-    items.forEach((element) {
-      Item item = Item(
-          sotreid: order["store_id"].toString(),
-          id: element["id"].toString(),
-          rate: double.parse(element["product"]["rate"]),
-          name: element["product"]["name"],
-          desc: "",
-          image: element["product"]["image"],
-          price: double.parse(element["product"]["price"]));
-      item.count = element["quantity"];
-      global.card.add(item);
-    });
-    global.currentCardPayement = true;
-    global.currentley_running_order = true;
-    global.sum = order["total_price"];
   }
 }

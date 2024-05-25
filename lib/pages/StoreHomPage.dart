@@ -4,19 +4,19 @@ import 'dart:typed_data';
 import 'package:blink/pages/ProductComment.dart';
 import 'package:blink/pages/StoreComment.dart';
 import 'package:image/image.dart' as img;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blink/global.dart' as global;
 import 'package:image_picker/image_picker.dart';
 import '../classes/item.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
-import 'Home.dart';
 import 'Login.dart';
 import 'Orders.dart';
 import 'ProfileEdit.dart';
 
 class StoreHomePage extends StatefulWidget {
+  const StoreHomePage({super.key});
+
   // Store store;
 
   @override
@@ -42,6 +42,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
 
   @override
   void initState() {
+
     // TODO: implement initState
     load_store();
     // wait();
@@ -53,9 +54,9 @@ class _StoreHomePageState extends State<StoreHomePage> {
     // store = stores[0];
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xFF256F46),
-          unselectedIconTheme: IconThemeData(color: Colors.white, size: 40),
-          selectedIconTheme: IconThemeData(color: Color(0xFF256F46), size: 50),
+          backgroundColor: const Color(0xFF256F46),
+          unselectedIconTheme: const IconThemeData(color: Colors.white, size: 40),
+          selectedIconTheme: const IconThemeData(color: Color(0xFF256F46), size: 50),
           currentIndex: _currentIndex,
           onTap: (index) {
             // global.card.forEach((element) {
@@ -67,17 +68,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
             BottomNavigationBarItem(
               icon: Column(
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage('images/user2.png'),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Divider(
                     height: 0.5,
                     color:
-                        _currentIndex == 0 ? Colors.white : Color(0xFF256F46),
+                        _currentIndex == 0 ? Colors.white : const Color(0xFF256F46),
                     thickness: 2.5,
                     indent: 30,
                     endIndent: 30,
@@ -89,17 +90,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
             BottomNavigationBarItem(
               icon: Column(
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage('images/home.png'),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Divider(
                     height: 0.5,
                     color:
-                        _currentIndex == 1 ? Colors.white : Color(0xFF256F46),
+                        _currentIndex == 1 ? Colors.white : const Color(0xFF256F46),
                     thickness: 2.5,
                     indent: 30,
                     endIndent: 30,
@@ -113,17 +114,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage('images/graph.png'),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Divider(
                     height: 0.5,
                     color:
-                        _currentIndex == 2 ? Colors.white : Color(0xFF256F46),
+                        _currentIndex == 2 ? Colors.white : const Color(0xFF256F46),
                     thickness: 2.5,
                     indent: 37,
                     endIndent: 30,
@@ -136,7 +137,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
         ),
         floatingActionButton: _currentIndex == 1
             ? FloatingActionButton(
-                backgroundColor: Color(0xFF256F46),
+                backgroundColor: const Color(0xFF256F46),
                 onPressed: () {
                   name.clear();
                   desc.clear();
@@ -144,17 +145,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
                   price.clear();
                   if (store != null) bottomShett(context, null, false);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.add,
                   size: 50,
                 ),
               )
             : Container(),
         appBar: AppBar(
-          backgroundColor: Color(0xFF256F46),
+          backgroundColor: const Color(0xFF256F46),
         ),
         body: store == null
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -186,7 +187,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             children: [
                               IconButton(
                                   onPressed: () {},
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.arrow_back_ios_rounded,
                                     color: Color(0xFF1C5334),
                                     size: 35,
@@ -196,9 +197,9 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ProfileEdit()))
+                                          builder: (context) => const ProfileEdit()))
                                 },
-                                child: Text(
+                                child: const Text(
                                   "ویرایش",
                                   style: TextStyle(
                                       fontFamily: 'shabnam',
@@ -211,13 +212,13 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 children: [
                                   Text(
                                     global.first_name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
                                       fontSize: 25,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     "فروشنده",
                                     style: TextStyle(
                                         fontFamily: 'shabnam',
@@ -230,7 +231,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 17),
                                 child: global.profile_imge == ""
-                                    ? ImageIcon(
+                                    ? const ImageIcon(
                                         AssetImage('images/account.png'),
                                         color: Color(0xFF618771),
                                         size: 80,
@@ -259,18 +260,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
                             // bottomsheed_takhfif(context);
-                            print("tapped");
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20, left: 20),
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            decoration: BoxDecoration(
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "تخفیف‌ها",
                                 style: TextStyle(
@@ -282,7 +282,6 @@ class _StoreHomePageState extends State<StoreHomePage> {
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
-                            print("tapped");
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -291,16 +290,16 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                         )));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20, left: 20),
-                            padding: EdgeInsets.symmetric(vertical: 40),
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 40),
 
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "سفارش‌ها",
                                 style: TextStyle(
@@ -316,18 +315,18 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ChatPage()));
+                                    builder: (context) => const ChatPage()));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20, left: 20),
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            decoration: BoxDecoration(
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "ارتباط با پشتیبانی",
                                 style: TextStyle(
@@ -340,25 +339,24 @@ class _StoreHomePageState extends State<StoreHomePage> {
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
-                            print("logged out");
                             Navigator.pop(context);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Login()));
+                                    builder: (context) => const Login()));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 right: 20, left: 20, bottom: 40),
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                               bottom: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "خروج",
                                 style: TextStyle(
@@ -368,17 +366,17 @@ class _StoreHomePageState extends State<StoreHomePage> {
                           ),
                         ),
                         // Expanded(child: Container())
-                        ImageIcon(
+                        const ImageIcon(
                           AssetImage('images/logo.png'),
                           size: 80,
                           color: Color(0xFF399160),
                         ),
-                        Text("with blink",
+                        const Text("with blink",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
                                 fontSize: 20,
                                 color: Color(0xFF1C5334))),
-                        Text(
+                        const Text(
                           "v 1.0.0",
                           style: TextStyle(
                               fontFamily: 'shabnam',
@@ -398,7 +396,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 10),
-                                child: Container(
+                                child: SizedBox(
                                   height: 120,
                                   child: Column(
                                     children: [
@@ -411,7 +409,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                               IconButton(
                                                   onPressed: () {},
                                                   iconSize: 40,
-                                                  icon: ImageIcon(
+                                                  icon: const ImageIcon(
                                                     AssetImage(
                                                         "images/notification.png"),
                                                     color: Color(0xFF2E8B57),
@@ -427,7 +425,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                                     child: IconButton(
                                                       onPressed: () {},
                                                       iconSize: 25,
-                                                      icon: ImageIcon(
+                                                      icon: const ImageIcon(
                                                         AssetImage(
                                                             "images/star.png"),
                                                         color: Color(0xFF256F46),
@@ -437,7 +435,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                                   Text(
                                                     global.toPersianNumbers(store!.rate) + "/۵",
                                                     style:
-                                                        TextStyle(fontSize: 17),
+                                                        const TextStyle(fontSize: 17),
                                                   ),
                                                 ],
                                               ),
@@ -448,23 +446,23 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                             children: [
                                               Text(
                                                 store!.name,
-                                                style: TextStyle(fontSize: 25),
+                                                style: const TextStyle(fontSize: 25),
                                               ),
                                               Text(
                                                 store!.category,
-                                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                                style: const TextStyle(fontSize: 18, color: Colors.grey),
                                               ),
                                             ],
                                           ),
                                           Expanded(child: Container()),
                                           Container(
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 // color: Color(0xffEAF3EE),
                                                 boxShadow: [
-                                                  const BoxShadow(
+                                                  BoxShadow(
                                                     color: Colors.grey,
                                                   ),
-                                                  const BoxShadow(
+                                                  BoxShadow(
                                                     color: Color(0xffEAF3EE),
                                                     spreadRadius: -0.2,
                                                     blurRadius: 5.0,
@@ -474,8 +472,8 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
                                             child: global.profile_imge == ""
-                                                ? Padding(
-                                                    padding: const EdgeInsets
+                                                ? const Padding(
+                                                    padding: EdgeInsets
                                                         .symmetric(
                                                         horizontal: 15,
                                                         vertical: 15),
@@ -510,7 +508,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (builder)=>StoreComment(store: store!)));
                                   },
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF256F46),),
@@ -528,27 +526,27 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   onChanged: (changed) {
                                     _load_items(store, changed);
                                   },
-                                  style: TextStyle(fontSize: 25),
+                                  style: const TextStyle(fontSize: 25),
                                   decoration: InputDecoration(
-                                      prefixIcon: Icon(
+                                      prefixIcon: const Icon(
                                         Icons.search_rounded,
                                         size: 35,
                                         color: Color(0xFF2E8B57),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(15),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: Color(0xFF2E8B57),
                                               width: 2.0)),
                                       border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(15),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: Color(0xFF2E8B57),
                                               width: 2.0))),
                                 ),
                               ),
-                              !got_data?Padding(
-                                padding: const EdgeInsets.only(top: 30),
+                              !got_data?const Padding(
+                                padding: EdgeInsets.only(top: 30),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -571,7 +569,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   ),
                                 ),
                               ) : ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: store!.items.length,
@@ -614,13 +612,13 @@ class _StoreHomePageState extends State<StoreHomePage> {
           height: 250,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderRadius: const BorderRadius.all(Radius.circular(25)),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 7,
-                offset: Offset(0, 11), // changes position of shadow
+                offset: const Offset(0, 11), // changes position of shadow
               ),
             ],
           ),
@@ -628,8 +626,8 @@ class _StoreHomePageState extends State<StoreHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               item.image == ""
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: 15, vertical: 15),
                       child: ImageIcon(
                         AssetImage("images/product.png"),
@@ -651,14 +649,14 @@ class _StoreHomePageState extends State<StoreHomePage> {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   item.name,
-                  style: TextStyle(fontSize: 23),
+                  style: const TextStyle(fontSize: 23),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(child: Container()),
-                  Column(
+                  const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -691,7 +689,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     setState(() {
       got_data = false;
     });
-    var res = global.getRequestmap('/sellers_store/');
+    var res = global.getRequestMap('/sellers_store/');
     Map<String, dynamic> data = await res;
 
     Store s = Store(
@@ -716,7 +714,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     setState(() {
       got_data = false;
     });
-    var res = global.getRequestmap("/sellers_product/?search="+filter);
+    var res = global.getRequestMap("/sellers_product/?search="+filter);
     Map<String,dynamic> data = await res;
     List<Item> items = [];
     data.forEach((key, value) {
@@ -747,7 +745,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(25),
@@ -775,7 +773,6 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 base64Image = base64Encode(imageBytes);
                               });
                             } else {
-                              print('No image selected.');
                             }
                           },
                           child: Padding(
@@ -787,7 +784,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   height: MediaQuery.of(context).size.width * 0.6,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(25),
-                                      color: Color(0xFFEAF3EE)
+                                      color: const Color(0xFFEAF3EE)
                                     // color: Colors.red
                                   ),
                                   child: _imageFile != null
@@ -803,8 +800,8 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                     ),
                                   )
                                       : item == null || item.image == ""
-                                      ? Padding(
-                                    padding: const EdgeInsets.symmetric(
+                                      ? const Padding(
+                                    padding: EdgeInsets.symmetric(
                                         vertical: 35),
                                     child: ImageIcon(
                                       AssetImage("images/product.png"),
@@ -828,7 +825,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 _imageFile != null ||
                                     (item != null && item.image != "")
                                     ? IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.highlight_remove_rounded,
                                     // Use any icon you prefer for deleting the image
                                     color: Colors
@@ -857,7 +854,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (builder)=>ProductComment(item: item!,)));
                             },
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF256F46),),
@@ -878,7 +875,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 ),
                                 child: TextField(
                                   controller: name,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide:
                                         BorderSide(color: Colors.teal),
@@ -907,7 +904,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 child: TextField(
                                   controller: desc,
                                   maxLines: 3,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide:
                                         BorderSide(color: Colors.teal),
@@ -936,7 +933,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 child: TextField(
                                   controller: count,
                                   keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide:
                                         BorderSide(color: Colors.teal),
@@ -964,7 +961,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 ),
                                 child: TextField(
                                   controller: price,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide:
                                         BorderSide(color: Colors.teal),
@@ -981,7 +978,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                               )),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                           child: SizedBox(
                             height: MediaQuery.of(context).size.height * 0.085,
                             child: ElevatedButton(
@@ -1013,10 +1010,12 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 wait();
                                 load_store();
                                 Navigator.pop(context);
+                                edit?
+                                global.toast(context, "محصول با موفقیت ویرایش شد", null) : global.toast(context, "حصول با موفقیت اضافه شد", null);
                               },
                               child: Text( edit?
                                 "   ویرایش محصول   ":"   افزودن محصول   ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 25,
                                 ),
                               ),
@@ -1028,7 +1027,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                     ),
                                   ),
                                   backgroundColor: MaterialStateColor.resolveWith(
-                                          (states) => Color(0xFF256F46))),
+                                          (states) => const Color(0xFF256F46))),
                             ),
                           ),
                         ),
@@ -1073,7 +1072,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
   }
 
   Future<void> wait() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
 }

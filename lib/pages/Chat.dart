@@ -13,10 +13,10 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF256F46),
+        backgroundColor: const Color(0xFF256F46),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("images/chat_background.png"),
                 fit: BoxFit.cover)),
@@ -40,29 +40,29 @@ class _ChatPageState extends State<ChatPage> {
                         color: Colors.grey.withOpacity(0.6),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset: const Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),                  child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                       ),
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
                       decoration:
                           InputDecoration(hintText: "نوشتن پیام",
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                 color: Colors.grey
                               ),
                               border: InputBorder.none,
                               suffixIcon: IconButton(
-                            icon: ImageIcon(
+                            icon: const ImageIcon(
                               AssetImage("images/send-message.png"),
                             ),
                             iconSize: 40,
-                            color: Color(0xFF256f46),
+                            color: const Color(0xFF256f46),
                             onPressed: (){},
                           )),
                     ),
@@ -75,13 +75,13 @@ class _ChatPageState extends State<ChatPage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Color(0xFF256F46),
+          color: const Color(0xFF256F46),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(1),
               spreadRadius: 12,
               blurRadius: 10,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -98,18 +98,12 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Center(
             child: Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
-              child: Text(
-                text,
-                style: TextStyle(
-                    fontFamily: 'shabnam', fontSize: 25, color: Colors.white),
-                textAlign: TextAlign.right,
-              ),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width * 0.7,
               decoration: BoxDecoration(
-                color: Color(0xFF2E8B57),
-                borderRadius: BorderRadius.only(
+                color: const Color(0xFF2E8B57),
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25),
                     bottomLeft: Radius.circular(25)),
@@ -118,9 +112,15 @@ class _ChatPageState extends State<ChatPage> {
                     color: Colors.grey.withOpacity(0.6),
                     spreadRadius: 5,
                     blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
+              ),
+              child: Text(
+                text,
+                style: const TextStyle(
+                    fontFamily: 'shabnam', fontSize: 25, color: Colors.white),
+                textAlign: TextAlign.right,
               ),
             ),
           ),
@@ -145,8 +145,8 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               child: Text(
                 text,
                 style: TextStyle(
@@ -162,11 +162,11 @@ class _ChatPageState extends State<ChatPage> {
                       color: Colors.grey.withOpacity(0.6),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
-                  color: Color(0xFFEAF3EE),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFEAF3EE),
+                  borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(25),
                       bottomRight: Radius.circular(25),
                       bottomLeft: Radius.circular(25))),

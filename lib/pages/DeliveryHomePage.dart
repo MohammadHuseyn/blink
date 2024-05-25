@@ -1,17 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:blink/pages/OrderHistory.dart';
-import 'package:blink/pages/StoreHomPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blink/global.dart' as global;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../classes/order.dart';
-import '../classes/store.dart';
 import 'Chat.dart';
-import 'Home.dart';
 import 'Login.dart';
 
 // import 'Orders.dart';
@@ -45,6 +40,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
 
   @override
   void initState() {
+
     // TODO: implement initState
     _load_orders();
     super.initState();
@@ -56,9 +52,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     // load_store();
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xFF256F46),
-          unselectedIconTheme: IconThemeData(color: Colors.white, size: 40),
-          selectedIconTheme: IconThemeData(color: Color(0xFF256F46), size: 50),
+          backgroundColor: const Color(0xFF256F46),
+          unselectedIconTheme: const IconThemeData(color: Colors.white, size: 40),
+          selectedIconTheme: const IconThemeData(color: Color(0xFF256F46), size: 50),
           currentIndex: _currentIndex,
           onTap: (index) {
             // global.card.forEach((element) {
@@ -70,17 +66,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
             BottomNavigationBarItem(
               icon: Column(
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage('images/user2.png'),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Divider(
                     height: 0.5,
                     color:
-                        _currentIndex == 0 ? Colors.white : Color(0xFF256F46),
+                        _currentIndex == 0 ? Colors.white : const Color(0xFF256F46),
                     thickness: 2.5,
                     indent: 30,
                     endIndent: 30,
@@ -92,17 +88,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
             BottomNavigationBarItem(
               icon: Column(
                 children: [
-                  ImageIcon(
+                  const ImageIcon(
                     AssetImage('images/home.png'),
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Divider(
                     height: 0.5,
                     color:
-                        _currentIndex == 1 ? Colors.white : Color(0xFF256F46),
+                        _currentIndex == 1 ? Colors.white : const Color(0xFF256F46),
                     thickness: 2.5,
                     indent: 30,
                     endIndent: 30,
@@ -122,7 +118,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     _load_orders();
                     // _load_orders();
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.refresh_rounded,
                     color: Color(0xFF2E8B57),
                     size: 40,
@@ -133,7 +129,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     padding: const EdgeInsets.only(right: 10),
                     child: IconButton(
                         onPressed: () {},
-                        icon: ImageIcon(
+                        icon: const ImageIcon(
                           AssetImage("images/notification.png"),
                           color: Color(0xFF2E8B57),
                           size: 50,
@@ -146,7 +142,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                 elevation: 0,
               ),
         body: !got_data
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -178,7 +174,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             children: [
                               IconButton(
                                   onPressed: () {},
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.arrow_back_ios_rounded,
                                     color: Color(0xFF1C5334),
                                     size: 35,
@@ -188,9 +184,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ProfileEdit()))
+                                          builder: (context) => const ProfileEdit()))
                                 },
-                                child: Text(
+                                child: const Text(
                                   "ویرایش",
                                   style: TextStyle(
                                       fontFamily: 'shabnam',
@@ -203,13 +199,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 children: [
                                   Text(
                                     global.first_name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'shabnam',
                                       color: Color(0xFF1C5334),
                                       fontSize: 20,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     "پیک",
                                     style: TextStyle(
                                         fontFamily: 'shabnam',
@@ -222,7 +218,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 17),
                                 child: global.profile_imge == ""
-                                    ? ImageIcon(
+                                    ? const ImageIcon(
                                         AssetImage('images/account.png'),
                                         color: Color(0xFF618771),
                                         size: 80,
@@ -255,16 +251,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             //     MaterialPageRoute(builder: (context) => Orders(store: store,)));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20, left: 20),
-                            padding: EdgeInsets.symmetric(vertical: 40),
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 40),
 
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "سفارش‌ها",
                                 style: TextStyle(
@@ -280,18 +276,18 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ChatPage()));
+                                    builder: (context) => const ChatPage()));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20, left: 20),
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            decoration: BoxDecoration(
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "ارتباط با پشتیبانی",
                                 style: TextStyle(
@@ -309,20 +305,20 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Login()));
+                                    builder: (context) => const Login()));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 right: 20, left: 20, bottom: 40),
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            decoration: const BoxDecoration(
                                 border: Border(
                               top: BorderSide(color: Colors.grey),
                               bottom: BorderSide(color: Colors.grey),
                             )),
                             width: MediaQuery.of(context).size.width,
                             // height: MediaQuery.of(context).size.height * 0.03,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "خروج",
                                 style: TextStyle(
@@ -332,17 +328,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           ),
                         ),
                         // Expanded(child: Container())
-                        ImageIcon(
+                        const ImageIcon(
                           AssetImage('images/logo.png'),
                           size: 80,
                           color: Color(0xFF399160),
                         ),
-                        Text("with blink",
+                        const Text("with blink",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
                                 fontSize: 20,
                                 color: Color(0xFF1C5334))),
-                        Text(
+                        const Text(
                           "v 1.0.0",
                           style: TextStyle(
                               fontFamily: 'shabnam',
@@ -361,12 +357,12 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             children: [
                               Expanded(child: Container()),
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     border: Border(
                                         bottom: BorderSide(
                                             color: Color(0xFF899E92)))),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
                                       right: 15.0, bottom: 20, left: 30),
                                   child: Text(
                                     "سفارش‌های اطراف",
@@ -385,7 +381,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                   return order(context, orders[i]);
                                 })),
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(25),
                                   topLeft: Radius.circular(25)),
@@ -404,8 +400,8 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 //     border: Border(
                                 //         bottom:
                                 //         BorderSide(color: Color(0xFF899E92)))),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
                                       right: 15.0,
                                       bottom: 20,
                                       left: 30,
@@ -444,7 +440,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
           bottomsheed(context, order);
         },
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               border: Border(
                   bottom: BorderSide(color: Color(0xFF899E92), width: 2.0))),
           child: Column(
@@ -458,7 +454,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                       children: [
                         Text(
                           order.delivery_price.toString() + " تومان",
-                          style: TextStyle(fontSize: 15),
+                          style: const TextStyle(fontSize: 15),
                           textDirection: TextDirection.rtl,
                         ),
                         IconButton(
@@ -471,12 +467,12 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     ? "Accepted"
                                     : "Delivered"
                               }, "/delivery_orders/");
-                              await Future.delayed(Duration(milliseconds: 500));
+                              await Future.delayed(const Duration(milliseconds: 500));
                               _load_orders();
                               dispatching = !dispatching;
                             }
                           },
-                          icon: ImageIcon(
+                          icon: const ImageIcon(
                             AssetImage("images/tick.png"),
                             color: Colors.green,
                           ),
@@ -493,7 +489,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Text(
                             "از " + order.store_name,
                             textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Padding(
@@ -501,7 +497,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Text(
                             "برای " + order.customer.split(" ")[0],
                             textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Padding(
@@ -511,9 +507,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                               Text(
                                 "از " + order.store_address,
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 15),
                               ),
-                              ImageIcon(
+                              const ImageIcon(
                                 AssetImage("images/location.png"),
                                 color: Color(0xFF97b9a7),
                                 size: 30,
@@ -526,11 +522,11 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Text(
-                                "از " + order.address,
+                                "به " + order.address,
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 15),
                               ),
-                              ImageIcon(
+                              const ImageIcon(
                                 AssetImage("images/location.png"),
                                 color: Color(0xFF97b9a7),
                                 size: 30,
@@ -543,13 +539,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             // color: Color(0xffEAF3EE),
                             boxShadow: [
-                              const BoxShadow(
+                              BoxShadow(
                                 color: Colors.grey,
                               ),
-                              const BoxShadow(
+                              BoxShadow(
                                 color: Color(0xffEAF3EE),
                                 spreadRadius: -0.2,
                                 blurRadius: 5.0,
@@ -559,8 +555,8 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
                         child: global.profile_imge == ""
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
+                            ? const Padding(
+                                padding: EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 15),
                                 child: ImageIcon(
                                   AssetImage("images/shop.png"),
@@ -570,7 +566,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 borderRadius: BorderRadius.circular(15),
                                 // Same radius as the CircleAvatar
                                 child: Image.memory(
-                                  width: 100,
+                                  width: 80,
                                   Uint8List.fromList(
                                       base64Decode(global.profile_imge)),
                                   fit: BoxFit.cover, // Adjust the fit as needed
@@ -589,7 +585,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                       : order.status == "DISPATCHED"
                           ? "شما در حال تحویل این سفارش هستید"
                           : "UNKNOWN",
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
               )
             ],
@@ -604,11 +600,11 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       body: FlutterMap(
           mapController: mapc,
           options: MapOptions(
-              onTap: (tap_position, latlng) {},
-              initialCenter: LatLng(35.715298, 51.404343),
+              onTap: (tapPosition, latlng) {},
+              initialCenter: const LatLng(35.715298, 51.404343),
               initialZoom: 5,
               interactionOptions:
-                  InteractionOptions(flags: InteractiveFlag.pinchZoom)),
+                  const InteractionOptions(flags: InteractiveFlag.all)),
           children: [
             tilelayer,
             MarkerLayer(markers: two_markers_bool ? two_markers : markers)
@@ -624,7 +620,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
         builder: (builder) {
           return Scaffold(
             bottomNavigationBar: Container(
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              decoration: const BoxDecoration(color: Colors.white, boxShadow: [
                 BoxShadow(
                     blurRadius: 7,
                     spreadRadius: 7,
@@ -632,7 +628,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     color: Colors.grey)
               ]),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.085,
                   child: ElevatedButton(
@@ -653,7 +649,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           setState(() {
                             dispatching = true;
                           });
-                          await Future.delayed(Duration(milliseconds: 500));
+                          await Future.delayed(const Duration(milliseconds: 500));
                         _load_orders();
                         Navigator.pop(context);
                       }
@@ -661,7 +657,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     child: Text(
                       order.status == "WAITING"?
                       "  قبول سفارش   " : "  تحویل داده شد  ",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                       ),
                     ),
@@ -673,7 +669,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           ),
                         ),
                         backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Color(0xFF256F46))),
+                            (states) => const Color(0xFF256F46))),
                   ),
                 ),
               ),
@@ -681,7 +677,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
             backgroundColor: Colors.transparent,
             body: Container(
               // height: MediaQuery.of(context).size.height * 0.8,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
@@ -698,7 +694,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Text(
+                              const Text(
                                 "موقعیت سفارش",
                                 style: TextStyle(fontSize: 25),
                               ),
@@ -713,13 +709,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                               Expanded(child: Container()),
                               Text(
                                 order.store_name,
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Image.asset(
                                   "images/store.png",
-                                  width: 50,
+                                  width: 40,
                                 ),
                               )
                             ],
@@ -732,13 +728,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                               Expanded(child: Container()),
                               Text(
                                 order.customer,
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Image.asset(
                                   "images/customer.png",
-                                  width: 50,
+                                  width: 40,
                                 ),
                               )
                             ],
@@ -774,7 +770,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
 
     setState(() {
       bool dis = false;
-      List<Order> o_o = [];
+      List<Order> oO = [];
         data.forEach((element) {
           Order o = Order(
               goal: LatLng(
@@ -795,9 +791,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
           o.delivery_price = element["delivery_price"];
           if (o.status == "DISPATCHED")
             dis = true;
-          o_o.add(o);
+          oO.add(o);
         });
-        o_o.forEach((element) {
+        oO.forEach((element) {
           if (!dis)
             orders.add(element);
           else if (element.status == "DISPATCHED") {
@@ -813,7 +809,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
         markers.add(Marker(
             point: element.origin,
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.location_on,
                 color: Colors.blue,
               ),
@@ -830,7 +826,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             two_markers_bool = false;
                           });
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.location_on,
                           color: Colors.blue,
                         ),
@@ -845,7 +841,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             bottomsheed(context, element);
                           });
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.location_on,
                           color: Colors.orange,
                         ),

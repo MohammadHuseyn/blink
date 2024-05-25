@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-// import 'dart:html';
 import 'package:image/image.dart' as img;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../global.dart' as global;
@@ -40,7 +38,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     store_name.text = global.storeName;
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
@@ -54,8 +52,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                     "password" : newpass.text
                   }, '/customer_edit_profile/');
               }
+              Navigator.pop(context);
+              global.toast(context, "پروفایل با موفقیت ویرایش شد", null);
             },
-            child: Text(
+            child: const Text(
               "  ثبت تغییرات   ",
               style: TextStyle(
                 fontSize: 25,
@@ -68,14 +68,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                   ),
                 ),
                 backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => Color(0xFF256F46))),
+                        (states) => const Color(0xFF256F46))),
           ),
         ),
       ),
 
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFF256F46),
+        backgroundColor: const Color(0xFF256F46),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -103,7 +103,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               height: 150,
                               fit: BoxFit.cover, // Ensure the image fills the IconButton
                             )
-                                : global.profile_imge == ""? ImageIcon(
+                                : global.profile_imge == ""? const ImageIcon(
                               AssetImage("images/addimage.png"),
                               color: Color(0xFF1c5334),
                               size: 150, // Size of the ImageIcon
@@ -138,7 +138,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     ),
                     _imageFile != null || global.profile_imge != ""? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.highlight_remove_rounded, // Use any icon you prefer for deleting the image
                         color: Colors.red, // Change the color if needed
                       ),
@@ -168,7 +168,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       child: TextField(
                         readOnly: true,
                         controller: username,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -193,7 +193,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       child: TextField(
                         controller: first_name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -218,7 +218,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       child: TextField(
                         controller: last_name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -231,7 +231,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                     )),
               ),
-              global.userkind == "Seller"? Padding(
+              global.userKind == "Seller"? Padding(
                 padding: const EdgeInsets.only(
                     top: 20, right: 20, left: 20, bottom: 20),
                 child: Directionality(
@@ -243,7 +243,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       child: TextField(
                         controller: store_name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -268,7 +268,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       child: TextField(
                         controller: email,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -294,7 +294,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       child: TextField(
                         readOnly: true,
                         controller: phone,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -319,7 +319,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       ),
                       child: TextField(
                         controller: currPass,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
@@ -350,15 +350,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                             setState(() {
                               showPass = !showPass;
                             });
-                          }, icon: Icon(Icons.remove_red_eye)),
-                          border: OutlineInputBorder(
+                          }, icon: const Icon(Icons.remove_red_eye)),
+                          border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
                               BorderRadius.all(Radius.circular(15))),
                           labelText: '  رمز جدید  ',
-                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelStyle: const TextStyle(fontSize: 25),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                          labelStyle: const TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                         ),
                       ),
                     )),
@@ -381,15 +381,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                             setState(() {
                               showPass = !showPass;
                             });
-                          }, icon: Icon(Icons.remove_red_eye)),
-                          border: OutlineInputBorder(
+                          }, icon: const Icon(Icons.remove_red_eye)),
+                          border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                               borderRadius:
                               BorderRadius.all(Radius.circular(15))),
                           labelText: ' تکرار رمز جدید  ',
-                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelStyle: const TextStyle(fontSize: 25),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                          labelStyle: const TextStyle(fontSize: 25, fontFamily: 'shabnam'),
                         ),
                       ),
                     )),

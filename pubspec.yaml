@@ -30,52 +30,7 @@ flutter:
       fonts:
         - asset: assets\fonts\Shabnam.ttf
   assets:
-    - images/bell.png
-    - images/question.png
-    - images/seller.png
-    - images/motorbike.png
-    - images/people.png
-    - images/user.png
-    - images/key.png
-    - images/logo.png
-    - images/notification.png
-    - images/user2.png
-    - images/home.png
-    - images/cart.png
-    - images/account.png
-    - images/plus.png
-    - images/remove.png
-    - images/img.png
-    - images/trash.png
-    - images/pencil.png
-    - images/blink.png
-    - images/chat_background.png
-    - images/send-message.png
-    - images/search.png
-    - images/options.png
-    - images/pizza.png
-    - images/arayeshi.png
-    - images/digital.png
-    - images/market.png
-    - images/lebas.png
-    - images/product.png
-    - images/shop.png
-    - images/location.png
-    - images/addimage.png
-    - images/boxing.png
-    - images/packing.png
-    - images/delivery.png
-    - images/deliverd.png
-    - images/copy.png
-    - images/star.png
-    - images/star_empty.png
-    - images/commentratesent.png
-    - images/graph.png
-    - images/cross.png
-    - images/tick.png
-    - images/fast.png
-    - images/customer.png
-    - images/store.png
+    - images/
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
