@@ -689,6 +689,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     setState(() {
       got_data = false;
     });
+// committing
     var res = global.getRequestMap('/sellers_store/');
     Map<String, dynamic> data = await res;
 

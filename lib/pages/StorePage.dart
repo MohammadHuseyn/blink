@@ -18,6 +18,7 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
+// committing
   Store store;
   bool got_data = false;
   var search = TextEditingController();

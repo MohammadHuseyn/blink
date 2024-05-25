@@ -145,6 +145,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       ? "در انتظار تایید فروشگاه"
                       : status == "PROCESSING"
                           ? "در حال آماده‌سازی محصول"
+// committing
                           : status == "DISPATCHED"
                               ? "ارسال محصول توسط پیک"
                               : status == "WAITING"? "در جستجوی پیک" : "تحویل داده شد",

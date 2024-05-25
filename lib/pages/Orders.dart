@@ -228,6 +228,7 @@ class _OrdersState extends State<Orders> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           order.customer,
+// committing
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),

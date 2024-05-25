@@ -46,6 +46,7 @@ class _AddressState extends State<Address> {
         leading: IconButton(
             onPressed: () {
               if (gloabl.addressIndex != null) {
+// committing
                 stores.clear();
                 Navigator.pop(context);
                 Navigator.pop(context);

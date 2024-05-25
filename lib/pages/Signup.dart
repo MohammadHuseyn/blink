@@ -464,6 +464,7 @@ class _SignupState extends State<Signup> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
+// committing
                               padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
                                 controller: username,
