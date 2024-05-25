@@ -14,7 +14,7 @@ class Signup extends StatefulWidget {
   @override
   State<Signup> createState() => _SignupState();
 }
-
+bool _show_pass = false;
 var username = TextEditingController();
 var password = TextEditingController();
 var check = TextEditingController();
@@ -531,6 +531,21 @@ class _SignupState extends State<Signup> {
                                 ),
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      _show_pass
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      // color: Theme.of(context).primaryColorDark,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _show_pass = !_show_pass;
+                                      });
+                                    },
+                                  ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),
@@ -584,6 +599,21 @@ class _SignupState extends State<Signup> {
                                   fontFamily: 'shabnam',
                                 ),
                                 decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      _show_pass
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      // color: Theme.of(context).primaryColorDark,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _show_pass = !_show_pass;
+                                      });
+                                    },
+                                  ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),

@@ -21,6 +21,7 @@ class Login extends StatefulWidget {
 
 var username = TextEditingController();
 var password = TextEditingController();
+bool _show_pass = false;
 
 class _LoginState extends State<Login> {
   @override
@@ -420,6 +421,21 @@ class _LoginState extends State<Login> {
                             fontFamily: 'shabnam',
                           ),
                           decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _show_pass
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                // color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                // Update the state i.e. toogle the state of passwordVisible variable
+                                setState(() {
+                                  _show_pass = !_show_pass;
+                                });
+                              },
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(17)),
@@ -478,7 +494,8 @@ class _LoginState extends State<Login> {
     }
     Map<String, dynamic> order = data[0];
     global.order_id = order["order_id"];
-    List<Map<String, dynamic>> items = List<Map<String, dynamic>>.from(order["order_items"]);
+    List<Map<String, dynamic>> items =
+        List<Map<String, dynamic>>.from(order["order_items"]);
     items.forEach((element) {
       Item item = Item(
           sotreid: order["store_id"].toString(),
