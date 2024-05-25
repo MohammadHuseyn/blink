@@ -8,8 +8,8 @@ import 'classes/item.dart';
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
 // committing
-var url ='http://192.168.124.45:8000';
-// var url = 'http://62.60.205.58:8001';
+// var url ='http://192.168.124.45:8000';
+var url = 'http://62.60.205.58:8000';
 
 
 
