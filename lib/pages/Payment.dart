@@ -19,7 +19,7 @@ class _PaymentPageState extends State<PaymentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
@@ -47,7 +47,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,
                 child: ElevatedButton(
@@ -231,7 +231,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       padding: EdgeInsets.all(25),
                       child: Text("رمز اینترنتی",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],
@@ -268,7 +268,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       padding: EdgeInsets.all(25),
                       child: Text("cvv2",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],
@@ -327,7 +327,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     padding: EdgeInsets.all(25),
                     child: Text("تاریخ انقضا",
                       style: TextStyle(
-                          fontSize: 25
+                          fontSize: 20
                       ),),
                   ),
                 ],
@@ -364,7 +364,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       padding: EdgeInsets.all(25),
                       child: Text("ایمیل",
                         style: TextStyle(
-                            fontSize: 25
+                            fontSize: 20
                         ),),
                     ),
                   ],

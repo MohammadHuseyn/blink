@@ -18,8 +18,16 @@ class Login extends StatefulWidget {
 var username = TextEditingController();
 var password = TextEditingController();
 bool _show_pass = false;
+bool got_data = true;
 
 class _LoginState extends State<Login> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    username.text = "";
+    password.text = "";
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +41,9 @@ class _LoginState extends State<Login> {
               //   Navigator.pop(context);
               //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
               // }
+              setState(() {
+                got_data = false;
+              });
               try {
                 var res = global.postRequest(
                     {'username': username.text, 'password': password.text},
@@ -62,6 +73,7 @@ class _LoginState extends State<Login> {
                     case "Customer":
                       {
                         _load_order();
+                        global.wait(1500);
                         Navigator.pop(context);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Home()));
@@ -79,14 +91,20 @@ class _LoginState extends State<Login> {
                   }
                 } catch (e) {
                   print('Error: $e');
+                  global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد", Colors.red);
+
                 }
               } on Exception {
-                global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد");
+                global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد", Colors.red);
                 // TODO
               }
-
+              setState(() {
+                got_data = true;
+              });
             },
-            child: Text(
+            child: !got_data? CircularProgressIndicator(
+              color: Colors.white,
+            ): Text(
               "   ورود   ",
               style: TextStyle(
                 fontSize: 25,
@@ -416,6 +434,7 @@ class _LoginState extends State<Login> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 15, right: 10),
                         child: TextField(
+                          obscureText: !_show_pass,
                           controller: password,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -493,25 +512,26 @@ class _LoginState extends State<Login> {
     if (data.isEmpty) {
       global.card.clear();
       global.currentCardPayement = false;
+    } else {
+      Map<String, dynamic> order = data[0];
+      global.order_id = order["order_id"];
+      List<Map<String, dynamic>> items =
+      List<Map<String, dynamic>>.from(order["order_items"]);
+      items.forEach((element) {
+        Item item = Item(
+            sotreid: order["store_id"].toString(),
+            id: element["id"].toString(),
+            rate: double.parse(element["product"]["rate"]),
+            name: element["product"]["name"],
+            desc: "",
+            image: element["product"]["image"],
+            price: double.parse(element["product"]["price"]));
+        item.count = element["quantity"];
+        global.card.add(item);
+      });
+      global.currentCardPayement = true;
+      global.currentley_running_order = true;
+      global.sum = order["total_price"];
     }
-    Map<String, dynamic> order = data[0];
-    global.order_id = order["order_id"];
-    List<Map<String, dynamic>> items =
-        List<Map<String, dynamic>>.from(order["order_items"]);
-    items.forEach((element) {
-      Item item = Item(
-          sotreid: order["store_id"].toString(),
-          id: element["id"].toString(),
-          rate: double.parse(element["product"]["rate"]),
-          name: element["product"]["name"],
-          desc: "",
-          image: element["product"]["image"],
-          price: double.parse(element["product"]["price"]));
-      item.count = element["quantity"];
-      global.card.add(item);
-    });
-    global.currentCardPayement = true;
-    global.currentley_running_order = true;
-    global.sum = order["total_price"];
   }
 }

@@ -33,7 +33,7 @@ class _AddressState extends State<Address> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          bottomsheed("آدرس جدید");
+          bottomsheet("آدرس جدید");
         },
         child: const Icon(
           Icons.add,
@@ -46,6 +46,7 @@ class _AddressState extends State<Address> {
         leading: IconButton(
             onPressed: () {
               if (gloabl.addressIndex != null) {
+                stores.clear();
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.push(
@@ -123,91 +124,110 @@ class _AddressState extends State<Address> {
             ),
     );
   }
-
-  void bottomsheed(title) {
+  void bottomsheet(String title) {
     markers.clear();
     showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return StatefulBuilder(builder: (BuildContext context,
-              StateSetter setState /*You can rename this!*/) {
-            return Scaffold(
-                body: SingleChildScrollView(
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 25,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+      ),
+      builder: (builder) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.3,
+          maxChildSize: 1.0,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Scaffold(
+                  body: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              controller: name,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Colors.redAccent,
+                                primaryColorDark: Colors.red,
+                              ),
+                              child: TextField(
+                                controller: name,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                labelText: 'نام آدرس',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  labelText: 'نام آدرس',
+                                  floatingLabelStyle: TextStyle(fontSize: 25),
+                                  floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                                  labelStyle: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'shabnam',
+                                  ),
+                                ),
                               ),
                             ),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, right: 20, left: 20, bottom: 20),
-                      child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Theme(
-                            data: ThemeData(
-                              primaryColor: Colors.redAccent,
-                              primaryColorDark: Colors.red,
-                            ),
-                            child: TextField(
-                              maxLines: 3,
-                              controller: address,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Colors.redAccent,
+                                primaryColorDark: Colors.red,
+                              ),
+                              child: TextField(
+                                maxLines: 3,
+                                controller: address,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                                labelText: 'آدرس',
-                                floatingLabelStyle: TextStyle(fontSize: 25),
-                                floatingLabelBehavior:
-                                FloatingLabelBehavior.always,
-                                labelStyle: TextStyle(
-                                    fontSize: 25, fontFamily: 'shabnam'),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  labelText: 'آدرس',
+                                  floatingLabelStyle: TextStyle(fontSize: 25),
+                                  floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                                  labelStyle: TextStyle(
+                                    fontSize: 25,
+                                    fontFamily: 'shabnam',
+                                  ),
+                                ),
                               ),
                             ),
-                          )),
-                    ),
-                    Container(
-                      height: MediaQuery.of(builder).size.height * 0.30,
-                      child: Scaffold(
-                        body: FlutterMap(
-                            options: MapOptions(
-                                onTap: (tap_position, latlng) {
-                                  latlngLocal = latlng;
-                                  // print('Tapped at: $latlng');
-                                  // Clear existing markers
-                                  setState(() {
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: FlutterMap(
+                                options: MapOptions(
+                                  onTap: (tap_position, latlng) {
+                                    latlngLocal = latlng;
                                     setState(() {
                                       markers.clear();
                                       markers.add(
@@ -215,73 +235,78 @@ class _AddressState extends State<Address> {
                                           width: 80.0,
                                           height: 80.0,
                                           point: latlng,
-                                          // Child parameter instead of builder
-                                          // Directly using an Icon as the child
-                                          child: Container(
-                                            child: const Icon(
-                                              Icons.location_pin,
-                                              color: Colors.red,
-                                              size: 40.0,
-                                            ),
+                                          child: const Icon(
+                                            Icons.location_pin,
+                                            color: Colors.red,
+                                            size: 40.0,
                                           ),
                                         ),
                                       );
                                     });
-                                    // Add a marker for the tapped location
-                                  });
-                                },
-                                initialCenter: const LatLng(35.715298, 51.404343),
-                                initialZoom: 11,
-                                interactionOptions: const InteractionOptions(
-                                    flags: InteractiveFlag.all)),
-                            children: [
-                              tilelayer,
-                              MarkerLayer(markers: markers)
-                            ]),
-                      ),
-                    )
-                  ]),
-                ),
-                bottomNavigationBar: Container(
-                  // color: Colors.red,
-                  height: MediaQuery.of(builder).size.height * 0.085,
-                  decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(1, 1),
-                        blurRadius: 10,
-                        spreadRadius: 5)
-                  ]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          addAddress(name.text, latlngLocal);
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        "افزودن آدرس",
-                        style: TextStyle(fontSize: 25),
-                      ),
-                      style: ButtonStyle(
+                                  },
+                                  initialCenter: const LatLng(35.715298, 51.404343),
+                                  initialZoom: 11,
+                                  interactionOptions: const InteractionOptions(
+                                      flags: InteractiveFlag.all),
+                                ),
+                                children: [
+                                  tilelayer,
+                                  MarkerLayer(markers: markers),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  bottomNavigationBar: Container(
+                    height: MediaQuery.of(context).size.height * 0.085,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(1, 1),
+                          blurRadius: 10,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 20),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            addAddress(name.text, latlngLocal);
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          "افزودن آدرس",
+                          style: TextStyle(fontSize: 25),
+                        ),
+                        style: ButtonStyle(
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => const Color(0xFF256F46))),
+                                  (states) => const Color(0xFF256F46)),
+                        ),
+                      ),
                     ),
                   ),
-                ));
-          });
-        },
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
-        ));
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget map() {

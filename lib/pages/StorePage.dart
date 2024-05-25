@@ -26,9 +26,9 @@ class _StorePageState extends State<StorePage> {
   @override
   void initState() {
     // uncomment the below line / debug
-    // _load_items(store: store, filter: "");
+    _load_items(store: store, filter: "");
     // comment the below line / debug
-    got_data = true;
+    // got_data = true;
     // TODO: implement initState
     super.initState();
   }
@@ -253,7 +253,7 @@ class _StorePageState extends State<StorePage> {
 
   prodcut(Item item) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
       child: GestureDetector(
         onTap: () {
           bottomShett(item);
@@ -275,135 +275,134 @@ class _StorePageState extends State<StorePage> {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  item.image == ""
-                      ? const Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: ImageIcon(
-                        AssetImage("images/product.png",),
-                        color: Color(0xFF517360),
-                        size: 80,
-                      ),
-                  ) : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
-                      child: Image.memory(
-                        width: 100,
-                        Uint8List.fromList(
-                            base64Decode(item.image)),
-                        fit: BoxFit
-                            .cover, // Adjust the fit as needed
-                      ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                item.image == ""
+                    ? const Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: ImageIcon(
+                      AssetImage("images/product.png",),
+                      color: Color(0xFF517360),
+                      size: 80,
+                    ),
+                ) : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15), // Same radius as the CircleAvatar
+                    child: Image.memory(
+                      width: 100,
+                      Uint8List.fromList(
+                          base64Decode(item.image)),
+                      fit: BoxFit
+                          .cover, // Adjust the fit as needed
                     ),
                   ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-                  //   child:
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: item.count > 0
-                        ? Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        item.count -= 1;
-                                      });
-                                      if (item.count == 0) {
-                                        _remove_from_cart(item);
-                                      }
-                                      global.sum += item.price;
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+                //   child:
+                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: global.card.any((element) => element.id == item.id)?
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      global.card.elementAt(global.card.indexOf(item)).count -= 1;
+                                    });
+                                    if (global.card.elementAt(global.card.indexOf(item)).count == 0) {
+                                      _remove_from_cart(item);
+                                    }
+                                    global.sum += item.price;
 
-                                    },
-                                    icon: const ImageIcon(
-                                        AssetImage(
-                                          "images/remove.png",
-                                        ),
-                                        color: Colors.red
-                                        // color: Colors.black,
-                                        )),
-                                // Expanded(child: Container()),
-                                Text(
-                                  item.count.toString(),
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                // Expanded(child: Container()),
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        item.count += 1;
-                                      });
-                                      global.store_id = store.id;
-                                      global.sum += item.price;
-                                    },
-                                    icon: const ImageIcon(
-                                      AssetImage("images/plus.png"),
-                                      color: Color(0xFF2E8B57),
-                                    ))
-                              ],
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    item.count += 1;
-                                    _add_to_cart(item);
-                                  });
-                                  global.store_id = store.id;
-                                  global.sum += item.price;
-                                },
-                                icon: const ImageIcon(AssetImage("images/plus.png"),
-                                    color: Color(0xFF2E8B57))),
+                                  },
+                                  icon: const ImageIcon(
+                                      AssetImage(
+                                        "images/remove.png",
+                                      ),
+                                      color: Colors.red
+                                      // color: Colors.black,
+                                      )),
+                              // Expanded(child: Container()),
+                              Text(
+                                  global.card.any((element) => element.id == item.id)? global.card.elementAt(global.card.indexWhere((element) => element.id == item.id)).count.toString() : "0",
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              // Expanded(child: Container()),
+                              IconButton(
+                                  onPressed: () {
+
+                                    setState(() {
+                                      global.card.elementAt(global.card.indexWhere((element) => element.id == item.id)).count += 1;
+                                    });
+                                    global.store_id = store.id;
+                                    global.sum += item.price;
+                                  },
+                                  icon: const ImageIcon(
+                                    AssetImage("images/plus.png"),
+                                    color: Color(0xFF2E8B57),
+                                  ))
+                            ],
                           ),
-                  ),
-                  Text(
-                    item.name,
-                    style: const TextStyle(fontSize: 23),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Expanded(child: Container()),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            global.toPersianNumbers(item.price),
-                            style: const TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.grey),
-                          ),
-                          Text(
-                            global.toPersianNumbers(item.price),
-                            style: const TextStyle(fontSize: 23),
-                          ),
-                        ],
-                      ),
-                      // Expanded(child: Container()),
-                      const Text(
-                        "0%",
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                        textAlign: TextAlign.right,
-                      ),
-                      // Expanded(child: Container()),
-                    ],
-                  )
-                ],
-              ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: IconButton(
+                              onPressed: () {
+                                // if (!global.card.contains(item))
+                                setState(() {
+                                  _add_to_cart(item);
+                                  global.card.elementAt(global.card.indexWhere((element) => element.id == item.id)).count += 1;
+                                });
+                                global.store_id = store.id;
+                                global.sum += item.price;
+                              },
+                              icon: const ImageIcon(AssetImage("images/plus.png"),
+                                  color: Color(0xFF2E8B57))),
+                        ),
+                ),
+                Text(
+                  item.name,
+                  style: const TextStyle(fontSize: 23),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Expanded(child: Container()),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          global.toPersianNumbers(item.price),
+                          style: const TextStyle(
+                              fontSize: 18,
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey),
+                        ),
+                        Text(
+                          global.toPersianNumbers(item.price),
+                          style: const TextStyle(fontSize: 23),
+                        ),
+                      ],
+                    ),
+                    // Expanded(child: Container()),
+                    const Text(
+                      "0%",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                      textAlign: TextAlign.right,
+                    ),
+                    // Expanded(child: Container()),
+                  ],
+                )
+              ],
             ),
           ),
         ),
@@ -630,7 +629,7 @@ class _StorePageState extends State<StorePage> {
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          item.count += 1;
+                                          global.card.elementAt(global.card.indexWhere((element) => element.id == item.id)).count += 1;
                                         });
                                         global.store_id = store.id;
                                       },

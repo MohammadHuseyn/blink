@@ -177,7 +177,7 @@ class _OrdersState extends State<Orders> {
                   Column(
                     children: [
                       Text(
-                        order.total_price.toString() + " تومان",
+                        global.toPersianNumbers(order.total_price) + " تومان",
                         style: const TextStyle(fontSize: 18),
                         textDirection: TextDirection.rtl,
                       ),
@@ -228,7 +228,7 @@ class _OrdersState extends State<Orders> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           order.customer,
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ),
                       Row(
@@ -260,7 +260,7 @@ class _OrdersState extends State<Orders> {
                                 "تحویل فوری!",
                                 textDirection: TextDirection.rtl,
                                 style:
-                                    TextStyle(color: Colors.red, fontSize: 15),
+                                    TextStyle(color: Colors.red, fontSize: 10),
                               )
                             ],
                           ),
@@ -421,7 +421,7 @@ class _OrdersState extends State<Orders> {
           Row(
             children: [
               Text(
-                item.price.toString() + "  تومان",
+                global.toPersianNumbers(item.price) + "  تومان",
                 textDirection: TextDirection.rtl,
                 style: const TextStyle(fontSize: 18),
               ),

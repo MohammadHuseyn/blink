@@ -53,7 +53,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   }, '/customer_edit_profile/');
               }
               Navigator.pop(context);
-              global.toast(context, "پروفایل با موفقیت ویرایش شد");
+              global.toast(context, "پروفایل با موفقیت ویرایش شد", null);
             },
             child: const Text(
               "  ثبت تغییرات   ",

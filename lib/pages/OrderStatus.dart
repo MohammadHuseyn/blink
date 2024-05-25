@@ -105,7 +105,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       " ... ",
                       style: TextStyle(
                         fontSize: 30,
-                        color: status == "DELIVERED" || status == "DISPATCHED"
+                        color: status == "DELIVERED" || status == "DISPATCHED" || status == "WAITING"
                             ? Color(0xFF256f46)
                             : Color(0xFFCFDED6),
                       ),
@@ -115,7 +115,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       size: 40,
                       color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
-                              status == "PROCESSING"
+                              status == "PROCESSING"  || status == "WAITING"
                           ? Color(0xFF256f46)
                           : Color(0xFFCFDED6),
                     ),
@@ -125,7 +125,7 @@ class _OrderStatusState extends State<OrderStatus> {
                           fontSize: 30,
                           color: status == "DELIVERED" ||
                               status == "DISPATCHED" ||
-                              status == "PROCESSING"
+                              status == "PROCESSING"  || status == "WAITING"
                               ? Color(0xFF256f46)
                               : Color(0xFFCFDED6)),
                     ),
@@ -133,7 +133,7 @@ class _OrderStatusState extends State<OrderStatus> {
                       AssetImage("images/boxing.png"),
                       size: 40,
                       color:
-                      status == "DELIVERED" ||
+                      status == "DELIVERED" ||  status == "WAITING" ||
                           status == "DISPATCHED" ||
                           status == "PROCESSING" || status == "PENDING"? Color(0xFF256f46) : Color(0xFFCFDED6),
                     )
@@ -147,7 +147,7 @@ class _OrderStatusState extends State<OrderStatus> {
                           ? "در حال آماده‌سازی محصول"
                           : status == "DISPATCHED"
                               ? "ارسال محصول توسط پیک"
-                              : "تحویل داده شد",
+                              : status == "WAITING"? "در جستجوی پیک" : "تحویل داده شد",
                   style: TextStyle(fontSize: 25, color: Color(0xFF256F46)),
                 ),
                 Expanded(child: Container()),

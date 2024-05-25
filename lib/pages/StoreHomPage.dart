@@ -1011,7 +1011,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 load_store();
                                 Navigator.pop(context);
                                 edit?
-                                global.toast(context, "محصول با موفقیت ویرایش شد") : global.toast(context, "حصول با موفقیت اضافه شد");
+                                global.toast(context, "محصول با موفقیت ویرایش شد", null) : global.toast(context, "حصول با موفقیت اضافه شد", null);
                               },
                               child: Text( edit?
                                 "   ویرایش محصول   ":"   افزودن محصول   ",

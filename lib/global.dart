@@ -7,8 +7,8 @@ import 'classes/item.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-// var url ='http://172.20.174.125:8000';
-var url = 'http://62.60.205.58:8001';
+var url ='http://192.168.124.45:8000';
+// var url = 'http://62.60.205.58:8001';
 
 
 
@@ -106,9 +106,9 @@ String toPersianNumbers(double number) {
 }
 
 
-void toast(context, String txt) {
+void toast(context, String txt, Color? bgColor) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    backgroundColor: Color(0xFF01913f),
+    backgroundColor: bgColor ?? Color(0xFF01913f),
     behavior: SnackBarBehavior.floating,
 
     shape: RoundedRectangleBorder(

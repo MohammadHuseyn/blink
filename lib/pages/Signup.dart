@@ -520,6 +520,7 @@ class _SignupState extends State<Signup> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                obscureText: !_show_pass,
                                 controller: password,
                                 style: const TextStyle(
                                   fontSize: 20,
@@ -588,6 +589,7 @@ class _SignupState extends State<Signup> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
+                                obscureText: !_show_pass,
                                 controller: check,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(

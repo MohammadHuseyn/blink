@@ -489,7 +489,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Text(
                             "از " + order.store_name,
                             textDirection: TextDirection.rtl,
-                            style: const TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Padding(
@@ -497,7 +497,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Text(
                             "برای " + order.customer.split(" ")[0],
                             textDirection: TextDirection.rtl,
-                            style: const TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Padding(
@@ -507,7 +507,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                               Text(
                                 "از " + order.store_address,
                                 textDirection: TextDirection.rtl,
-                                style: const TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 15),
                               ),
                               const ImageIcon(
                                 AssetImage("images/location.png"),
@@ -522,9 +522,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           child: Row(
                             children: [
                               Text(
-                                "از " + order.address,
+                                "به " + order.address,
                                 textDirection: TextDirection.rtl,
-                                style: const TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 15),
                               ),
                               const ImageIcon(
                                 AssetImage("images/location.png"),
@@ -566,7 +566,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 borderRadius: BorderRadius.circular(15),
                                 // Same radius as the CircleAvatar
                                 child: Image.memory(
-                                  width: 100,
+                                  width: 80,
                                   Uint8List.fromList(
                                       base64Decode(global.profile_imge)),
                                   fit: BoxFit.cover, // Adjust the fit as needed
@@ -604,7 +604,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
               initialCenter: const LatLng(35.715298, 51.404343),
               initialZoom: 5,
               interactionOptions:
-                  const InteractionOptions(flags: InteractiveFlag.pinchZoom)),
+                  const InteractionOptions(flags: InteractiveFlag.all)),
           children: [
             tilelayer,
             MarkerLayer(markers: two_markers_bool ? two_markers : markers)
@@ -715,7 +715,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Image.asset(
                                   "images/store.png",
-                                  width: 50,
+                                  width: 40,
                                 ),
                               )
                             ],
@@ -734,7 +734,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Image.asset(
                                   "images/customer.png",
-                                  width: 50,
+                                  width: 40,
                                 ),
                               )
                             ],

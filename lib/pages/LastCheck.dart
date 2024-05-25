@@ -198,6 +198,7 @@ class _LastCheckState extends State<LastCheck> {
                 padding: EdgeInsets.only(top: 15),
                 child: Text("با انتخاب گزینه بالا هزینه ارسال دوبرابر می‌شود\n اما سفارش در زمان کمتری به دستتان می‌رسد.",
                 textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
               )
