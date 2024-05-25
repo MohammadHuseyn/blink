@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer
+    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer, OrderItemSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
@@ -158,6 +158,19 @@ class ProductListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve a list of products for a specific store, optionally filtered by name",
+        responses={200: openapi.Response('Success', ProductSerializer(many=True))},
+        manual_parameters=[
+            openapi.Parameter(
+                'store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER, required=True
+            ),
+            openapi.Parameter(
+                'search', openapi.IN_QUERY, description="Search filter for product names", type=openapi.TYPE_STRING,
+                required=False
+            )
+        ]
+    )
     def get(self, request):
         store_id = request.query_params.get('store_id')
         search = True
@@ -190,6 +203,20 @@ class StoreListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve a list of stores based on latitude and longitude",
+        responses={200: openapi.Response('Success', StoreSerializer(many=True))},
+        manual_parameters=[
+            openapi.Parameter(
+                'longitude', openapi.IN_QUERY, description="Longitude of the location", type=openapi.TYPE_NUMBER,
+                required=True
+            ),
+            openapi.Parameter(
+                'latitude', openapi.IN_QUERY, description="Latitude of the location", type=openapi.TYPE_NUMBER,
+                required=True
+            )
+        ]
+    )
     def get(self, request):
         longitude = request.query_params.get('longitude')
         latitude = request.query_params.get('latitude')
@@ -930,6 +957,15 @@ class StoreCommentView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve comments for a specific store",
+        responses={200: StoreCommentSerializer(many=True)},
+        manual_parameters=[
+            openapi.Parameter(
+                'store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER, required=True
+            )
+        ]
+    )
     def get(self, request):
         store_id = request.query_params.get('store_id')
         if not store_id:
@@ -939,6 +975,16 @@ class StoreCommentView(APIView):
         serializer = StoreCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK, content_type='application/json; charset=utf-8')
 
+    @swagger_auto_schema(
+        operation_description="Add a comment to a specific store",
+        request_body=StoreCommentSerializer,
+        responses={201: StoreCommentSerializer, 400: 'Bad Request'},
+        manual_parameters=[
+            openapi.Parameter(
+                'store_id', openapi.IN_QUERY, description="ID of the store", type=openapi.TYPE_INTEGER, required=True
+            )
+        ]
+    )
     def post(self, request):
         store_id = request.query_params.get('store_id')
         if not store_id:
@@ -956,3 +1002,31 @@ class StoreCommentView(APIView):
                             content_type='application/json; charset=utf-8')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
                         content_type='application/json; charset=utf-8')
+
+class CustomerOrdersView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve customer orders with status PENDING, PROCESSING, DISPATCHED, or WAITING",
+        responses={200: openapi.Response('Success', OrderItemSerializer(many=True))}
+    )
+    def get(self, request):
+        user = request.user
+        customer_orders = Order.objects.filter(customer=user.id, status__in=['PENDING', 'PROCESSING', 'DISPATCHED','WAITING'])
+        orders_data = []
+        for order in customer_orders:
+            order_items = OrderItem.objects.filter(order=order)
+            order_items_data = OrderItemSerializer(order_items, many=True).data
+            order_data = {
+                'order_id': order.id,
+                'store_id': order.store_id,
+                'status': order.status,
+                'total_price': order.total_price,
+                'delivery_price': order.delivery_price,
+                'discount': order.discount_value,
+                'updated': order.updated_at,
+                'order_items': order_items_data
+            }
+            orders_data.append(order_data)
+        return Response(orders_data, status=status.HTTP_200_OK)
