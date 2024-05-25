@@ -191,7 +191,7 @@ class ProductListView(APIView):
         serializer = ProductSerializer(products, many=True)
 
         for p in serializer.data:
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None):
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != None):
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
             else:
                 p['rate'] = float(0)
@@ -235,11 +235,12 @@ class StoreListView(APIView):
             for s in serializer.data:
                 category = Category.objects.get(id=s['category'])
                 s['category'] = category.name
-                if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) == None):
+                if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) != None):
                     s['rate'] = float(
                         StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'])
                 else:
                     s['rate'] = float(0)
+
             store_dict = {str(store['id']): store for store in serializer.data}
 
 
@@ -445,6 +446,7 @@ class AddProductView(APIView):
                             status=status.HTTP_201_CREATED, content_type='application/json; charset=utf-8', )
 
         except Exception as e:
+            print(e)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content_type='application/json; charset=utf-8')
 
@@ -637,7 +639,7 @@ class SellerProductsView(APIView) :
         serializer = ProductSerializer(products, many=True)
 
         for p in serializer.data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) == None) :
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != None) :
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
             else :
                 p['rate'] = float(0)
