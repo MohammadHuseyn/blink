@@ -1,37 +1,54 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'package:blink/pages/Address.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'classes/address.dart';
 import 'classes/item.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-var url = 'http://62.60.205.58:8001';
 // var url ='http://172.20.174.125:8000';
-// var url ='http://localhost:8000';
+var url = 'http://62.60.205.58:8001';
+
+
+
+
 List<addres_data> addresses = [];
-var s = null;
+
+var s;
+
 var token = "";
+
 var currentCardPayement = false;
+
 var tokenbool = false;
+
 var sum = 0.0;
+
 bool currentley_running_order = false;
-var username = "username";
-var userkind = "";
-var storeName = "باغ گیلاس";
+
+var username = "";
+
+var userKind = "";
+
+var storeName = "";
+
 var store_id = "";
-// var order_id;
+
 var order_id;
+
 var first_name = "محسین";
+
 String profile_imge = "";
-var phone_number = "09156130018";
-var last_name = "امینی";
-var email = "mahsein@mail.com";
-// var address_name = "آدرس ۱";
+
+var phone_number = "";
+
+var last_name = "";
+
+var email = "";
+
 var addressIndex = null;
+
 List<Item> card = [];
 
 String toPersianNumbers(double number) {
@@ -88,6 +105,7 @@ String toPersianNumbers(double number) {
   return formattedPersianNumberStr.toString().split('').reversed.join('');
 }
 
+
 void toast(context, String txt) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     backgroundColor: Color(0xFF01913f),
@@ -108,6 +126,9 @@ void toast(context, String txt) {
     ),
   ));
 }
+
+
+
 
 var headerA = {
   "Content-Type": "application/json; charset=UTF-8",
@@ -136,6 +157,9 @@ Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   }
 }
 
+
+
+
 Future<List<Map<String, dynamic>>> getRequest(String endpoint) async {
   var response = await http.get(Uri.parse(url + endpoint),
       headers: tokenbool ? headerA : header);
@@ -162,7 +186,9 @@ Future<List<Map<String, dynamic>>> getRequest(String endpoint) async {
   }
 }
 
-Future<Map<String, dynamic>> getRequestmap(String endpoint) async {
+
+
+Future<Map<String, dynamic>> getRequestMap(String endpoint) async {
   var response = await http.get(
     Uri.parse(url + endpoint),
     headers: tokenbool ? headerA : header,

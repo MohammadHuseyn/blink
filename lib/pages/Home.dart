@@ -5,12 +5,9 @@ import 'package:blink/pages/Chat.dart';
 import 'package:blink/pages/LastCheck.dart';
 import 'package:blink/pages/OrderHistory.dart';
 import 'package:blink/pages/OrderStatus.dart';
-import 'package:blink/pages/Payment.dart';
-import 'package:blink/pages/StoreHomPage.dart';
 import 'package:blink/pages/StorePage.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../classes/item.dart';
+import '../classes/address.dart';
 import '../classes/store.dart';
 import 'package:blink/pages/Address.dart';
 import 'package:blink/pages/Login.dart';
@@ -1187,12 +1184,12 @@ class _HomeState extends State<Home> {
                                                     OrderStatus()));
                                       } else {
                                         var req = [];
-                                        global.card.forEach((element) {
+                                        for (var element in global.card) {
                                           req.add({
                                             "product_id": element.id,
                                             "quantity": element.count
                                           });
-                                        });
+                                        }
                                         // req.addAll();
                                         var res =
                                             global.postRequest(req, "/cart/");
@@ -1279,7 +1276,7 @@ class _HomeState extends State<Home> {
   Future<void> _loadAddresses() async {
     var res = global.getRequest("/locations/");
     List<Map<String, dynamic>> data = await res;
-    data.forEach((element) {
+    for (var element in data) {
       setState(() {
         global.addressIndex = global.addresses.length;
         global.addresses.add(addres_data(
@@ -1289,7 +1286,7 @@ class _HomeState extends State<Home> {
             id: element["id"],
             desc: element["address"]));
       });
-    });
+    }
   }
 
   loadStores() async {
@@ -1297,7 +1294,7 @@ class _HomeState extends State<Home> {
     // var res = global.postRequest(
     //     {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
     //     "/stores/");
-    var res = global.getRequestmap("/stores/?longitude=35.7219&latitude=51.3347");
+    var res = global.getRequestMap("/stores/?longitude=35.7219&latitude=51.3347");
     Map<String, dynamic> data = await res;
 
     data.forEach((storeId, storeData) {
@@ -1323,12 +1320,6 @@ class _HomeState extends State<Home> {
         stores.add(store);
       });
     });
-  }
-
-  sendcart() async {
-    // print("TOKEN" + global.token)
-    var res = global.postRequest({}, "/sendcart/");
-    Map<String, dynamic> data = await res;
   }
 
   prodcut() {

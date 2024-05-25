@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:blink/classes/comment.dart';
 import 'package:blink/pages/CommentRateSent.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as global;
 import '../classes/store.dart';
@@ -33,7 +31,7 @@ class _StoreCommentState extends State<StoreComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: global.userkind == "Seller"? null : Container(
+      bottomNavigationBar: global.userKind == "Seller"? null : Container(
         decoration: BoxDecoration(color: Colors.white, boxShadow: [
           BoxShadow(
               color: Colors.grey,
@@ -202,13 +200,6 @@ class _StoreCommentState extends State<StoreComment> {
                                               onPressed: () async {
                                                 Navigator.pop(context);
                                               },
-                                              child: Text(
-                                                "   بیخیال   ",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 25,
-                                                ),
-                                              ),
                                               style: ButtonStyle(
                                                   shape:
                                                       MaterialStateProperty.all<
@@ -226,6 +217,13 @@ class _StoreCommentState extends State<StoreComment> {
                                                           .resolveWith(
                                                               (states) => Colors
                                                                   .white)),
+                                              child: Text(
+                                                "   بیخیال   ",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 25,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -255,12 +253,6 @@ class _StoreCommentState extends State<StoreComment> {
                                                         builder: (builder) =>
                                                             CommentRateSent()));
                                               },
-                                              child: Text(
-                                                "   ثبت نظر   ",
-                                                style: TextStyle(
-                                                  fontSize: 25,
-                                                ),
-                                              ),
                                               style: ButtonStyle(
                                                   shape:
                                                       MaterialStateProperty.all<
@@ -276,6 +268,12 @@ class _StoreCommentState extends State<StoreComment> {
                                                           .resolveWith(
                                                               (states) => Color(
                                                                   0xFF256F46))),
+                                              child: Text(
+                                                "   ثبت نظر   ",
+                                                style: TextStyle(
+                                                  fontSize: 25,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -291,12 +289,6 @@ class _StoreCommentState extends State<StoreComment> {
                       });
                     });
               },
-              child: Text(
-                "   ثبت نظر   ",
-                style: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
               style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -305,6 +297,12 @@ class _StoreCommentState extends State<StoreComment> {
                   ),
                   backgroundColor: MaterialStateColor.resolveWith(
                       (states) => Color(0xFF256F46))),
+              child: Text(
+                "   ثبت نظر   ",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
             ),
           ),
         ),
@@ -339,7 +337,7 @@ class _StoreCommentState extends State<StoreComment> {
                               var star = AssetImage("images/star.png");
                               var empty_star =
                                   AssetImage("images/star_empty.png");
-                              if (global.userkind != "Seller")
+                              if (global.userKind != "Seller")
                               showDialog(
                                   context: context,
                                   builder: (builder) {
@@ -474,14 +472,6 @@ class _StoreCommentState extends State<StoreComment> {
                                                               Navigator.pop(
                                                                   context);
                                                             },
-                                                            child: Text(
-                                                              "   بیخیال   ",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 25,
-                                                              ),
-                                                            ),
                                                             style: ButtonStyle(
                                                                 shape: MaterialStateProperty
                                                                     .all<
@@ -498,6 +488,14 @@ class _StoreCommentState extends State<StoreComment> {
                                                                     MaterialStateColor.resolveWith(
                                                                         (states) =>
                                                                             Colors.white)),
+                                                            child: Text(
+                                                              "   بیخیال   ",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 25,
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -522,12 +520,6 @@ class _StoreCommentState extends State<StoreComment> {
                                                                           (builder) =>
                                                                               CommentRateSent()));
                                                             },
-                                                            child: Text(
-                                                              "   ثبت   ",
-                                                              style: TextStyle(
-                                                                fontSize: 25,
-                                                              ),
-                                                            ),
                                                             style: ButtonStyle(
                                                                 shape: MaterialStateProperty
                                                                     .all<
@@ -542,6 +534,12 @@ class _StoreCommentState extends State<StoreComment> {
                                                                     MaterialStateColor.resolveWith(
                                                                         (states) =>
                                                                             Color(0xFF256F46))),
+                                                            child: Text(
+                                                              "   ثبت   ",
+                                                              style: TextStyle(
+                                                                fontSize: 25,
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -659,6 +657,11 @@ class _StoreCommentState extends State<StoreComment> {
                       return Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Color(0xFF7CA990),
+                                      width: 2))),
                           child: Column(
                             children: [
                               Row(
@@ -715,11 +718,6 @@ class _StoreCommentState extends State<StoreComment> {
                               )
                             ],
                           ),
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Color(0xFF7CA990),
-                                      width: 2))),
                         ),
                       );
                     }),

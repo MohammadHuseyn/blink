@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:image/image.dart' as img;
-import 'package:blink/pages/Signup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +13,7 @@ import 'StoreHomPage.dart';
 
 class SignupScndPage extends StatefulWidget {
   SignupScndPage(
-      {required this.userkind, required this.username, required this.password});
+      {super.key, required this.userkind, required this.username, required this.password});
 
   String userkind;
   var username = TextEditingController();
@@ -94,7 +91,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
@@ -162,10 +159,10 @@ class _SignupScndPageState extends State<SignupScndPage> {
               global.first_name = data["user"]["first_name"];
               global.last_name = data["user"]["last_name"];
               global.email = data["user"]["email"];
-              global.userkind = data["user_type"];
+              global.userKind = data["user_type"];
               global.phone_number = data["phone_number"];
               global.profile_imge = data["image"] == null ? "" : data["image"];
-              switch (global.userkind) {
+              switch (global.userKind) {
                 case "Seller":
                   {
                     Navigator.pop(context);
@@ -181,7 +178,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Home()));
+                        MaterialPageRoute(builder: (context) => const Home()));
                   }
                   break;
                 case "Delivery":
@@ -200,7 +197,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
               // Navigator.push(
               //     context, MaterialPageRoute(builder: (context) => Home()));
             },
-            child: Text(
+            child: const Text(
               "   تکمیل ثبت نام   ",
               style: TextStyle(
                 fontSize: 25,
@@ -213,12 +210,12 @@ class _SignupScndPageState extends State<SignupScndPage> {
                   ),
                 ),
                 backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Color(0xFF256F46))),
+                    (states) => const Color(0xFF256F46))),
           ),
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Color(0xFF256F46),
+        backgroundColor: const Color(0xFF256F46),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -250,7 +247,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                                   fit: BoxFit
                                       .cover, // Ensure the image fills the IconButton
                                 )
-                              : ImageIcon(
+                              : const ImageIcon(
                                   AssetImage("images/addimage.png"),
                                   color: Color(0xFF1c5334),
                                   size: 150, // Size of the ImageIcon
@@ -277,7 +274,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                   ),
                   _imageFile != null
                       ? IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.highlight_remove_rounded,
                             // Use any icon you prefer for deleting the image
                             color: Colors.red, // Change the color if needed
@@ -305,7 +302,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     ),
                     child: TextField(
                       controller: widget.username,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
@@ -331,7 +328,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     ),
                     child: TextField(
                       controller: first_name,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
@@ -357,7 +354,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     ),
                     child: TextField(
                       controller: last_name,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
@@ -383,7 +380,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     ),
                     child: TextField(
                       controller: email,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
@@ -410,7 +407,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: phone,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius:
@@ -437,7 +434,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                           ),
                           child: TextField(
                             controller: pelak,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.teal),
                                   borderRadius:
@@ -466,7 +463,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                           ),
                           child: TextField(
                             controller: license,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.teal),
                                   borderRadius:
@@ -495,7 +492,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                           ),
                           child: TextField(
                             controller: shopname,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.teal),
                                   borderRadius:
@@ -519,7 +516,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                       textDirection: TextDirection.rtl,
                       child: DropdownButtonFormField<String>(
                         value: _selectedCategory,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
                             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -537,7 +534,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                               category,
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.right,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontFamily: 'shabnam'),
                             ),
                             alignment: Alignment.centerRight,
@@ -553,8 +550,8 @@ class _SignupScndPageState extends State<SignupScndPage> {
                   )
                 : Container(),
             widget.userkind == "f"
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 20, top: 10),
+                ? const Padding(
+                    padding: EdgeInsets.only(bottom: 20, top: 10),
                     child: Text(
                       "انتخاب فروشگاه روی نقشه",
                       style: TextStyle(fontSize: 20, color: Colors.black87),
@@ -563,10 +560,10 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 : Container(),
             widget.userkind == "f"
                 ? Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       // borderRadius: BorderRadius.circular(50),
                       boxShadow: [
-                        const BoxShadow(
+                        BoxShadow(
                           color: Colors.grey,
                           spreadRadius: 5.0,
                           blurRadius: 7.0,
@@ -579,7 +576,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                         child: map()),
                   )
                 : Container(),
-            SizedBox(
+            const SizedBox(
               height: 20,
             )
           ],
@@ -608,7 +605,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                         // Child parameter instead of builder
                         // Directly using an Icon as the child
                         child: Container(
-                          child: Icon(
+                          child: const Icon(
                             Icons.location_pin,
                             color: Colors.red,
                             size: 40.0,
@@ -620,10 +617,10 @@ class _SignupScndPageState extends State<SignupScndPage> {
                   // Add a marker for the tapped location
                 });
               },
-              initialCenter: LatLng(35.715298, 51.404343),
+              initialCenter: const LatLng(35.715298, 51.404343),
               initialZoom: 5,
               interactionOptions:
-                  InteractionOptions(flags: InteractiveFlag.all)),
+                  const InteractionOptions(flags: InteractiveFlag.all)),
           children: [tilelayer, MarkerLayer(markers: markers)]),
     );
   }

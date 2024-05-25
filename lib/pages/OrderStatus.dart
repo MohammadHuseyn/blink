@@ -1,6 +1,4 @@
-import 'package:blink/classes/order.dart';
 import 'package:blink/global.dart' as global;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatus extends StatefulWidget {
@@ -336,7 +334,7 @@ class _OrderStatusState extends State<OrderStatus> {
       got_data = false;
     });
     var res =
-        global.getRequestmap("/order_status/?order_id=" + order_id.toString());
+        global.getRequestMap("/order_status/?order_id=$order_id");
     Map<String, dynamic> data = await res;
     setState(() {
       delivery_price = double.parse(data["order"]["delivery_price"]);

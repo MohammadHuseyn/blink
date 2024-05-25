@@ -8,8 +8,6 @@ import 'package:latlong2/latlong.dart';
 import '../classes/item.dart';
 import '../global.dart' as global;
 import '../classes/store.dart';
-import 'Home.dart';
-import 'StorePage.dart';
 
 class Orders extends StatefulWidget {
   Orders({required this.store});
@@ -40,19 +38,19 @@ class _OrdersState extends State<Orders> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xFF256F46),
+          backgroundColor: const Color(0xFF256F46),
           actions: [
             IconButton(
                 onPressed: () async {
                   // _load_orders(store);
-                  await Future.delayed(Duration(milliseconds: 500));
+                  await Future.delayed(const Duration(milliseconds: 500));
                   _load_orders(store);
                 },
-                icon: Icon(Icons.refresh))
+                icon: const Icon(Icons.refresh))
           ],
         ),
         body: !got_data
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -85,28 +83,28 @@ class _OrdersState extends State<Orders> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(
+                      const Center(
                           child: Text(
                         "سفارشی ندارید  : (",
                         textDirection: TextDirection.rtl,
                         style: TextStyle(fontSize: 25),
                       )),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Container(
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                            color: Color(0xFF256F46),
+                            color: const Color(0xFF256F46),
                             borderRadius: BorderRadius.circular(50)),
                         child: IconButton(
                             onPressed: () async {
-                              await Future.delayed(Duration(milliseconds: 500));
+                              await Future.delayed(const Duration(milliseconds: 500));
                               _load_orders(store);
                               // _load_orders(store);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.refresh,
                               color: Colors.white,
                               size: 50,
@@ -143,8 +141,8 @@ class _OrdersState extends State<Orders> {
       setState(() {
         orders.clear();
         orders.add(Order(
-            origin: LatLng(0, 0),
-            goal: LatLng(0, 0),
+            origin: const LatLng(0, 0),
+            goal: const LatLng(0, 0),
             store_address: "[not needed]",
             address: element["delivery_location"],
             order_id: element["order_id"],
@@ -167,7 +165,7 @@ class _OrdersState extends State<Orders> {
         bottomsheed(context, order);
       },
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             border: Border(
                 bottom: BorderSide(color: Color(0xFF899E92), width: 2.0))),
         child: Padding(
@@ -180,7 +178,7 @@ class _OrdersState extends State<Orders> {
                     children: [
                       Text(
                         order.total_price.toString() + " تومان",
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                         textDirection: TextDirection.rtl,
                       ),
                       order.status != "WAITING"
@@ -194,11 +192,11 @@ class _OrdersState extends State<Orders> {
                                         "status": "Rejected"
                                       }, "/accept_reject_order/");
                                       await Future.delayed(
-                                          Duration(milliseconds: 500));
+                                          const Duration(milliseconds: 500));
                                       // _load_orders(store);
                                       _load_orders(store);
                                     },
-                                    icon: ImageIcon(
+                                    icon: const ImageIcon(
                                       AssetImage("images/cross.png"),
                                       color: Colors.red,
                                     )),
@@ -214,7 +212,7 @@ class _OrdersState extends State<Orders> {
                                       _load_orders(store);
                                       _load_orders(store);
                                     },
-                                    icon: ImageIcon(
+                                    icon: const ImageIcon(
                                       AssetImage("images/tick.png"),
                                       color: Colors.green,
                                     ))
@@ -230,7 +228,7 @@ class _OrdersState extends State<Orders> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           order.customer,
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                       Row(
@@ -238,9 +236,9 @@ class _OrdersState extends State<Orders> {
                         children: [
                           Text(
                             order.address,
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
-                          ImageIcon(
+                          const ImageIcon(
                             AssetImage("images/location.png"),
                             color: Color(0xFF97b9a7),
                             size: 30,
@@ -258,7 +256,7 @@ class _OrdersState extends State<Orders> {
                                 "images/fast.png",
                                 width: 40,
                               ),
-                              Text(
+                              const Text(
                                 "تحویل فوری!",
                                 textDirection: TextDirection.rtl,
                                 style:
@@ -280,7 +278,7 @@ class _OrdersState extends State<Orders> {
                           : order.status == "WAITING"
                               ? "در انتظار پیک"
                               : "در دست پیک",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Color(0xFF256F46),
                       fontWeight: FontWeight.bold),
@@ -299,7 +297,7 @@ class _OrdersState extends State<Orders> {
         backgroundColor: Colors.transparent,
         builder: (builder) {
           return Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -321,10 +319,10 @@ class _OrdersState extends State<Orders> {
                                     ? "۰ تومان"
                                     : order.discount_value.toString(),
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                               Expanded(child: Container()),
-                              Text(
+                              const Text(
                                 "تخفیف",
                                 style: TextStyle(
                                   fontSize: 20,
@@ -341,10 +339,10 @@ class _OrdersState extends State<Orders> {
                               Text(
                                 order.total_price.toString(),
                                 textDirection: TextDirection.rtl,
-                                style: TextStyle(fontSize: 25),
+                                style: const TextStyle(fontSize: 25),
                               ),
                               Expanded(child: Container()),
-                              Text(
+                              const Text(
                                 "مبلغ نهایی",
                                 style: TextStyle(
                                   fontSize: 25,
@@ -368,12 +366,12 @@ class _OrdersState extends State<Orders> {
                                           : "Processed"
                                     }, "/accept_reject_order/");
                                     await Future.delayed(
-                                        Duration(milliseconds: 500));
+                                        const Duration(milliseconds: 500));
                                     // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },
-                                  icon: ImageIcon(
+                                  icon: const ImageIcon(
                                     AssetImage("images/cross.png"),
                                     color: Colors.red,
                                   )),
@@ -386,12 +384,12 @@ class _OrdersState extends State<Orders> {
                                       "status": "Rejected"
                                     }, "/accept_reject_order/");
                                     await Future.delayed(
-                                        Duration(milliseconds: 500));
+                                        const Duration(milliseconds: 500));
                                     // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },
-                                  icon: ImageIcon(
+                                  icon: const ImageIcon(
                                     AssetImage("images/tick.png"),
                                     color: Colors.green,
                                   ))
@@ -425,25 +423,25 @@ class _OrdersState extends State<Orders> {
               Text(
                 item.price.toString() + "  تومان",
                 textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               Text(
                 item.count.toString() + " ╳  ",
                 textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
             ],
           ),
           Expanded(child: Container()),
           Text(
             item.name,
-            style: TextStyle(fontSize: 22),
+            style: const TextStyle(fontSize: 22),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Container(
                 decoration: BoxDecoration(
-                    color: Color(0xFFEAF3EE),
+                    color: const Color(0xFFEAF3EE),
                     borderRadius: BorderRadius.circular(20)),
                 child: item.image == ""
                     ? Padding(

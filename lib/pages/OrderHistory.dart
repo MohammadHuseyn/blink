@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Home.dart';
-import 'StorePage.dart';
 
 class OrderHistory extends StatelessWidget {
   const OrderHistory({super.key});
@@ -11,7 +10,7 @@ class OrderHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xFF256F46),
+          backgroundColor: const Color(0xFF256F46),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -29,7 +28,7 @@ card(context) {
   return Directionality(
     textDirection: TextDirection.rtl,
     child: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           border:
               Border(bottom: BorderSide(color: Color(0xFF256f46), width: 1.5))),
       child: Column(
@@ -38,13 +37,13 @@ card(context) {
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ListTile(
               leading: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     // color: Color(0xffEAF3EE),
                     boxShadow: [
-                      const BoxShadow(
+                      BoxShadow(
                         color: Colors.grey,
                       ),
-                      const BoxShadow(
+                      BoxShadow(
                         color: Color(0xffEAF3EE),
                         spreadRadius: -0.2,
                         blurRadius: 5.0,
@@ -52,8 +51,8 @@ card(context) {
                     ],
                     // color: Colors.red,
                     borderRadius: BorderRadius.all(Radius.circular(15))),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: ImageIcon(
                     AssetImage("images/shop.png"),
                     size: 65,
@@ -62,9 +61,9 @@ card(context) {
               ),
               title: Text(
                 stores[0].name,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
-              subtitle: Row(
+              subtitle: const Row(
                 children: [
                   ImageIcon(
                     AssetImage("images/location.png"),
@@ -74,7 +73,7 @@ card(context) {
                   Text("  آدرس انتخاب شده"),
                 ],
               ),
-              trailing: Text("پیگیری سفارش"),
+              trailing: const Text("پیگیری سفارش"),
               onTap: () {
                 // Navigator.push(
                 //     context,
@@ -84,7 +83,7 @@ card(context) {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.075,
               width: MediaQuery.of(context).size.width,
@@ -92,7 +91,7 @@ card(context) {
                 onPressed: () async {
                   bottomsheed(context);
                 },
-                child: Text(
+                child: const Text(
                   "مشاهده فاکتور",
                   style: TextStyle(fontSize: 20),
                 ),
@@ -103,7 +102,7 @@ card(context) {
                       ),
                     ),
                     backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => Color(0xFF256F46))),
+                        (states) => const Color(0xFF256F46))),
               ),
             ),
           ),
@@ -122,7 +121,7 @@ void bottomsheed(context) {
         expand: false,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(25),
@@ -149,7 +148,7 @@ void bottomsheed(context) {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
@@ -170,9 +169,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("نام محصول", style: TextStyle(fontSize: 20)),
+                                    const Text("نام محصول", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -180,13 +179,13 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("نام محصول", style: TextStyle(fontSize: 20)),
+                                    const Text("نام محصول", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                             ],
                           ),
                         ),
@@ -194,7 +193,7 @@ void bottomsheed(context) {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
@@ -211,14 +210,14 @@ void bottomsheed(context) {
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("مالیات", style: TextStyle(fontSize: 20)),
+                                    const Text("مالیات", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -226,9 +225,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("بسته‌بندی", style: TextStyle(fontSize: 20)),
+                                    const Text("بسته‌بندی", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -236,9 +235,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("ارسال", style: TextStyle(fontSize: 20)),
+                                    const Text("ارسال", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -246,9 +245,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("تحویل سریع", style: TextStyle(fontSize: 20)),
+                                    const Text("تحویل سریع", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -256,9 +255,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("تخفیف", style: TextStyle(fontSize: 20)),
+                                    const Text("تخفیف", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),
@@ -266,9 +265,9 @@ void bottomsheed(context) {
                                 padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                 child: Row(
                                   children: [
-                                    Text("قیمت", style: TextStyle(fontSize: 18)),
+                                    const Text("قیمت", style: TextStyle(fontSize: 18)),
                                     Expanded(child: Container()),
-                                    Text("مبلغ نهایی", style: TextStyle(fontSize: 20)),
+                                    const Text("مبلغ نهایی", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
                               ),

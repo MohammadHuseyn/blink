@@ -1,22 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../classes/address.dart';
 import '../global.dart' as gloabl;
 import 'Home.dart';
 
-class addres_data {
-  addres_data(
-      {required this.name,
-      required this.latLng,
-      required this.id,
-      required this.desc});
-
-  late int id;
-  late String desc;
-  late String name;
-  late LatLng latLng;
-}
 
 var name = TextEditingController();
 var address = TextEditingController();
@@ -47,11 +35,11 @@ class _AddressState extends State<Address> {
         onPressed: () {
           bottomsheed("آدرس جدید");
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: 40,
         ),
-        backgroundColor: Color(0xFF256F46),
+        backgroundColor: const Color(0xFF256F46),
       ),
       appBar: AppBar(
         centerTitle: true,
@@ -61,19 +49,19 @@ class _AddressState extends State<Address> {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
+                    context, MaterialPageRoute(builder: (context) => const Home()));
               } else
                 Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_outlined)),
-        title: Text(
+            icon: const Icon(Icons.arrow_back_outlined)),
+        title: const Text(
           "انتخاب آدرس",
           style: TextStyle(fontFamily: 'shabnam', fontSize: 25),
         ),
-        backgroundColor: Color(0xFF256F46),
+        backgroundColor: const Color(0xFF256F46),
       ),
       body: gloabl.addresses.length == 0
-          ? Center()
+          ? const Center()
           : ListView.builder(
               itemCount: gloabl.addresses.length,
               itemBuilder: (context, i) {
@@ -91,14 +79,14 @@ class _AddressState extends State<Address> {
                             IconButton(
                                 iconSize: 50,
                                 onPressed: () {},
-                                icon: ImageIcon(
+                                icon: const ImageIcon(
                                   AssetImage('images/pencil.png'),
                                   color: Color(0xFFa7afab),
                                 )),
                             IconButton(
                                 iconSize: 50,
                                 onPressed: () {},
-                                icon: ImageIcon(
+                                icon: const ImageIcon(
                                   AssetImage('images/trash.png'),
                                   color: Colors.red,
                                 ))
@@ -110,21 +98,21 @@ class _AddressState extends State<Address> {
                           height: 120,
                           // color: Colors.red,
                           decoration: BoxDecoration(
-                              color: Color(0xFFEAF3EE),
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              color: const Color(0xFFEAF3EE),
+                              borderRadius: const BorderRadius.all(Radius.circular(25)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 5,
                                   blurRadius: 7,
                                   offset:
-                                      Offset(0, 3), // changes position of shadow
+                                      const Offset(0, 3), // changes position of shadow
                                 ),
                               ]),
                           child: Center(
                               child: Text(
                             gloabl.addresses[i].name,
-                            style: TextStyle(fontSize: 30, color: Colors.black),
+                            style: const TextStyle(fontSize: 30, color: Colors.black),
                           )),
                         ),
                       ],
@@ -150,7 +138,7 @@ class _AddressState extends State<Address> {
                       padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 25,
                         ),
                       ),
@@ -167,7 +155,7 @@ class _AddressState extends State<Address> {
                             ),
                             child: TextField(
                               controller: name,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
                                     borderRadius:
@@ -195,7 +183,7 @@ class _AddressState extends State<Address> {
                             child: TextField(
                               maxLines: 3,
                               controller: address,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
                                     borderRadius:
@@ -230,7 +218,7 @@ class _AddressState extends State<Address> {
                                           // Child parameter instead of builder
                                           // Directly using an Icon as the child
                                           child: Container(
-                                            child: Icon(
+                                            child: const Icon(
                                               Icons.location_pin,
                                               color: Colors.red,
                                               size: 40.0,
@@ -242,9 +230,9 @@ class _AddressState extends State<Address> {
                                     // Add a marker for the tapped location
                                   });
                                 },
-                                initialCenter: LatLng(35.715298, 51.404343),
+                                initialCenter: const LatLng(35.715298, 51.404343),
                                 initialZoom: 11,
-                                interactionOptions: InteractionOptions(
+                                interactionOptions: const InteractionOptions(
                                     flags: InteractiveFlag.all)),
                             children: [
                               tilelayer,
@@ -257,7 +245,7 @@ class _AddressState extends State<Address> {
                 bottomNavigationBar: Container(
                   // color: Colors.red,
                   height: MediaQuery.of(builder).size.height * 0.085,
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  decoration: const BoxDecoration(color: Colors.white, boxShadow: [
                     BoxShadow(
                         color: Colors.grey,
                         offset: Offset(1, 1),
@@ -265,7 +253,7 @@ class _AddressState extends State<Address> {
                         spreadRadius: 5)
                   ]),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -273,7 +261,7 @@ class _AddressState extends State<Address> {
                         });
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: const Text(
                         "افزودن آدرس",
                         style: TextStyle(fontSize: 25),
                       ),
@@ -285,18 +273,16 @@ class _AddressState extends State<Address> {
                             ),
                           ),
                           backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => Color(0xFF256F46))),
+                              (states) => const Color(0xFF256F46))),
                     ),
                   ),
                 ));
           });
         },
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
         ));
   }
-
-  void _handleTap(LatLng latlng) {}
 
   Widget map() {
     return Container();
@@ -331,7 +317,7 @@ class _AddressState extends State<Address> {
     });
 
     Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Address()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const Address()));
   }
 
   Future<void> _loadAddresses() async {

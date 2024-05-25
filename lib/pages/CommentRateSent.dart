@@ -14,7 +14,7 @@ class CommentRateSent extends StatelessWidget {
             Navigator.pop(context);
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
+          icon: const Icon(Icons.arrow_back, color: Colors.black,),
         ),
       ),
       body: Center(
@@ -22,7 +22,7 @@ class CommentRateSent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("images/commentratesent.png",width: 300),
-            Text("نظر شما ثبت شد",
+            const Text("نظر شما ثبت شد",
             style: TextStyle(
               fontSize: 30,
               color: Color(0xFF236841)

@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:image/image.dart' as img;
-import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/ProductComment.dart';
 import 'package:blink/pages/StoreComment.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import '../classes/item.dart';
 import '../global.dart' as global;
 import '../classes/store.dart';
@@ -39,7 +35,7 @@ class _StorePageState extends State<StorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFEAF3EE),
+        backgroundColor: const Color(0xFFEAF3EE),
       // backgroundColor:,
         // backgroundColor: Image.memory(
         //   width: 100,
@@ -50,14 +46,14 @@ class _StorePageState extends State<StorePage> {
         body: Stack(
           children: [
             PreferredSize(
-                preferredSize: Size.fromHeight(150.0),
+                preferredSize: const Size.fromHeight(150.0),
                 child: Container(
-                  color: Color(0xFFEAF3EE),
+                  color: const Color(0xFFEAF3EE),
                   // color: Colors.red,
                   height: 200,
                   width: MediaQuery.of(context).size.width,
                   child: store.image == ""
-                      ? ImageIcon(
+                      ? const ImageIcon(
                     AssetImage("images/shop.png"),
                     size: 250,
                     color: Color(0xFF949494),
@@ -76,11 +72,11 @@ class _StorePageState extends State<StorePage> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 170,),
+                  const SizedBox(height: 170,),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(50),
@@ -101,7 +97,7 @@ class _StorePageState extends State<StorePage> {
                             Row(
                               // crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.star_rate_rounded,
                                   size: 32,
                                   color: Color(0xFF256f46),
@@ -110,13 +106,13 @@ class _StorePageState extends State<StorePage> {
                                   padding: const EdgeInsets.only(top: 5),
                                   child: Text(
                                     global.toPersianNumbers(store.rate) + "/۵",
-                                    style: TextStyle(fontSize: 17),
+                                    style: const TextStyle(fontSize: 17),
                                   ),
                                 ),
                                 Expanded(child: Container()),
                                 Text(
                                   store.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 25, fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -146,12 +142,12 @@ class _StorePageState extends State<StorePage> {
                                     ),
                                   ),
                                   Expanded(child: Container()),
-                                  Text(
+                                  const Text(
                                     "  آدرس انتخاب شده",
                                     textDirection: TextDirection.rtl,
                                     style: TextStyle(fontSize: 15),
                                   ),
-                                  ImageIcon(
+                                  const ImageIcon(
                                     AssetImage("images/location.png"),
                                     color: Color(0xFF97b9a7),
                                     size: 30,
@@ -164,7 +160,7 @@ class _StorePageState extends State<StorePage> {
                               child: TextField(
                                 controller: search,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 25),
+                                style: const TextStyle(fontSize: 25),
                                 onChanged: (changed) {
                                   _load_items(store: store, filter: changed);
                                 },
@@ -176,15 +172,15 @@ class _StorePageState extends State<StorePage> {
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             color: Color(0xFF2E8B57), width: 2.0)),
                                     border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(15),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             color: Color(0xFF2E8B57), width: 2.0))),
                               ),
                             ),
-                            !got_data? Center(
+                            !got_data? const Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -257,7 +253,7 @@ class _StorePageState extends State<StorePage> {
 
   prodcut(Item item) {
     return Padding(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
       child: GestureDetector(
         onTap: () {
           bottomShett(item);
@@ -268,13 +264,13 @@ class _StorePageState extends State<StorePage> {
           // height: 250,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderRadius: const BorderRadius.all(Radius.circular(25)),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 7,
-                offset: Offset(0, 11), // changes position of shadow
+                offset: const Offset(0, 11), // changes position of shadow
               ),
             ],
           ),
@@ -286,8 +282,8 @@ class _StorePageState extends State<StorePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   item.image == ""
-                      ? Padding(
-                      padding: const EdgeInsets.symmetric(
+                      ? const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: ImageIcon(
                         AssetImage("images/product.png",),
@@ -340,7 +336,7 @@ class _StorePageState extends State<StorePage> {
                                 // Expanded(child: Container()),
                                 Text(
                                   item.count.toString(),
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                                 // Expanded(child: Container()),
                                 IconButton(
@@ -369,13 +365,13 @@ class _StorePageState extends State<StorePage> {
                                   global.store_id = store.id;
                                   global.sum += item.price;
                                 },
-                                icon: ImageIcon(AssetImage("images/plus.png"),
+                                icon: const ImageIcon(AssetImage("images/plus.png"),
                                     color: Color(0xFF2E8B57))),
                           ),
                   ),
                   Text(
                     item.name,
-                    style: TextStyle(fontSize: 23),
+                    style: const TextStyle(fontSize: 23),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -386,19 +382,19 @@ class _StorePageState extends State<StorePage> {
                         children: [
                           Text(
                             global.toPersianNumbers(item.price),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18,
                                 decoration: TextDecoration.lineThrough,
                                 color: Colors.grey),
                           ),
                           Text(
                             global.toPersianNumbers(item.price),
-                            style: TextStyle(fontSize: 23),
+                            style: const TextStyle(fontSize: 23),
                           ),
                         ],
                       ),
                       // Expanded(child: Container()),
-                      Text(
+                      const Text(
                         "0%",
                         style: TextStyle(color: Colors.red, fontSize: 20),
                         textAlign: TextAlign.right,
@@ -442,7 +438,7 @@ class _StorePageState extends State<StorePage> {
             return StatefulBuilder(
               builder: (context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
@@ -470,11 +466,11 @@ class _StorePageState extends State<StorePage> {
                               width: MediaQuery.of(context).size.width * 0.85,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(25),
-                                  color: Color(0xFFEAF3EE)
+                                  color: const Color(0xFFEAF3EE)
                                 // color: Colors.red
                               ),
-                              child: item.image == ""? Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 35),
+                              child: item.image == ""? const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 35),
                                 child: ImageIcon(
                                   AssetImage("images/product.png"),
                                   color: Color(0xFF5E846E),
@@ -495,7 +491,7 @@ class _StorePageState extends State<StorePage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.star_rate_rounded,
                                 size: 32,
                                 color: Color(0xFF256f46),
@@ -504,13 +500,13 @@ class _StorePageState extends State<StorePage> {
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Text(
                                   item.rate.toString() + "/5",
-                                  style: TextStyle(fontSize: 17),
+                                  style: const TextStyle(fontSize: 17),
                                 ),
                               ),
                               Expanded(child: Container()),
                               Text(
                                 item.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.bold),
                               )
                             ],
@@ -525,8 +521,8 @@ class _StorePageState extends State<StorePage> {
                                   children: [
                                     IconButton(
                                         onPressed: () {},
-                                        icon: Icon(Icons.arrow_back_ios_rounded)),
-                                    Text(
+                                        icon: const Icon(Icons.arrow_back_ios_rounded)),
+                                    const Text(
                                       "مشاهده نظرات",
                                       style: TextStyle(fontSize: 20),
                                     ),
@@ -542,10 +538,10 @@ class _StorePageState extends State<StorePage> {
                               Expanded(child: Container()),
                               Text(
                                 store.name,
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: ImageIcon(
                                   AssetImage("images/shop.png"),
                                   size: 50,
@@ -559,12 +555,12 @@ class _StorePageState extends State<StorePage> {
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
                               boxShadow: [
-                                BoxShadow(
+                                const BoxShadow(
                                     color: Color(0xFF518C6B),
                                     spreadRadius: 0,
                                     blurRadius: 0,
                                     offset: Offset(0, -2)),
-                                BoxShadow(
+                                const BoxShadow(
                                     color: Color(0xFF518C6B),
                                     spreadRadius: 0,
                                     blurRadius: 0,
@@ -579,7 +575,7 @@ class _StorePageState extends State<StorePage> {
                             child: Text(
                               item.desc,
                               textDirection: TextDirection.rtl,
-                              style: TextStyle(fontSize: 20, color: Colors.grey),
+                              style: const TextStyle(fontSize: 20, color: Colors.grey),
                             ),
                           ),
                         ),
@@ -587,13 +583,13 @@ class _StorePageState extends State<StorePage> {
                           padding:
                           const EdgeInsets.only(left: 35, right: 35, top: 20),
                           child: Row(children: [
-                            Text("تومان ",
+                            const Text("تومان ",
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 22,
                                     fontFamily: 'shabnam')),
                             Text(item.price.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'shabnam',
                                     color: Colors.black)),
@@ -614,7 +610,7 @@ class _StorePageState extends State<StorePage> {
                                         global.sum -= item.price;
 
                                       },
-                                      icon: ImageIcon(
+                                      icon: const ImageIcon(
                                           AssetImage(
                                             "images/remove.png",
                                           ),
@@ -627,7 +623,7 @@ class _StorePageState extends State<StorePage> {
                                         horizontal: 10),
                                     child: Text(
                                       item.count.toString(),
-                                      style: TextStyle(fontSize: 20),
+                                      style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
                                   // Expanded(child: Container()),
@@ -638,14 +634,14 @@ class _StorePageState extends State<StorePage> {
                                         });
                                         global.store_id = store.id;
                                       },
-                                      icon: ImageIcon(
+                                      icon: const ImageIcon(
                                         AssetImage("images/plus.png"),
                                         color: Color(0xFF2E8B57),
                                       ))
                                 ],
                               ),
                             )
-                                : Container(
+                                : SizedBox(
                               width: MediaQuery.of(context).size.width * 0.3,
                               child: ElevatedButton(
                                   onPressed: () {
@@ -654,9 +650,9 @@ class _StorePageState extends State<StorePage> {
                                       _add_to_cart(item);
                                     });
                                   },
-                                  child: Padding(
+                                  child: const Padding(
                                     padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
+                                    EdgeInsets.symmetric(vertical: 5),
                                     child: Text(
                                       "  افزودن  ",
                                       style: TextStyle(
@@ -673,13 +669,13 @@ class _StorePageState extends State<StorePage> {
                                           RoundedRectangleBorder(
                                               borderRadius:
                                               BorderRadius.circular(18.0),
-                                              side: BorderSide(
+                                              side: const BorderSide(
                                                   color: Color(0xFF256F46),
                                                   width: 2))))),
                             ),
                           ]),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         )
                       ],
@@ -728,7 +724,7 @@ class _StorePageState extends State<StorePage> {
     setState(() {
       got_data = false;
     });
-    var res = global.getRequestmap("/products/?store_id=" + store.id + "&search=" + filter);
+    var res = global.getRequestMap("/products/?store_id=" + store.id + "&search=" + filter);
     Map<String, dynamic> data = await res;
     List<Item> items = [];
     data.forEach((key, value) {

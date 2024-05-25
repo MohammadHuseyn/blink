@@ -1,16 +1,12 @@
-import 'dart:ffi';
 import 'dart:ui';
 import 'package:blink/classes/item.dart';
 import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/StoreHomPage.dart';
-
 import '../global.dart' as global;
 import 'package:blink/pages/Home.dart';
 import 'package:blink/pages/Signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'StorePage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -49,11 +45,11 @@ class _LoginState extends State<Login> {
                   global.first_name = data["user"]["first_name"];
                   global.last_name = data["user"]["last_name"];
                   global.email = data["user"]["email"];
-                  global.userkind = data["user_type"];
+                  global.userKind = data["user_type"];
                   global.phone_number = data["phone_number"];
                   global.profile_imge =
                   data["image"] == null ? "" : data["image"];
-                  switch (global.userkind) {
+                  switch (global.userKind) {
                     case "Seller":
                       {
                         Navigator.pop(context);
@@ -84,7 +80,7 @@ class _LoginState extends State<Login> {
                 } catch (e) {
                   print('Error: $e');
                 }
-              } on Exception catch (e) {
+              } on Exception {
                 global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد");
                 // TODO
               }

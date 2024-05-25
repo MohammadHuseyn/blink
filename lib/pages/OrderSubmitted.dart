@@ -1,5 +1,4 @@
 import 'package:blink/pages/OrderStatus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Home.dart';
@@ -20,31 +19,31 @@ class _OrderSubmittedState extends State<OrderSubmitted> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (builder)=>Home()));
+            Navigator.push(context, MaterialPageRoute(builder: (builder)=>const Home()));
           },
-          icon: Icon(Icons.arrow_back, color: Color(0xFF256F46),),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF256F46),),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (builder) => OrderStatus()));
             },
-            child:Text("   پیگیری سفارش   ",
-              style: TextStyle(
-                fontSize: 25,
-              ),),
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                backgroundColor: MaterialStateColor.resolveWith((states) => Color(0xFF256F46))
+                backgroundColor: MaterialStateColor.resolveWith((states) => const Color(0xFF256F46))
             ),
+            child:const Text("   پیگیری سفارش   ",
+              style: TextStyle(
+                fontSize: 25,
+              ),),
           ),
         ),
       ),
