@@ -30,11 +30,19 @@ LatLng? latlngLocal = null;
 List<Marker> markers = [];
 var mapc = MapController();
 bool isMapRead = false;
+
 class _SignupScndPageState extends State<SignupScndPage> {
   final ImagePicker _picker = ImagePicker();
+  String? _selectedCategory;
+  final List<String> _categories = [
+    "غذا",
+    "لباس",
+    "کالای دیجیتال",
+    "سوپر مارکت",
+    "آرایشی بهداشتی"
+  ];
 
   File? _imageFile;
-
 
   Future<File> cropImageToSquare(File imageFile) async {
     final imageBytes = await imageFile.readAsBytes();
@@ -56,13 +64,13 @@ class _SignupScndPageState extends State<SignupScndPage> {
       height: shortestSide,
     );
 
-    final croppedFile = await imageFile.writeAsBytes(img.encodePng(croppedImage));
+    final croppedFile =
+        await imageFile.writeAsBytes(img.encodePng(croppedImage));
     setState(() {
       _imageFile = croppedFile;
     });
     return croppedFile;
   }
-
 
   String? base64Image = "";
 
@@ -98,56 +106,56 @@ class _SignupScndPageState extends State<SignupScndPage> {
               var res = global.postRequest(
                   widget.userkind == "f"
                       ? {
-                    "username": widget.username.text,
-                    "password": widget.password.text,
-                    "email": email.text,
-                    "first_name": first_name.text,
-                    "last_name": last_name.text,
-                    "phone_number": phone.text,
-                    "user_type": "seller",
-                    "longitude": latlngLocal!.longitude,
-                    "latitude": latlngLocal!.latitude,
-                    // "longitude": "35.715298",
-                    // "latitude": "51.404343",
-                    "location_name": shopname.text,
-                    "store_name": shopname.text,
-                    "image" : base64Image,
-                    "address" : shopaddress.text
-                  }
+                          "username": widget.username.text,
+                          "password": widget.password.text,
+                          "email": email.text,
+                          "first_name": first_name.text,
+                          "last_name": last_name.text,
+                          "phone_number": phone.text,
+                          "user_type": "seller",
+                          "longitude": latlngLocal!.longitude,
+                          "latitude": latlngLocal!.latitude,
+                          // "longitude": "35.715298",
+                          // "latitude": "51.404343",
+                          "category": _selectedCategory,
+                          "location_name": shopname.text,
+                          "store_name": shopname.text,
+                          "image": base64Image,
+                          "address": shopaddress.text
+                        }
                       : widget.userkind == "m"
                           ? {
-                    "username": widget.username.text,
-                    "password": widget.password.text,
-                    "email": email.text,
-                    "first_name": first_name.text,
-                    "last_name": last_name.text,
-                    "phone_number": phone.text,
-                    // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
-                    "user_type": "customer",
-                    "longitude": "35.715298",
-                    "latitude": "51.404343",
-                    "location_name": "usertemplocation",
-                    "image" : base64Image,
-
-                  }
+                              "username": widget.username.text,
+                              "password": widget.password.text,
+                              "email": email.text,
+                              "first_name": first_name.text,
+                              "last_name": last_name.text,
+                              "phone_number": phone.text,
+                              // "user_type" : userkind == "f" ? "seller" : userkind == "m"? "customer" : userkind == "p"? "delivery" : null,
+                              "user_type": "customer",
+                              "longitude": "35.715298",
+                              "latitude": "51.404343",
+                              "location_name": "usertemplocation",
+                              "image": base64Image,
+                            }
                           : {
-                    "username": widget.username.text,
-                    "password": widget.password.text,
-                    "email": email.text,
-                    "first_name": first_name.text,
-                    "last_name": last_name.text,
-                    "phone_number": phone.text,
-                    "user_type": "delivery",
-                    "image" : base64Image,
-                    // "longitude" : "35.715298",
-                    // "latitude" : "51.404343",
-                    // "location_name" : shopname.text,
-                    // "store_name" : shopname.text,
-                    "plate": pelak.text,
-                    "license": license.text
-                  },
+                              "username": widget.username.text,
+                              "password": widget.password.text,
+                              "email": email.text,
+                              "first_name": first_name.text,
+                              "last_name": last_name.text,
+                              "phone_number": phone.text,
+                              "user_type": "delivery",
+                              "image": base64Image,
+                              // "longitude" : "35.715298",
+                              // "latitude" : "51.404343",
+                              // "location_name" : shopname.text,
+                              // "store_name" : shopname.text,
+                              "plate": pelak.text,
+                              "license": license.text
+                            },
                   "/signup/");
-              Map<String, dynamic> data = await res;
+              Map<String, dynamic> data =     await res;
               global.token = data["token"];
               global.tokenbool = true;
               global.username = data["user"]["username"];
@@ -156,24 +164,36 @@ class _SignupScndPageState extends State<SignupScndPage> {
               global.email = data["user"]["email"];
               global.userkind = data["user_type"];
               global.phone_number = data["phone_number"];
-              global.profile_imge = data["image"];
+              global.profile_imge = data["image"] == null ? "" : data["image"];
               switch (global.userkind) {
-                case "Seller" : {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoreHomePage()));
-                } break;
-                case "Customer" : {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-                } break;
-                case "Delivery" : {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryHomePage()));
-
-                } break;
+                case "Seller":
+                  {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoreHomePage()));
+                  }
+                  break;
+                case "Customer":
+                  {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  }
+                  break;
+                case "Delivery":
+                  {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DeliveryHomePage()));
+                  }
+                  break;
               }
               global.tokenbool = true;
               // Navigator.pop(context);
@@ -209,34 +229,42 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 75, // Adjust the radius as needed
-                    backgroundColor: Colors.transparent, // Make the background transparent
+                    radius: 75,
+                    // Adjust the radius as needed
+                    backgroundColor: Colors.transparent,
+                    // Make the background transparent
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(75), // Same radius as the CircleAvatar
+                      borderRadius: BorderRadius.circular(75),
+                      // Same radius as the CircleAvatar
                       child: Container(
                         width: 150, // Width of the IconButton
                         height: 150, // Height of the IconButton
                         child: IconButton(
-                          padding: EdgeInsets.zero, // Remove padding around the icon
+                          padding: EdgeInsets.zero,
+                          // Remove padding around the icon
                           icon: _imageFile != null
                               ? Image.file(
-                            _imageFile!,
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover, // Ensure the image fills the IconButton
-                          )
+                                  _imageFile!,
+                                  width: 150,
+                                  height: 150,
+                                  fit: BoxFit
+                                      .cover, // Ensure the image fills the IconButton
+                                )
                               : ImageIcon(
-                            AssetImage("images/addimage.png"),
-                            color: Color(0xFF1c5334),
-                            size: 150, // Size of the ImageIcon
-                          ),
+                                  AssetImage("images/addimage.png"),
+                                  color: Color(0xFF1c5334),
+                                  size: 150, // Size of the ImageIcon
+                                ),
                           onPressed: () async {
-                            final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                            final XFile? image = await _picker.pickImage(
+                                source: ImageSource.gallery);
 
                             if (image != null) {
-                                (await cropImageToSquare(File(image.path))) as File?;
+                              (await cropImageToSquare(File(image.path)))
+                                  as File?;
                               // If you need the base64 string for any purpose
-                              List<int> imageBytes = await _imageFile!.readAsBytes();
+                              List<int> imageBytes =
+                                  await _imageFile!.readAsBytes();
                               base64Image = base64Encode(imageBytes);
                             } else {
                               print('No image selected.');
@@ -247,19 +275,21 @@ class _SignupScndPageState extends State<SignupScndPage> {
                       ),
                     ),
                   ),
-                  _imageFile != null? IconButton(
-                    icon: Icon(
-                      Icons.highlight_remove_rounded, // Use any icon you prefer for deleting the image
-                      color: Colors.red, // Change the color if needed
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _imageFile = null; // Set _imageFile to null
-                      });
-                    },
-                    iconSize: 30, // Adjust the size of the icon as needed
-                  ) : Container(),
-
+                  _imageFile != null
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.highlight_remove_rounded,
+                            // Use any icon you prefer for deleting the image
+                            color: Colors.red, // Change the color if needed
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _imageFile = null; // Set _imageFile to null
+                            });
+                          },
+                          iconSize: 30, // Adjust the size of the icon as needed
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -378,6 +408,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                       primaryColorDark: Colors.red,
                     ),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: phone,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -482,32 +513,44 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 : Container(),
             widget.userkind == "f"
                 ? Padding(
-              padding: const EdgeInsets.only(
-                  top: 20, right: 20, left: 20, bottom: 20),
-              child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.redAccent,
-                      primaryColorDark: Colors.red,
-                    ),
-                    child: TextField(
-                      controller: shopaddress,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
+                    padding: const EdgeInsets.only(
+                        top: 20, right: 20, left: 20, bottom: 20),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedCategory,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15))),
-                        labelText: '  آدرس  ',
-                        floatingLabelStyle: TextStyle(fontSize: 25),
-                        floatingLabelBehavior:
-                        FloatingLabelBehavior.always,
-                        labelStyle: TextStyle(
-                            fontSize: 25, fontFamily: 'shabnam'),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
+                          labelText: '  دسته‌بندی  ',
+                          floatingLabelStyle: TextStyle(fontSize: 25),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelStyle:
+                              TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                        ),
+                        items: _categories.map((String category) {
+                          return DropdownMenuItem<String>(
+                            value: category,
+                            child: Text(
+                              category,
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'shabnam'),
+                            ),
+                            alignment: Alignment.centerRight,
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedCategory = newValue;
+                          });
+                        },
                       ),
                     ),
-                  )),
-            )
+                  )
                 : Container(),
             widget.userkind == "f"
                 ? Padding(
@@ -520,21 +563,21 @@ class _SignupScndPageState extends State<SignupScndPage> {
                 : Container(),
             widget.userkind == "f"
                 ? Container(
-              decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  const BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 5.0,
-                    blurRadius: 7.0,
-                  ),
-                ],
-              ),
-              child: SizedBox(
+                    decoration: BoxDecoration(
+                      // borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        const BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 5.0,
+                          blurRadius: 7.0,
+                        ),
+                      ],
+                    ),
+                    child: SizedBox(
                         height: MediaQuery.of(context).size.width * 0.8,
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: map()),
-                )
+                  )
                 : Container(),
             SizedBox(
               height: 20,
@@ -548,7 +591,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
   Widget map() {
     return Scaffold(
       body: FlutterMap(
-        mapController: mapc,
+          mapController: mapc,
           options: MapOptions(
               onTap: (tap_position, latlng) {
                 latlngLocal = latlng;
@@ -579,17 +622,12 @@ class _SignupScndPageState extends State<SignupScndPage> {
               },
               initialCenter: LatLng(35.715298, 51.404343),
               initialZoom: 5,
-              interactionOptions: InteractionOptions(
-                  flags: InteractiveFlag.pinchZoom)),
-          children: [
-            tilelayer,
-            MarkerLayer(markers: markers)
-          ]),
+              interactionOptions:
+                  InteractionOptions(flags: InteractiveFlag.pinchZoom)),
+          children: [tilelayer, MarkerLayer(markers: markers)]),
     );
   }
-
 }
-
 
 TileLayer get tilelayer => TileLayer(
       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

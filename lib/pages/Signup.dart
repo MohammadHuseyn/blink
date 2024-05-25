@@ -75,6 +75,8 @@ class _SignupState extends State<Signup> {
                           builder: (_) => BackdropFilter(
                                 filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                                 child: AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(50))),
                                   elevation: 5.0,
                                   backgroundColor: Colors.white,
                                   insetPadding: EdgeInsets.symmetric(
@@ -103,9 +105,9 @@ class _SignupState extends State<Signup> {
                                               textDirection: TextDirection.rtl,
                                               style: TextStyle(
                                                 fontFamily: 'shabnam',
-                                                fontSize: 20,
+                                                fontSize: 18,
                                               ),
-                                              textAlign: TextAlign.justify,
+                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                           Padding(
@@ -117,7 +119,7 @@ class _SignupState extends State<Signup> {
                                               textDirection: TextDirection.rtl,
                                               style: TextStyle(
                                                 fontFamily: 'shabnam',
-                                                fontSize: 20,
+                                                fontSize: 16,
                                               ),
                                               textAlign: TextAlign.justify,
                                             ),
@@ -129,23 +131,28 @@ class _SignupState extends State<Signup> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: [
-                                                Text(
-                                                  "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                                  // textAlign: TextAlign.center,
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  style: TextStyle(
-                                                    fontFamily: 'shabnam',
-                                                    fontSize: 15,
+                                                Flexible(
+                                                  child: Text(
+                                                    "اگر صاحب فروشگاهی این گزینه رو انتخاب کن!",
+                                                    // textAlign: TextAlign.center,
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    style: TextStyle(
+                                                      fontFamily: 'shabnam',
+                                                      fontSize: 15,
+                                                    ),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                  textAlign: TextAlign.justify,
                                                 ),
-                                                Expanded(child: Container()),
-                                                ImageIcon(
-                                                  AssetImage(
-                                                      'images/seller.png'),
-                                                  size: 40,
-                                                  color: Color(0xFF256F46),
+                                                // Expanded(child: Container()),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 5),
+                                                  child: ImageIcon(
+                                                    AssetImage(
+                                                        'images/seller.png'),
+                                                    size: 40,
+                                                    color: Color(0xFF256F46),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -157,23 +164,28 @@ class _SignupState extends State<Signup> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: [
-                                                Text(
-                                                  "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                                  // textAlign: TextAlign.center,
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  style: TextStyle(
-                                                    fontFamily: 'shabnam',
-                                                    fontSize: 15,
+                                                Flexible(
+                                                  child: Text(
+                                                    "اگر صاحب فروشگاهی این گزینه رو انتخاب کن!",
+                                                    // textAlign: TextAlign.center,
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    style: TextStyle(
+                                                      fontFamily: 'shabnam',
+                                                      fontSize: 15,
+                                                    ),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                  textAlign: TextAlign.justify,
                                                 ),
-                                                Expanded(child: Container()),
-                                                ImageIcon(
-                                                  AssetImage(
-                                                      'images/people.png'),
-                                                  size: 40,
-                                                  color: Color(0xFF256F46),
+                                                // Expanded(child: Container()),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 5),
+                                                  child: ImageIcon(
+                                                    AssetImage(
+                                                        'images/people.png'),
+                                                    size: 40,
+                                                    color: Color(0xFF256F46),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -185,23 +197,28 @@ class _SignupState extends State<Signup> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: [
-                                                Text(
-                                                  "اگر صاحب فروشگاهی این گزینه رو انتخاب کن",
-                                                  // textAlign: TextAlign.center,
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  style: TextStyle(
-                                                    fontFamily: 'shabnam',
-                                                    fontSize: 15,
+                                                Flexible(
+                                                  child: Text(
+                                                    "اگر صاحب فروشگاهی این گزینه رو انتخاب کن!",
+                                                    // textAlign: TextAlign.center,
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    style: TextStyle(
+                                                      fontFamily: 'shabnam',
+                                                      fontSize: 15,
+                                                    ),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                  textAlign: TextAlign.justify,
                                                 ),
-                                                Expanded(child: Container()),
-                                                ImageIcon(
-                                                  AssetImage(
-                                                      'images/motorbike.png'),
-                                                  color: Color(0xFF256F46),
-                                                  size: 40,
+                                                // Expanded(child: Container()),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 8.0),
+                                                  child: ImageIcon(
+                                                    AssetImage(
+                                                        'images/motorbike.png'),
+                                                    color: Color(0xFF256F46),
+                                                    size: 40,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -219,7 +236,7 @@ class _SignupState extends State<Signup> {
                 Padding(
                   padding: const EdgeInsets.only(top: 35),
                   child: Container(
-                    width: 90,
+                    width: 100,
                     child: ElevatedButton(
                       onPressed: () {},
                       child: Text(
@@ -244,7 +261,7 @@ class _SignupState extends State<Signup> {
                 Padding(
                   padding: const EdgeInsets.only(right: 13, left: 11, top: 35),
                   child: Container(
-                    width: 90,
+                    width: 100,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -328,7 +345,7 @@ class _SignupState extends State<Signup> {
                                     : null),
                           ),
                           Text(
-                            "پیک",
+                            "   پیک   ",
                             style: TextStyle(
                                 fontFamily: 'shabnam',
                                 fontSize: 25,
@@ -442,13 +459,13 @@ class _SignupState extends State<Signup> {
                           padding: EdgeInsets.only(right: 20),
                           child: ImageIcon(
                             AssetImage('images/user.png'),
-                            size: 40,
+                            size: 35,
                             color: Color(0xFFBDD2C6),
                           ),
                         ),
                         Container(
-                          width: 300,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
                               padding: EdgeInsets.only(top: 15, right: 10),
@@ -456,7 +473,7 @@ class _SignupState extends State<Signup> {
                                 controller: username,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
                                 decoration: InputDecoration(
@@ -470,7 +487,7 @@ class _SignupState extends State<Signup> {
                                   hintStyle: TextStyle(
                                     height: 1.5,
                                     fontFamily: 'shabnam',
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     color: Colors.grey,
                                   ),
                                   filled: true,
@@ -496,20 +513,20 @@ class _SignupState extends State<Signup> {
                           padding: EdgeInsets.only(right: 20),
                           child: ImageIcon(
                             AssetImage('images/key.png'),
-                            size: 40,
+                            size: 35,
                             color: Color(0xFFBDD2C6),
                           ),
                         ),
                         Container(
-                          width: 300,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
                               padding: EdgeInsets.only(top: 15, right: 10),
                               child: TextField(
                                 controller: password,
                                 style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
                                 textAlign: TextAlign.center,
@@ -524,7 +541,7 @@ class _SignupState extends State<Signup> {
                                   hintStyle: TextStyle(
                                     height: 1.5,
                                     fontFamily: 'shabnam',
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     color: Colors.grey,
                                   ),
                                   filled: true,
@@ -550,12 +567,12 @@ class _SignupState extends State<Signup> {
                             padding: EdgeInsets.only(right: 20),
                             child: Icon(
                               Icons.check,
-                              size: 40,
-                              color: Color(0xFFbec6c2),
+                              size: 35,
+                              color: Color(0xFFBDD2C6),
                             )),
                         Container(
-                          width: 300,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: MediaQuery.of(context).size.height * 0.1,
                           child: Material(
                             child: Padding(
                               padding: EdgeInsets.only(top: 15, right: 10),
@@ -563,7 +580,7 @@ class _SignupState extends State<Signup> {
                                 controller: check,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   fontFamily: 'shabnam',
                                 ),
                                 decoration: InputDecoration(
@@ -577,7 +594,7 @@ class _SignupState extends State<Signup> {
                                   hintStyle: TextStyle(
                                     height: 1.5,
                                     fontFamily: 'shabnam',
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     color: Colors.grey,
                                   ),
                                   filled: true,

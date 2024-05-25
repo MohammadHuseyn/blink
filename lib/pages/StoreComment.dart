@@ -33,7 +33,7 @@ class _StoreCommentState extends State<StoreComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
+      bottomNavigationBar: global.userkind == "Seller"? null : Container(
         decoration: BoxDecoration(color: Colors.white, boxShadow: [
           BoxShadow(
               color: Colors.grey,
@@ -339,7 +339,7 @@ class _StoreCommentState extends State<StoreComment> {
                               var star = AssetImage("images/star.png");
                               var empty_star =
                                   AssetImage("images/star_empty.png");
-
+                              if (global.userkind != "Seller")
                               showDialog(
                                   context: context,
                                   builder: (builder) {
@@ -678,13 +678,8 @@ class _StoreCommentState extends State<StoreComment> {
                                           color: Color(0xFF256F46)),
                                     ),
                                   ),
-                                  // Expanded(child: Container()),
-                                  Text(
-                                    store.comments[i].date,
-                                    textDirection: TextDirection.rtl,
-                                    style:
-                                    TextStyle(color: Colors.black87),
-                                  ),
+                                  Expanded(child: Container()),
+
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
@@ -694,6 +689,15 @@ class _StoreCommentState extends State<StoreComment> {
                                     ),
                                   )
                                 ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  store.comments[i].date,
+                                  textDirection: TextDirection.rtl,
+                                  style:
+                                  TextStyle(color: Colors.black87),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(

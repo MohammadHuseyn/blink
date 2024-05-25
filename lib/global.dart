@@ -1,20 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:blink/pages/Address.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'classes/item.dart';
-import 'classes/order.dart';
 
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
-var url ='http://192.168.124.31:8000';
+var url ='http://62.60.205.58:8001';
+// var url ='http://172.20.174.125:8000';
+// var url ='http://localhost:8000';
 List<addres_data> addresses = [];
 var s = null;
 var token = "";
 var currentCardPayement = false;
 var tokenbool = false;
+var sum = 0.0;
+bool currentley_running_order = false;
 var username = "username";
 var userkind = "";
 var storeName = "باغ گیلاس";
@@ -29,6 +33,51 @@ var email = "mahsein@mail.com";
 // var address_name = "آدرس ۱";
 var addressIndex = null;
 List<Item> card = [];
+
+
+String toPersianNumbers(double number) {
+  // Define the Persian numerals
+  const List<String> persianNumerals = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+  // Convert the number to string, removing the decimal part
+  String numberStr = number.toStringAsFixed(0);
+
+  // Convert the string to Persian numerals
+  StringBuffer persianNumberStr = StringBuffer();
+
+  for (int i = 0; i < numberStr.length; i++) {
+    String char = numberStr[i];
+    if (char == '-') {
+      persianNumberStr.write('-'); // Keep the negative sign as is
+    } else {
+      int? digit = int.tryParse(char);
+      if (digit != null) {
+        persianNumberStr.write(persianNumerals[digit]);
+      } else {
+        persianNumberStr.write(char); // Keep any other characters as is
+      }
+    }
+  }
+
+  // Convert StringBuffer to String
+  String persianNumberString = persianNumberStr.toString();
+
+  // Add Persian commas
+  StringBuffer formattedPersianNumberStr = StringBuffer();
+  int counter = 0;
+
+  for (int i = persianNumberString.length - 1; i >= 0; i--) {
+    formattedPersianNumberStr.write(persianNumberString[i]);
+    counter++;
+    if (counter == 3 && i != 0 && persianNumberString[i - 1] != '-') {
+      formattedPersianNumberStr.write('٬'); // Persian comma
+      counter = 0;
+    }
+  }
+
+  return formattedPersianNumberStr.toString().split('').reversed.join('');
+}
+
 
 void toast(context, String txt) {
   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
