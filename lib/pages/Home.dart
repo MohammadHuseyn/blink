@@ -44,6 +44,7 @@ class _HomeState extends State<Home> {
     if (global.addressIndex != null) loadStores();
 
     super.initState();
+
   }
 
   @override

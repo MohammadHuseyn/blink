@@ -54,6 +54,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                     "password" : newpass.text
                   }, '/customer_edit_profile/');
               }
+              Navigator.pop(context);
+              global.toast(context, "پروفایل با موفقیت ویرایش شد");
             },
             child: Text(
               "  ثبت تغییرات   ",

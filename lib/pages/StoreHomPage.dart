@@ -42,6 +42,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
 
   @override
   void initState() {
+
     // TODO: implement initState
     load_store();
     // wait();
@@ -1013,6 +1014,8 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 wait();
                                 load_store();
                                 Navigator.pop(context);
+                                edit?
+                                global.toast(context, "محصول با موفقیت ویرایش شد") : global.toast(context, "حصول با موفقیت اضافه شد");
                               },
                               child: Text( edit?
                                 "   ویرایش محصول   ":"   افزودن محصول   ",

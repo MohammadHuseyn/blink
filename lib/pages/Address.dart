@@ -80,50 +80,55 @@ class _AddressState extends State<Address> {
                 return Padding(
                   padding: const EdgeInsets.only(
                       bottom: 20, right: 15, left: 15, top: 5),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          IconButton(
-                              iconSize: 50,
-                              onPressed: () {},
-                              icon: ImageIcon(
-                                AssetImage('images/pencil.png'),
-                                color: Color(0xFFa7afab),
-                              )),
-                          IconButton(
-                              iconSize: 50,
-                              onPressed: () {},
-                              icon: ImageIcon(
-                                AssetImage('images/trash.png'),
-                                color: Colors.red,
-                              ))
-                        ],
-                      ),
-                      Expanded(child: Container()),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 150,
-                        height: 120,
-                        // color: Colors.red,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEAF3EE),
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
-                              ),
-                            ]),
-                        child: Center(
-                            child: Text(
-                          gloabl.addresses[i].name,
-                          style: TextStyle(fontSize: 30, color: Colors.black),
-                        )),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                                iconSize: 50,
+                                onPressed: () {},
+                                icon: ImageIcon(
+                                  AssetImage('images/pencil.png'),
+                                  color: Color(0xFFa7afab),
+                                )),
+                            IconButton(
+                                iconSize: 50,
+                                onPressed: () {},
+                                icon: ImageIcon(
+                                  AssetImage('images/trash.png'),
+                                  color: Colors.red,
+                                ))
+                          ],
+                        ),
+                        Expanded(child: Container()),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 150,
+                          height: 120,
+                          // color: Colors.red,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFEAF3EE),
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset:
+                                      Offset(0, 3), // changes position of shadow
+                                ),
+                              ]),
+                          child: Center(
+                              child: Text(
+                            gloabl.addresses[i].name,
+                            style: TextStyle(fontSize: 30, color: Colors.black),
+                          )),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -240,7 +245,7 @@ class _AddressState extends State<Address> {
                                 initialCenter: LatLng(35.715298, 51.404343),
                                 initialZoom: 11,
                                 interactionOptions: InteractionOptions(
-                                    flags: InteractiveFlag.pinchZoom)),
+                                    flags: InteractiveFlag.all)),
                             children: [
                               tilelayer,
                               MarkerLayer(markers: markers)

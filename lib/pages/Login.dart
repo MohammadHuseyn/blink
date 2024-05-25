@@ -37,52 +37,58 @@ class _LoginState extends State<Login> {
               //   Navigator.pop(context);
               //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
               // }
-              var res = global.postRequest(
-                  {'username': username.text, 'password': password.text},
-                  "/login/");
               try {
-                Map<String, dynamic> data = await res;
-                global.token = data["token"];
-                global.tokenbool = true;
-                global.username = data["user"]["username"];
-                global.first_name = data["user"]["first_name"];
-                global.last_name = data["user"]["last_name"];
-                global.email = data["user"]["email"];
-                global.userkind = data["user_type"];
-                global.phone_number = data["phone_number"];
-                global.profile_imge =
-                    data["image"] == null ? "" : data["image"];
-                switch (global.userkind) {
-                  case "Seller":
-                    {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StoreHomePage()));
-                    }
-                    break;
-                  case "Customer":
-                    {
-                      _load_order();
-                      Navigator.pop(context);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
-                    }
-                    break;
-                  case "Delivery":
-                    {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DeliveryHomePage()));
-                    }
-                    break;
+                var res = global.postRequest(
+                    {'username': username.text, 'password': password.text},
+                    "/login/");
+                try {
+                  Map<String, dynamic> data = await res;
+                  global.token = data["token"];
+                  global.tokenbool = true;
+                  global.username = data["user"]["username"];
+                  global.first_name = data["user"]["first_name"];
+                  global.last_name = data["user"]["last_name"];
+                  global.email = data["user"]["email"];
+                  global.userkind = data["user_type"];
+                  global.phone_number = data["phone_number"];
+                  global.profile_imge =
+                  data["image"] == null ? "" : data["image"];
+                  switch (global.userkind) {
+                    case "Seller":
+                      {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoreHomePage()));
+                      }
+                      break;
+                    case "Customer":
+                      {
+                        _load_order();
+                        Navigator.pop(context);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      }
+                      break;
+                    case "Delivery":
+                      {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DeliveryHomePage()));
+                      }
+                      break;
+                  }
+                } catch (e) {
+                  print('Error: $e');
                 }
-              } catch (e) {
-                print('Error: $e');
+              } on Exception catch (e) {
+                global.toast(context, "نام کاربری یا رمز عبور اشتباه می‌باشد");
+                // TODO
               }
+
             },
             child: Text(
               "   ورود   ",

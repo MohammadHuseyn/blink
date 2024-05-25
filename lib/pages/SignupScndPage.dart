@@ -623,7 +623,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
               initialCenter: LatLng(35.715298, 51.404343),
               initialZoom: 5,
               interactionOptions:
-                  InteractionOptions(flags: InteractiveFlag.pinchZoom)),
+                  InteractionOptions(flags: InteractiveFlag.all)),
           children: [tilelayer, MarkerLayer(markers: markers)]),
     );
   }
