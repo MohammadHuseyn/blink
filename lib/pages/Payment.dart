@@ -47,6 +47,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
             Padding(
+// committing
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.085,

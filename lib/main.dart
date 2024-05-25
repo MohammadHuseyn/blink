@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // stores[0].items.add(Item(
     //     sotreid: stores[0].id,
     //     id: "11",
+// committing
     //     rate: 2.5,
     //     name: "golabi",
     //     price: 10000,

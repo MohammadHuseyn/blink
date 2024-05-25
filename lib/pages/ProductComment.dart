@@ -7,6 +7,7 @@ import '../classes/item.dart';
 import '../global.dart' as global;
 import 'CommentRateSent.dart';
 
+// committing
 class ProductComment extends StatefulWidget {
   ProductComment({super.key, required this.item});
 

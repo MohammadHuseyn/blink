@@ -391,6 +391,7 @@ class _HomeState extends State<Home> {
                             global.currentley_running_order = false;
                             global.currentCardPayement = false;
                             stores.clear();
+// committing
                           },
                           child: Container(
                             margin: EdgeInsets.only(

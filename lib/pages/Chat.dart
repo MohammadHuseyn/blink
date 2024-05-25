@@ -51,6 +51,7 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
+// committing
                       decoration:
                           InputDecoration(hintText: "نوشتن پیام",
                               hintStyle: const TextStyle(

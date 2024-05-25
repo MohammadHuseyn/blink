@@ -2,6 +2,7 @@ import 'comment.dart';
 import 'item.dart';
 
 class Store {
+// committing
   late String id;
   late String name;
   late double longitude;

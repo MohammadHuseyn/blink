@@ -73,6 +73,7 @@ class _LoginState extends State<Login> {
                     case "Customer":
                       {
                         _load_order();
+// committing
                         global.wait(1500);
                         Navigator.pop(context);
                         Navigator.push(context,

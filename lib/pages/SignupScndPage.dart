@@ -152,6 +152,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
                               "license": license.text
                             },
                   "/signup/");
+// committing
               Map<String, dynamic> data =     await res;
               global.token = data["token"];
               global.tokenbool = true;
