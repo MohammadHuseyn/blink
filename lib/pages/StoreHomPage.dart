@@ -656,11 +656,11 @@ class _StoreHomePageState extends State<StoreHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(child: Container()),
-                  const Column(
+                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "۱۲۰۰۰",
+                        global.toPersianNumbers(item.price),
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
@@ -961,6 +961,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                   primaryColorDark: Colors.red,
                                 ),
                                 child: TextField(
+                                  keyboardType: TextInputType.number,
                                   controller: price,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
@@ -1012,7 +1013,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                                 load_store();
                                 Navigator.pop(context);
                                 edit?
-                                global.toast(context, "محصول با موفقیت ویرایش شد", null) : global.toast(context, "حصول با موفقیت اضافه شد", null);
+                                global.toast(context, "محصول با موفقیت ویرایش شد", null) : global.toast(context, "محصول با موفقیت اضافه شد", null);
                               },
                               child: Text( edit?
                                 "   ویرایش محصول   ":"   افزودن محصول   ",

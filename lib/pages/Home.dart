@@ -24,6 +24,7 @@ class Home extends StatefulWidget {
 }
 
 var _currentIndex = 1;
+bool got_data_address = false;
 List<Store> stores = [
   Store(
       id: "1", name: "baq gilas", category: "دیجیتال", longitude: 12554, latitude: 98455, image: "", rate: 0.0),
@@ -32,7 +33,7 @@ List<Store> stores = [
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455),
   // Store(id: "1", name: "baq gilas", longitude: 12554, latitude: 98455)
 ];
-
+bool got_data = false;
 class _HomeState extends State<Home> {
   @override
   void initState() {
@@ -46,7 +47,32 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return global.addressIndex == null
+    return !got_data_address? Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30),
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                backgroundColor: Colors.lightGreen,
+                color: Color(0xFF256F46),
+                strokeWidth: 5,
+                strokeAlign: 2,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "در حال دریافت آدرس‌ها",
+                textDirection: TextDirection.rtl,
+                style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ): global.addressIndex == null
         ? Scaffold(
             bottomNavigationBar: Padding(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -90,6 +116,18 @@ class _HomeState extends State<Home> {
                     _currentIndex == 0 ? Color(0xFF256F46) : Colors.white,
                 actions: _currentIndex == 1
                     ? [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: IconButton(
+                        onPressed: () {
+                          loadStores();
+                        },
+                        icon: Icon(
+                          Icons.refresh_rounded,
+                          size: 40,
+                          color: Color(0xFF256F46),
+                        )),
+                  ),
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: IconButton(
@@ -218,7 +256,30 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            body: _currentIndex == 0
+            body: !got_data? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.lightGreen,
+                      color: Color(0xFF256F46),
+                      strokeWidth: 5,
+                      strokeAlign: 2,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "در حال دریافت فروشگاه‌ها",
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 30, color: Color(0xFF256F46)),
+                    ),
+                  ],
+                ),
+              ),
+            ): _currentIndex == 0
                 ? SingleChildScrollView(
                     child: Column(
                       children: [
@@ -843,7 +904,7 @@ class _HomeState extends State<Home> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      stores[i].rate.toString() + "/5",
+                                                      global.toPersianNumbers(stores[i].rate) + "/۵",
                                                       style: TextStyle(
                                                           fontSize: 17),
                                                     )
@@ -1275,6 +1336,9 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadAddresses() async {
+    setState(() {
+      got_data_address = false;
+    });
     var res = global.getRequest("/locations/");
     List<Map<String, dynamic>> data = await res;
     for (var element in data) {
@@ -1288,6 +1352,9 @@ class _HomeState extends State<Home> {
             desc: element["address"]));
       });
     }
+    setState(() {
+      got_data_address = true;
+    });
   }
 
   loadStores() async {
@@ -1295,6 +1362,10 @@ class _HomeState extends State<Home> {
     // var res = global.postRequest(
     //     {"longitude": "35.7219", "latitude": "51.3347", "token": global.token},
     //     "/stores/");
+    setState(() {
+      got_data = false;
+    });
+    stores.clear();
     var res = global.getRequestMap("/stores/?longitude=35.7219&latitude=51.3347");
     Map<String, dynamic> data = await res;
 
@@ -1319,6 +1390,7 @@ class _HomeState extends State<Home> {
           image: storeData["image"] == null? "" : storeData["image"]);
       setState(() {
         stores.add(store);
+        got_data = true;
       });
     });
   }

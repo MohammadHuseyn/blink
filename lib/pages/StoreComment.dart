@@ -15,10 +15,10 @@ class StoreComment extends StatefulWidget {
   @override
   State<StoreComment> createState() => _StoreCommentState(store: store);
 }
+var comment = TextEditingController();
 
 class _StoreCommentState extends State<StoreComment> {
   _StoreCommentState({required this.store});
-  var comment = TextEditingController();
 
   Store store;
 
@@ -154,6 +154,7 @@ class _StoreCommentState extends State<StoreComment> {
                                       child: Directionality(
                                           textDirection: TextDirection.rtl,
                                           child: TextField(
+                                            controller: comment,
                                             textInputAction:
                                                 TextInputAction.newline,
                                             maxLines: 5,
@@ -238,6 +239,7 @@ class _StoreCommentState extends State<StoreComment> {
                                                 0.085,
                                             child: ElevatedButton(
                                               onPressed: () async {
+                                                print("COMMENT " + comment.text);
                                                 global.postRequest(
                                                     {
                                                       "rate": rate,
@@ -564,11 +566,11 @@ class _StoreCommentState extends State<StoreComment> {
                           ),
                         ),
                         Text(
-                          "4.1/5",
+                          global.toPersianNumbers(store.rate) + "/۵",
                           style: TextStyle(fontSize: 17),
                         ),
                         Text(
-                          "۳۲۱ امتیاز",
+                          global.toPersianNumbers(store.comments.length) + " امتیاز",
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
                             color: Colors.grey,
@@ -636,7 +638,7 @@ class _StoreCommentState extends State<StoreComment> {
                     child: Row(
                       children: [
                         Text(
-                          "۶۵ نظر",
+                          global.toPersianNumbers(store.comments.length) + " نظر",
                           textDirection: TextDirection.rtl,
                           style: TextStyle(color: Colors.grey, fontSize: 18),
                         ),
@@ -676,7 +678,7 @@ class _StoreCommentState extends State<StoreComment> {
                                     padding: const EdgeInsets.only(
                                         left: 10, top: 5),
                                     child: Text(
-                                      "4.1/5",
+                                      global.toPersianNumbers(store.comments[i].rate) + "/۵",
                                       style: TextStyle(
                                           fontSize: 20,
                                           color: Color(0xFF256F46)),
@@ -731,6 +733,7 @@ class _StoreCommentState extends State<StoreComment> {
   }
 
   Future<void> _load_comments(Store store) async {
+    store.comments.clear();
     var res = global.getRequest("/store-comments/?store_id=" + store.id);
     List<Map<String, dynamic>> data = await res;
     setState(() {

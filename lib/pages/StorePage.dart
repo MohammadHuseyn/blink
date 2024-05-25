@@ -499,7 +499,7 @@ class _StorePageState extends State<StorePage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Text(
-                                  item.rate.toString() + "/5",
+                                  global.toPersianNumbers(item.rate) + "/۵",
                                   style: const TextStyle(fontSize: 17),
                                 ),
                               ),
@@ -588,7 +588,7 @@ class _StorePageState extends State<StorePage> {
                                     color: Colors.grey,
                                     fontSize: 22,
                                     fontFamily: 'shabnam')),
-                            Text(item.price.toString(),
+                            Text(global.toPersianNumbers(item.price),
                                 style: const TextStyle(
                                     fontSize: 25,
                                     fontFamily: 'shabnam',

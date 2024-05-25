@@ -163,6 +163,7 @@ class _SignupScndPageState extends State<SignupScndPage> {
               global.userKind = data["user_type"];
               global.phone_number = data["phone_number"];
               global.profile_imge = data["image"] == null ? "" : data["image"];
+              global.wait(500);
               switch (global.userKind) {
                 case "Seller":
                   {

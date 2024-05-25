@@ -27,7 +27,7 @@ class _ProductCommentState extends State<ProductComment> {
   @override
   void initState() {
     // TODO: implement initState
-    // _load_comments(item);
+    _load_comments(item);
     super.initState();
   }
 
@@ -568,7 +568,7 @@ class _ProductCommentState extends State<ProductComment> {
                                   });
                             });
                       }, icon: const ImageIcon(AssetImage("images/star.png"), color: Color(0xFF256F46),), iconSize: 35,),
-                      Text(item.rate.toString() + "/5", style: const TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
+                      Text(global.toPersianNumbers(item.rate) + "/۵", style: const TextStyle(fontSize: 18, color: Color(0xFF256F46)),)
                     ],
                   ),
                   Padding(
@@ -605,8 +605,8 @@ class _ProductCommentState extends State<ProductComment> {
                               ),
                               Row(
                                 children: [
-                                  const Text(
-                                    "۳۲۱ امتیاز",
+                                  Text(
+                                    global.toPersianNumbers(item.comments.length) + " امتیاز",
                                     style: TextStyle(fontSize: 20, color: Colors.black54),
                                     textDirection: TextDirection.rtl,
                                   ),
@@ -631,8 +631,8 @@ class _ProductCommentState extends State<ProductComment> {
                                     padding: const EdgeInsets.only(bottom: 20),
                                     child: Row(
                                       children: [
-                                        const Text(
-                                          "۶۵ نظر",
+                                        Text(
+                                          global.toPersianNumbers(item.comments.length) + " نظر",
                                           textDirection: TextDirection.rtl,
                                           style:
                                               TextStyle(color: Colors.grey, fontSize: 18),
@@ -712,11 +712,11 @@ class _ProductCommentState extends State<ProductComment> {
                                               color: Color(0xFF256F46),
                                               size: 30,
                                             ),
-                                            const Padding(
+                                            Padding(
                                               padding: EdgeInsets.only(
                                                   left: 10, top: 5),
                                               child: Text(
-                                                "4.1/5",
+                                                global.toPersianNumbers(item.comments[i].rate) + "/۵",
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color: Color(0xFF256F46)),
