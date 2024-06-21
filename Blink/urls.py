@@ -20,10 +20,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 
-from .views import SignupView, LoginView, StoreListView, ShoppingCartView, OrderFromCartView, PaymentView, \
-    AddProductView, CustomerProfileEdit, LocationView, SellerStoresView, EditProductView, AcceptRejectOrderView, \
-    OrderStatusView, DeliveryOrdersView, ProductCommentView, StoreCommentView, ProductListView, SellerProductsView, \
-    CustomerOrdersView
+from .views import *
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -61,5 +58,6 @@ urlpatterns = [
     path('store-comments/', StoreCommentView.as_view(), name='store-comments'),
     path('products/', ProductListView.as_view(), name='product-list'),
     path('customer_orders/', CustomerOrdersView.as_view(), name='customer_orders'),
+    path('cancel_order/', CancelOrderView.as_view(), name='cancel_order')
 
 ]

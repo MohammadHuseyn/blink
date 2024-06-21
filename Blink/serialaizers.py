@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer, Seller, Delivery, Store, Location, Product, ShoppingCart, CartItem, ProductComment, Order, \
-    StoreComment, Category, OrderItem
+from .models import *
 
 
 class UserSignupSerializer(serializers.Serializer):

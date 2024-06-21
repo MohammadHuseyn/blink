@@ -173,6 +173,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     fast_delivery = models.BooleanField(default=False)
+    payment_method = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order #{self.id} by {self.customer.username} - Total: {self.total_price} - Status: {self.status}"

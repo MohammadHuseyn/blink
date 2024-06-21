@@ -235,6 +235,13 @@ class StoreListView(APIView):
         return distance
 
     def get(self, request):
+        search = True
+        filter = None
+        try:
+            filter = request.query_params.get('search')
+        except:
+            search = False
+
         longitude = request.query_params.get('longitude')
         latitude = request.query_params.get('latitude')
 
@@ -249,7 +256,10 @@ class StoreListView(APIView):
             user_location = (float(latitude), float(longitude))
 
             # Get all stores
-            stores = Store.objects.all()
+            if (search) :
+                stores = Store.objects.filter(name__icontains=filter)
+            else :
+                stores = Store.objects.all()
             nearby_stores = []
 
             for store in stores:
@@ -350,6 +360,7 @@ class OrderFromCartView(APIView):
         store_id = request.data.get('store_id')
         store = Store.objects.get(id=store_id)
         fast_delivery = request.data.get('fast_delivery')
+        payment_method = request.data.get('payment_method')
         if fast_delivery:
             delivery_price = 100000
         else:
@@ -368,6 +379,7 @@ class OrderFromCartView(APIView):
             updated_at=timezone.now(),
             store=store,
             fast_delivery=fast_delivery,
+            payment_method= payment_method
         )
 
         # Move items from the shopping cart to the order
@@ -833,10 +845,37 @@ class OrderStatusView(APIView):
     def get(self, request):
         order_id = request.query_params.get('order_id')
         order = Order.objects.get(id=order_id)
-        order_data = OrderSerializer(order)
 
+        order_data = OrderSerializer(order)
+        #print(order_data.data)
         return Response({"order": order_data.data})
 
+class CancelOrderView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Cancel an order",
+        manual_parameters=[
+            openapi.Parameter('order_id', openapi.IN_QUERY, description="ID of the order", type=openapi.TYPE_INTEGER)
+        ],
+        responses={200: OrderSerializer}
+    )
+    def post(self, request):
+        order_id = request.query_params.get('order_id')
+        if not order_id:
+            return Response({"error": "Order ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            order = Order.objects.get(id=order_id, customer=request.user)
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        order.status = Order.OrderStatus.CANCELLED
+        order.save()
+
+        order_data = OrderSerializer(order)
+        return Response({"order": order_data.data}, status=status.HTTP_200_OK)
 
 class DeliveryOrdersView(APIView):
     authentication_classes = [TokenAuthentication]
