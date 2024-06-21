@@ -134,7 +134,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'location', 'image','category', 'rate', 'category']
+        fields = ['id', 'name', 'location', 'image','category', 'rate']
 
     def get_location(self, obj):
         return LocationSerializer(obj.location).data

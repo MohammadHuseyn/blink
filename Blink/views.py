@@ -256,11 +256,12 @@ class StoreListView(APIView):
                 store_location = (
                     store.location.latitude, store.location.longitude)  # assuming Store model has latitude and longitude fields
                 distance = self.haversine(user_location[0], user_location[1], store_location[0], store_location[1])
-
-                if distance <= 5:
+                print (distance)
+                if distance <= 10:
                     nearby_stores.append(store)
-            # print(nearby_stores.__sizeof__())
+            print(nearby_stores.__sizeof__())
             serializer = StoreSerializer(nearby_stores, many=True)
+            print(serializer.data)
             for s in serializer.data:
                 category = Category.objects.get(id=s['category'])
                 s['category'] = category.name
