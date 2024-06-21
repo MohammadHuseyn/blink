@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../classes/item.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
+import 'CusotmerChatReq.dart';
 import 'Login.dart';
 import 'Orders.dart';
 import 'ProfileEdit.dart';
@@ -315,7 +316,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ChatPage()));
+                                    builder: (context) => CustomerChatRequestScreen()));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 20, left: 20),
@@ -689,6 +690,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     setState(() {
       got_data = false;
     });
+    global.wait(1000);
 // committing
     var res = global.getRequestMap('/sellers_store/');
     Map<String, dynamic> data = await res;

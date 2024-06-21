@@ -410,6 +410,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "web_socket_channel",
+      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "wkt_parser",
       "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/wkt_parser-2.0.0",
       "packageUri": "lib/",
@@ -434,7 +440,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-05-25T22:08:26.645808Z",
+  "generated": "2024-06-12T17:24:57.028592Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

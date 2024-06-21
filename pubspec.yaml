@@ -16,6 +16,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   image_picker: ^1.0.8
   image: ^4.1.7
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:
