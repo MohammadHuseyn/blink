@@ -1,3 +1,4 @@
+import math
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -175,9 +176,9 @@ class ProductListView(APIView):
         store_id = request.query_params.get('store_id')
         search = True
         filter = None
-        try :
+        try:
             filter = request.query_params.get('search')
-        except :
+        except:
             search = False
         if not store_id:
             return Response(
@@ -186,12 +187,12 @@ class ProductListView(APIView):
             )
         if search:
             products = Product.objects.filter(store_id=store_id, name__icontains=filter)
-        else :
+        else:
             products = Product.objects.filter(store_id=store_id)
         serializer = ProductSerializer(products, many=True)
 
         for p in serializer.data:
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != None):
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'] != None):
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
             else:
                 p['rate'] = float(0)
@@ -217,34 +218,56 @@ class StoreListView(APIView):
             )
         ]
     )
+    def haversine(self, lat1, lon1, lat2, lon2):
+        R = 6371.0
+        lat1_rad = math.radians(lat1)
+        lon1_rad = math.radians(lon1)
+        lat2_rad = math.radians(lat2)
+        lon2_rad = math.radians(lon2)
+
+        dlat = lat2_rad - lat1_rad
+        dlon = lon2_rad - lon1_rad
+
+        a = math.sin(dlat / 2) ** 2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+        distance = R * c
+        return distance
+
     def get(self, request):
         longitude = request.query_params.get('longitude')
         latitude = request.query_params.get('latitude')
 
         if not longitude or not latitude:
             return Response(
-                {"error": "Longitude, latitude, and token are required"},
+                {"error": "Longitude and latitude are required"},
                 content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
-        try:
 
-            # Get all stores (you might want to filter by location or other criteria)
+        try:
+            user_location = (float(latitude), float(longitude))
+
+            # Get all stores
             stores = Store.objects.all()
-            serializer = StoreSerializer(stores, many=True)
+            nearby_stores = []
+
+            for store in stores:
+                store_location = (
+                    store.location.latitude, store.location.longitude)  # assuming Store model has latitude and longitude fields
+                distance = self.haversine(user_location[0], user_location[1], store_location[0], store_location[1])
+
+                if distance <= 5:
+                    nearby_stores.append(store)
+            # print(nearby_stores.__sizeof__())
+            serializer = StoreSerializer(nearby_stores, many=True)
             for s in serializer.data:
                 category = Category.objects.get(id=s['category'])
                 s['category'] = category.name
-                if (StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate')) != None):
-                    s['rate'] = float(
-                        StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'])
-                else:
-                    s['rate'] = float(0)
+                s['rate'] = StoreComment.objects.filter(store_id=s['id']).aggregate(Avg('rate'))['rate__avg'] or 0.0
+                print(s['rate'])
 
-            store_dict = {str(store['id']): store for store in serializer.data}
-
-
-            return Response(store_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
+            return Response(serializer.data, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
 
         except Token.DoesNotExist:
             return Response(
@@ -604,7 +627,8 @@ class LocationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
                         content_type='application/json; charset=utf-8', )
 
-class SellerProductsView(APIView) :
+
+class SellerProductsView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -629,25 +653,23 @@ class SellerProductsView(APIView) :
 
         if not store_id:
             return Response(
-                {"error": "Store_id and token are required"},content_type='application/json; charset=utf-8',
+                {"error": "Store_id and token are required"}, content_type='application/json; charset=utf-8',
                 status=status.HTTP_400_BAD_REQUEST
             )
         if search:
             products = Product.objects.filter(store_id=store_id, name__icontains=filter)
-        else :
+        else:
             products = Product.objects.filter(store_id=store_id)
         serializer = ProductSerializer(products, many=True)
 
-        for p in serializer.data :
-            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate')) != None) :
+        for p in serializer.data:
+            if (ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'] != None):
                 p['rate'] = float(ProductComment.objects.filter(product_id=p['id']).aggregate(Avg('rate'))['rate__avg'])
-            else :
+            else:
                 p['rate'] = float(0)
         product_dict = {str(p['id']): p for p in serializer.data}
 
         return Response(product_dict, content_type='application/json; charset=utf-8', status=status.HTTP_200_OK)
-
-
 
 
 class SellerStoresView(APIView):
@@ -681,7 +703,7 @@ class SellerStoresView(APIView):
                     'category': category.name
                 }
 
-                if (StoreComment.objects.filter(store_id=store).aggregate(Avg('rate')) == None):
+                if (StoreComment.objects.filter(store_id=store).aggregate(Avg('rate'))['rate__avg'] != None):
                     response_data['store']['rate'] = float(
                         StoreComment.objects.filter(store_id=store).aggregate(Avg('rate'))['rate__avg'])
                 else:
@@ -695,11 +717,13 @@ class SellerStoresView(APIView):
                     status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
                 )
 
-        except Seller.DoesNotExist:
+        except Seller.DoesNotExist as e:
+
             return Response(
                 {"error": "Seller does not exist."},
                 status=status.HTTP_404_NOT_FOUND, content_type='application/json; charset=utf-8'
             )
+
 
 class AcceptRejectOrderView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -1005,6 +1029,7 @@ class StoreCommentView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST,
                         content_type='application/json; charset=utf-8')
 
+
 class CustomerOrdersView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -1015,7 +1040,8 @@ class CustomerOrdersView(APIView):
     )
     def get(self, request):
         user = request.user
-        customer_orders = Order.objects.filter(customer=user.id, status__in=['PENDING', 'PROCESSING', 'DISPATCHED','WAITING'])
+        customer_orders = Order.objects.filter(customer=user.id,
+                                               status__in=['PENDING', 'PROCESSING', 'DISPATCHED', 'WAITING'])
         orders_data = []
         for order in customer_orders:
             order_items = OrderItem.objects.filter(order=order)
