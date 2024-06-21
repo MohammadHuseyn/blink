@@ -2,6 +2,7 @@ import 'package:blink/pages/Payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as gloabl;
+import 'OrderSubmitted.dart';
 
 class LastCheck extends StatefulWidget {
   LastCheck({super.key, required this.sum});
@@ -13,6 +14,7 @@ class LastCheck extends StatefulWidget {
 
 class _LastCheckState extends State<LastCheck> {
   bool fast = false;
+  bool face2facePay = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +29,18 @@ class _LastCheckState extends State<LastCheck> {
                 var res = await gloabl.postRequest({
                   "location_id" : gloabl.addresses[gloabl.addressIndex].id,
                   "store_id" : gloabl.store_id,
-                  "fast_delivery" : fast
+                  "fast_delivery" : fast,
+                  "payment_method" : face2facePay
                 }, "/makeorder/");
                 Map<String, dynamic> data = await res;
                 gloabl.order_id = data["order_id"];
               // } catch(e) {}
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(sum: "120000")));
+              if (face2facePay) {gloabl.currentCardPayement = true;
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSubmitted()));} else Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(sum: "120000")));
             },
             child: const Text(
-              "  پرداخت   ",
+              "  ادامه   ",
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -178,19 +183,42 @@ class _LastCheckState extends State<LastCheck> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "تحویل فوری؟",
+                      "   تحویل فوری   ",
                       textDirection: TextDirection.rtl,
-                      style: TextStyle(fontSize: 25),
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.justify,
                     ),
-                    Checkbox(
-                        focusColor: const Color(0xFF256F46),
-                        activeColor: const Color(0xFF256F46),
-                        value: fast,
-                        onChanged: (value) {
-                          setState(() {
-                            fast = value ?? false;
-                          });
-                        }),
+                    Switch(
+                      value: fast,
+                      onChanged: (value) {
+                        setState(() {
+                          fast = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "پرداخت حضوری",
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.justify,
+
+                    ),
+                    Switch(
+                      value: face2facePay,
+                      onChanged: (value) {
+                        setState(() {
+                          face2facePay = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),

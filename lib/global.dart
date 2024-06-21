@@ -143,6 +143,7 @@ Future<void> wait(ms) async {
 Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
   var body = json.encode(data);
+  print(body.toString());
   var response = await http.post(Uri.parse(url + endpoint),
       headers: tokenbool ? headerA : header, body: body);
 

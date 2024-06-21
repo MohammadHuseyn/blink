@@ -9,6 +9,7 @@ class OrderStatus extends StatefulWidget {
 class _OrderStatusState extends State<OrderStatus> {
   double delivery_price = 0.0;
   bool fast = false;
+  bool face2facePay = false;
   String status = "";
   String? discount = "۰";
   double total_price = 0.0;
@@ -306,6 +307,32 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
+                                'نوع پرداخت',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              child: Text(
+                                face2facePay? "حضوری" : "آنلاین",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Container(
+                              height: 50,
+                              child: Text(
                                 'هزینه ارسال',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -429,6 +456,7 @@ class _OrderStatusState extends State<OrderStatus> {
       discount = data["order"]["discount_value"];
       total_price = double.parse(data["order"]["total_price"]);
       status = data["order"]["status"];
+      face2facePay = data["order"]["payment_method"];
       got_data = true;
     });
     if (data["order"]["status"] == "DELIVERED") {
