@@ -26,6 +26,8 @@ class Home extends StatefulWidget {
 
 var _currentIndex = 1;
 bool got_data_address = false;
+bool searching_mode = false;
+var search = TextEditingController();
 int addressIndex = -2;
 List<Store> stores = [
   Store(
@@ -49,7 +51,6 @@ class _HomeState extends State<Home> {
     super.initState();
     _initializeData();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +131,7 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(right: 15),
                               child: IconButton(
                                   onPressed: () {
-                                    loadStores();
+                                    loadStores("");
                                   },
                                   icon: Icon(
                                     Icons.refresh_rounded,
@@ -267,33 +268,7 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                body: !got_data
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30),
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                backgroundColor: Colors.lightGreen,
-                                color: Color(0xFF256F46),
-                                strokeWidth: 5,
-                                strokeAlign: 2,
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "در حال دریافت فروشگاه‌ها",
-                                textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                    fontSize: 30, color: Color(0xFF256F46)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : _currentIndex == 0
+                body: _currentIndex == 0
                         ? SingleChildScrollView(
                             child: Column(
                               children: [
@@ -440,7 +415,8 @@ class _HomeState extends State<Home> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => CustomerChatRequestScreen()));
+                                            builder: (context) =>
+                                                CustomerChatRequestScreen()));
                                   },
                                   child: Container(
                                     margin:
@@ -525,12 +501,20 @@ class _HomeState extends State<Home> {
                             ? SingleChildScrollView(
                                 child: Container(
                                   child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 40, vertical: 10),
                                         child: TextField(
+                                          controller: search,
+                                          onChanged: (txt) {
+                                            setState(() {
+                                              if (txt.isEmpty)
+                                                searching_mode = false;
+                                              else searching_mode = true;
+                                            });
+                                            loadStores(txt);
+                                          },
                                           textAlign: TextAlign.center,
                                           textDirection: TextDirection.rtl,
                                           style: TextStyle(
@@ -541,12 +525,12 @@ class _HomeState extends State<Home> {
                                                   fontFamily: 'shabnam',
                                                   fontSize: 30),
                                               hintTextDirection:
-                                                  TextDirection.rtl,
+                                              TextDirection.rtl,
                                               // contentPadding: EdgeInsets.all(-100),
                                               suffixIcon: Padding(
                                                 padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
                                                 child: IconButton(
                                                   iconSize: 35,
                                                   icon: ImageIcon(
@@ -554,7 +538,8 @@ class _HomeState extends State<Home> {
                                                         "images/options.png"),
                                                     color: Color(0xFF506f5d),
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                  },
                                                 ),
                                               ),
                                               prefixIcon: IconButton(
@@ -566,7 +551,9 @@ class _HomeState extends State<Home> {
                                                   color: Color(0xFF506f5d),
                                                   // size: 500,
                                                 ),
-                                                onPressed: () {},
+                                                onPressed: () {
+
+                                                },
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderRadius: BorderRadius.all(
@@ -584,515 +571,585 @@ class _HomeState extends State<Home> {
                                               )),
                                         ),
                                       ),
-                                      // Expanded(child: Container()),
-                                      SizedBox(
-                                        height: 25,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Row(
+                                      !got_data
+                                          ? Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 30),
+                                        child: const Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Expanded(child: Container()),
-                                              Container(
-                                                // height: 120,
-                                                width: 100,
-                                                // color: Colors.red,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(25)),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 20,
-                                                      offset: Offset(0,
-                                                          20), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                // color: Colors.red,
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                        "images/pizza.png",
-                                                        height: 100),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "غذا",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                              CircularProgressIndicator(
+                                                backgroundColor: Colors.lightGreen,
+                                                color: Color(0xFF256F46),
+                                                strokeWidth: 5,
+                                                strokeAlign: 2,
                                               ),
-                                              Expanded(child: Container()),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(25)),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 20,
-                                                      offset: Offset(0,
-                                                          20), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                // height: 120,
-                                                width: 100,
-                                                // color: Colors.red,
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                        "images/arayeshi.png",
-                                                        height: 100,
-                                                        fit: BoxFit.cover),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "آرایشی",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                        maxLines: 1,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                              SizedBox(
+                                                height: 20,
                                               ),
-                                              Expanded(child: Container()),
-                                              Container(
-                                                // height: 120,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(25)),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 20,
-                                                      offset: Offset(0,
-                                                          20), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                        "images/digital.png",
-                                                        height: 100,
-                                                        fit: BoxFit.cover),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "دیجیتال",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                              Text(
+                                                "در حال دریافت فروشگاه‌ها",
+                                                textDirection: TextDirection.rtl,
+                                                style: TextStyle(
+                                                    fontSize: 30, color: Color(0xFF256F46)),
                                               ),
-                                              Expanded(child: Container()),
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: 20,
+                                        ),
+                                      )
+                                          : Column(
+                                        // mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          // Expanded(child: Container()),
+                                          searching_mode? Container() : SizedBox(
+                                            height: 25,
+                                          ),
+                                          searching_mode
+                                              ? Container()
+                                              : Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Container(
+                                                          // height: 120,
+                                                          width: 100,
+                                                          // color: Colors.red,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        25)),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 20,
+                                                                offset: Offset(0,
+                                                                    20), // changes position of shadow
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          // color: Colors.red,
+                                                          child: Column(
+                                                            children: [
+                                                              Image.asset(
+                                                                  "images/pizza.png",
+                                                                  height: 100),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8.0),
+                                                                child: Text(
+                                                                  "غذا",
+                                                                  style: TextStyle(
+                                                                      fontSize: 20),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        25)),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 20,
+                                                                offset: Offset(0,
+                                                                    20), // changes position of shadow
+                                                              ),
+                                                            ],
+                                                          ),
+
+                                                          // height: 120,
+                                                          width: 100,
+                                                          // color: Colors.red,
+                                                          child: Column(
+                                                            children: [
+                                                              Image.asset(
+                                                                  "images/arayeshi.png",
+                                                                  height: 100,
+                                                                  fit:
+                                                                      BoxFit.cover),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8.0),
+                                                                child: Text(
+                                                                  "آرایشی",
+                                                                  style: TextStyle(
+                                                                      fontSize: 20),
+                                                                  maxLines: 1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Container(
+                                                          // height: 120,
+                                                          width: 100,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        25)),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 20,
+                                                                offset: Offset(0,
+                                                                    20), // changes position of shadow
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          child: Column(
+                                                            children: [
+                                                              Image.asset(
+                                                                  "images/digital.png",
+                                                                  height: 100,
+                                                                  fit:
+                                                                      BoxFit.cover),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8.0),
+                                                                child: Text(
+                                                                  "دیجیتال",
+                                                                  style: TextStyle(
+                                                                      fontSize: 20),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                  10),
+                                                          child: Container(
+                                                            height: 80,
+                                                            width: 80,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      bottom: 10),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                "...",
+                                                                style: TextStyle(
+                                                                    fontSize: 40),
+                                                              )),
+                                                            ),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .withOpacity(
+                                                                                0.5),
+                                                                        spreadRadius:
+                                                                            5,
+                                                                        blurRadius:
+                                                                            7,
+                                                                        offset: Offset(
+                                                                            0,
+                                                                            6), // changes position of shadow
+                                                                      ),
+                                                                    ],
+                                                                    // color: Colors  .red,
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(
+                                                                                75)),
+                                                                    border: Border.all(
+                                                                        color: Color(
+                                                                            0xFF256F46),
+                                                                        width:
+                                                                            2.0)),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Container(
+                                                          // height: 120,
+                                                          width: 100,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        25)),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 20,
+                                                                offset: Offset(0,
+                                                                    20), // changes position of shadow
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          child: Column(
+                                                            children: [
+                                                              Image.asset(
+                                                                  "images/lebas.png",
+                                                                  height: 100),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8.0),
+                                                                child: Text(
+                                                                  "لباس",
+                                                                  style: TextStyle(
+                                                                      fontSize: 20),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                        Container(
+                                                          // height: 120,
+                                                          width: 100,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        25)),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                spreadRadius: 1,
+                                                                blurRadius: 20,
+                                                                offset: Offset(0,
+                                                                    20), // changes position of shadow
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          child: Column(
+                                                            children: [
+                                                              Image.asset(
+                                                                  "images/market.png",
+                                                                  height: 100,
+                                                                  fit:
+                                                                      BoxFit.cover),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8.0),
+                                                                child: Text(
+                                                                  "مارکت",
+                                                                  style: TextStyle(
+                                                                      fontSize: 20),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                            child: Container()),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                          searching_mode? Container() : Row(
+                                            children: [
+                                              Expanded(child: Container()),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 20),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      border: Border(
+                                                          bottom: BorderSide(
+                                                              color: Color(
+                                                                  0xFF6F4699)))),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                            vertical: 20),
+                                                    child: Text(
+                                                      "٪ تخفیف‌دار‌ها            ",
+                                                      style:
+                                                          TextStyle(fontSize: 25),
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                      textAlign: TextAlign.right,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          searching_mode? Container() : Directionality(
+                                            textDirection: TextDirection.rtl,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(10),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFFEAF3EE),
+                                                      // color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(40))),
+                                                  child: Row(
+                                                    children: [
+                                                      prodcut(),
+                                                      prodcut(),
+                                                      prodcut(),
+                                                      prodcut(),
+                                                      prodcut()
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                           Row(
                                             children: [
                                               Expanded(child: Container()),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 20),
                                                 child: Container(
-                                                  height: 80,
-                                                  width: 80,
+                                                  decoration: BoxDecoration(
+                                                      border: Border(
+                                                          bottom: BorderSide(
+                                                              color: Color(
+                                                                  0xFF6F4699)))),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10),
-                                                    child: Center(
-                                                        child: Text(
-                                                      "...",
-                                                      style: TextStyle(
-                                                          fontSize: 40),
-                                                    )),
+                                                        const EdgeInsets.symmetric(
+                                                            vertical: 20),
+                                                    child: Text(
+                                                      "  فروشگاه‌ها            ",
+                                                      style:
+                                                          TextStyle(fontSize: 25),
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                      textAlign: TextAlign.right,
+                                                    ),
                                                   ),
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.5),
-                                                          spreadRadius: 5,
-                                                          blurRadius: 7,
-                                                          offset: Offset(0,
-                                                              6), // changes position of shadow
-                                                        ),
-                                                      ],
-                                                      // color: Colors  .red,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  75)),
-                                                      border: Border.all(
-                                                          color:
-                                                              Color(0xFF256F46),
-                                                          width: 2.0)),
                                                 ),
                                               ),
-                                              Expanded(child: Container()),
-                                              Container(
-                                                // height: 120,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(25)),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 20,
-                                                      offset: Offset(0,
-                                                          20), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                        "images/lebas.png",
-                                                        height: 100),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "لباس",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(child: Container()),
-                                              Container(
-                                                // height: 120,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(25)),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 20,
-                                                      offset: Offset(0,
-                                                          20), // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                        "images/market.png",
-                                                        height: 100,
-                                                        fit: BoxFit.cover),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "مارکت",
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(child: Container()),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(child: Container()),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: Color(
-                                                              0xFF6F4699)))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 20),
-                                                child: Text(
-                                                  "٪ تخفیف‌دار‌ها            ",
-                                                  style:
-                                                      TextStyle(fontSize: 25),
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  textAlign: TextAlign.right,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Directionality(
-                                        textDirection: TextDirection.rtl,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFFEAF3EE),
-                                                  // color: Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(40))),
-                                              child: Row(
-                                                children: [
-                                                  prodcut(),
-                                                  prodcut(),
-                                                  prodcut(),
-                                                  prodcut(),
-                                                  prodcut()
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(child: Container()),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: Color(
-                                                              0xFF6F4699)))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 20),
-                                                child: Text(
-                                                  "  فروشگاه‌ها            ",
-                                                  style:
-                                                      TextStyle(fontSize: 25),
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  textAlign: TextAlign.right,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, i) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            StorePage(
-                                                                store: stores[
-                                                                    i])));
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                        bottom: BorderSide(
-                                                            color: Color(
-                                                                0xFF256f46),
-                                                            width: 1.5))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 15),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15),
-                                                    child: Row(
-                                                      children: [
-                                                        Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          8.0),
-                                                              child: ImageIcon(
-                                                                AssetImage(
-                                                                    "images/star.png"),
+                                          stores.isEmpty? Padding(
+                                            padding: const EdgeInsets.only(top: 30),
+                                            child: Center(child: Text("فروشگاهی یافت نشد", style: TextStyle(
+                                              fontSize: 20
+                                            ),),),
+                                          ): ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount: stores.length,
+                                              itemBuilder: (context, i) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                StorePage(
+                                                                    store: stores[
+                                                                        i])));
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border(
+                                                            bottom: BorderSide(
                                                                 color: Color(
-                                                                    0xFF256F46),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              global.toPersianNumbers(
-                                                                      stores[i]
-                                                                          .rate) +
-                                                                  "/۵",
-                                                              style: TextStyle(
-                                                                  fontSize: 17),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        Expanded(
-                                                            child: Container()),
-                                                        Column(
+                                                                    0xFF256f46),
+                                                                width: 1.5))),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(vertical: 15),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 15),
+                                                        child: Row(
                                                           children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          8.0),
-                                                              child: Text(
-                                                                stores[i].name,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        20),
-                                                              ),
-                                                            ),
-                                                            Row(
+                                                            Column(
                                                               children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          bottom:
+                                                                              8.0),
+                                                                  child: ImageIcon(
+                                                                    AssetImage(
+                                                                        "images/star.png"),
+                                                                    color: Color(
+                                                                        0xFF256F46),
+                                                                  ),
+                                                                ),
                                                                 Text(
-                                                                    "  آدرس انتخاب شده"),
-                                                                ImageIcon(
-                                                                  AssetImage(
-                                                                      "images/location.png"),
-                                                                  color: Color(
-                                                                      0xFF97b9a7),
-                                                                  size: 30,
+                                                                  global.toPersianNumbers(
+                                                                          stores[i]
+                                                                              .rate) +
+                                                                      "/۵",
+                                                                  style: TextStyle(
+                                                                      fontSize: 17),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            Expanded(
+                                                                child: Container()),
+                                                            Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          bottom:
+                                                                              8.0),
+                                                                  child: Text(
+                                                                    stores[i].name,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "  آدرس انتخاب شده"),
+                                                                    ImageIcon(
+                                                                      AssetImage(
+                                                                          "images/location.png"),
+                                                                      color: Color(
+                                                                          0xFF97b9a7),
+                                                                      size: 30,
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ],
                                                             ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 15),
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        // color: Color(0xffEAF3EE),
+                                                                        boxShadow: [
+                                                                      const BoxShadow(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                      const BoxShadow(
+                                                                        color: Color(
+                                                                            0xffEAF3EE),
+                                                                        spreadRadius:
+                                                                            -0.2,
+                                                                        blurRadius:
+                                                                            5.0,
+                                                                      ),
+                                                                    ],
+                                                                        // color: Colors.red,
+                                                                        borderRadius:
+                                                                            BorderRadius.all(
+                                                                                Radius.circular(15))),
+                                                                child: stores[
+                                                                                i]
+                                                                            .image ==
+                                                                        ""
+                                                                    ? Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            horizontal:
+                                                                                15,
+                                                                            vertical:
+                                                                                15),
+                                                                        child:
+                                                                            ImageIcon(
+                                                                          AssetImage(
+                                                                              "images/shop.png"),
+                                                                          size: 50,
+                                                                        ))
+                                                                    : ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                15),
+                                                                        // Same radius as the CircleAvatar
+                                                                        child: Image
+                                                                            .memory(
+                                                                          width: 80,
+                                                                          height:
+                                                                              80,
+                                                                          Uint8List.fromList(
+                                                                              base64Decode(
+                                                                                  stores[i].image)),
+                                                                          fit: BoxFit
+                                                                              .cover, // Adjust the fit as needed
+                                                                        ),
+                                                                      ),
+                                                              ),
+                                                            ),
                                                           ],
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 15),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    // color: Color(0xffEAF3EE),
-                                                                    boxShadow: [
-                                                                  const BoxShadow(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                  const BoxShadow(
-                                                                    color: Color(
-                                                                        0xffEAF3EE),
-                                                                    spreadRadius:
-                                                                        -0.2,
-                                                                    blurRadius:
-                                                                        5.0,
-                                                                  ),
-                                                                ],
-                                                                    // color: Colors.red,
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(15))),
-                                                            child: stores[
-                                                                            i]
-                                                                        .image ==
-                                                                    ""
-                                                                ? Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            15,
-                                                                        vertical:
-                                                                            15),
-                                                                    child:
-                                                                        ImageIcon(
-                                                                      AssetImage(
-                                                                          "images/shop.png"),
-                                                                      size: 50,
-                                                                    ))
-                                                                : ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            15),
-                                                                    // Same radius as the CircleAvatar
-                                                                    child: Image
-                                                                        .memory(
-                                                                      width: 80,
-                                                                      height:
-                                                                          80,
-                                                                      Uint8List.fromList(
-                                                                          base64Decode(
-                                                                              stores[i].image)),
-                                                                      fit: BoxFit
-                                                                          .cover, // Adjust the fit as needed
-                                                                    ),
-                                                                  ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                      SizedBox(
-                                        height: 5,
-                                      )
-                                      // Expanded(child: Container())
+                                                );
+                                              }),
+                                          SizedBox(
+                                            height: 5,
+                                          )
+                                          // Expanded(child: Container())
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1497,7 +1554,7 @@ class _HomeState extends State<Home> {
     await Future.delayed(Duration(seconds: 1));
 
     // Load stores after addresses are loaded
-    await loadStores();
+    await loadStores("");
   }
 
   Future<void> _loadAddresses() async {
@@ -1512,13 +1569,10 @@ class _HomeState extends State<Home> {
       print(global.addressIndex.toString() + " here");
       global.addresses.add(addres_data(
           name: element["name"],
-          latLng: LatLng(
-              double.parse(element["latitude"]),
-              double.parse(element["longitude"])
-          ),
+          latLng: LatLng(double.parse(element["latitude"]),
+              double.parse(element["longitude"])),
           id: element["id"],
-          desc: element["address"]
-      ));
+          desc: element["address"]));
     }
 
     setState(() {
@@ -1526,7 +1580,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> loadStores() async {
+  Future<void> loadStores(String filter) async {
     setState(() {
       got_data = false;
     });
@@ -1536,12 +1590,18 @@ class _HomeState extends State<Home> {
     stores.clear();
 
     if (global.addressIndex >= 0) {
-      var res = await global.getRequest(
-          "/stores/?longitude=" +
-              global.addresses.elementAt(global.addressIndex).latLng.longitude.toString() +
-              "&latitude=" +
-              global.addresses.elementAt(global.addressIndex).latLng.latitude.toString()
-      );
+      var res = await global.getRequest("/stores/?longitude=" +
+          global.addresses
+              .elementAt(global.addressIndex)
+              .latLng
+              .longitude
+              .toString() +
+          "&latitude=" +
+          global.addresses
+              .elementAt(global.addressIndex)
+              .latLng
+              .latitude
+              .toString() + "&search=" + filter);
       List<Map<String, dynamic>> data = res;
 
       data.forEach((i) {
@@ -1555,12 +1615,13 @@ class _HomeState extends State<Home> {
             longitude: double.parse(i["location"]["longitude"]),
             latitude: double.parse(i["location"]["latitude"]),
             items: [],
-            image: i["image"] == null ? "" : i["image"]
-        );
+            image: i["image"] == null ? "" : i["image"]);
         setState(() {
           stores.add(store);
-          got_data = true;
         });
+      });
+      setState(() {
+        got_data = true;
       });
     }
   }
