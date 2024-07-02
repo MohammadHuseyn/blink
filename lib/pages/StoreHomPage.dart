@@ -315,7 +315,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ChatPage()));
+                                    builder: (context) => ChatPage(isAdmin: false)));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 20, left: 20),

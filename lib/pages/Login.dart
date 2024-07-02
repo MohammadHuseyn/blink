@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:blink/classes/item.dart';
+import 'package:blink/pages/CustomerSupportScreen.dart';
 import 'package:blink/pages/DeliveryHomePage.dart';
 import 'package:blink/pages/StoreHomPage.dart';
 import '../global.dart' as global;
@@ -89,6 +90,11 @@ class _LoginState extends State<Login> {
                                 builder: (context) => DeliveryHomePage()));
                       }
                       break;
+                    case "Customer_Support":
+                      {
+                        Navigator.pop(context);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CustomemrSuppoerScreen()));
+                      } break;
                   }
                 } catch (e) {
                   print('Error: $e');

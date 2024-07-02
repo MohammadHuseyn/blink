@@ -415,7 +415,7 @@ class _HomeState extends State<Home> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                ChatPage()));
+                                                ChatPage(isAdmin: false)));
                                   },
                                   child: Container(
                                     margin:

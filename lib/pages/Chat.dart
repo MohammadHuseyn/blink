@@ -4,23 +4,20 @@ import 'dart:async';
 import '../global.dart' as global;
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
-
+  ChatPage({super.key, required this.isAdmin});
+  bool isAdmin;
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState(isAdmin: isAdmin);
 }
 
-List<Widget> messages = [Container(
-  height: 100,
-  width: 100,
-  color: Colors.redAccent,
-)];
+List<Widget> messages = [];
 var controller = TextEditingController();
 
 class _ChatPageState extends State<ChatPage> {
   Timer? timer;
   bool wait = true;
-
+  bool isAdmin;
+  _ChatPageState({required this.isAdmin});
   @override
   void initState() {
     super.initState();
@@ -28,8 +25,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _initializeChat() async {
-    await global.postRequest({}, "/chat/start_room");
-    await global.wait(1000);
+    if (!isAdmin) {
+      await global.postRequest({}, "/chat/start_room");
+      await global.wait(1000);
+    }
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _viewMessages());
     _viewMessages();
   }
