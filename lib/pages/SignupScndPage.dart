@@ -120,7 +120,6 @@ class _SignupScndPageState extends State<SignupScndPage> {
                           "image": base64Image,
                           "address": shopaddress.text
                         }
-
                       : widget.userkind == "m"
                           ? {
                               "username": widget.username.text,

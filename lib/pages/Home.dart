@@ -14,7 +14,6 @@ import 'package:blink/pages/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../global.dart' as global;
-import 'CusotmerChatReq.dart';
 import 'ProfileEdit.dart';
 
 class Home extends StatefulWidget {
@@ -416,7 +415,7 @@ class _HomeState extends State<Home> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                CustomerChatRequestScreen()));
+                                                ChatPage()));
                                   },
                                   child: Container(
                                     margin:

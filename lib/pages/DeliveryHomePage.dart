@@ -7,7 +7,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../classes/order.dart';
 import 'Chat.dart';
-import 'CusotmerChatReq.dart';
 import 'Login.dart';
 
 // import 'Orders.dart';
@@ -277,7 +276,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CustomerChatRequestScreen()));
+                                    builder: (context) => ChatPage()));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 20, left: 20),

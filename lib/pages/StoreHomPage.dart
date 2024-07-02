@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import '../classes/item.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
-import 'CusotmerChatReq.dart';
 import 'Login.dart';
 import 'Orders.dart';
 import 'ProfileEdit.dart';
@@ -316,7 +315,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CustomerChatRequestScreen()));
+                                    builder: (context) => ChatPage()));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 20, left: 20),
