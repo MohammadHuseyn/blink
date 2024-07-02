@@ -86,6 +86,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.1",
       "packageUri": "lib/",
@@ -114,6 +120,12 @@
       "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_windows-0.9.3+1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "fl_chart",
+      "rootUri": "file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.65.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter",
@@ -440,7 +452,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-06-12T17:24:57.028592Z",
+  "generated": "2024-07-02T13:06:53.509506Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

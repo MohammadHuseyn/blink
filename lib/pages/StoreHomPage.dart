@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:blink/pages/ProductComment.dart';
 import 'package:blink/pages/StoreComment.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:blink/global.dart' as global;
@@ -592,7 +593,38 @@ class _StoreHomePageState extends State<StoreHomePage> {
                           ),
                         ),
                     )
-                    : Container());
+                    : Scaffold(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildPieChartCard(),
+                  SizedBox(height: 16),
+                  _buildSalesInfoCard(),
+                ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.bar_chart),
+                label: '',
+              ),
+            ],
+            selectedItemColor: Color(0xFF256F46),
+            backgroundColor: Colors.white,
+          ),
+        ));
   }
 
   prodcut(double left, double right, Item item) {
@@ -1077,5 +1109,154 @@ class _StoreHomePageState extends State<StoreHomePage> {
   Future<void> wait() async {
     await Future.delayed(const Duration(milliseconds: 500));
   }
+  Widget _buildPieChartCard() {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              'فروش روزانه',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            PieChart(
+              PieChartData(
+                sections: [
+                  PieChartSectionData(
+                    color: Colors.blue,
+                    value: 35,
+                    title: '35',
+                    radius: 50,
+                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  PieChartSectionData(
+                    color: Colors.red,
+                    value: 73,
+                    title: '73',
+                    radius: 50,
+                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  PieChartSectionData(
+                    color: Colors.pink,
+                    value: 27,
+                    title: '27',
+                    radius: 50,
+                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  PieChartSectionData(
+                    color: Colors.green,
+                    value: 65,
+                    title: '65',
+                    radius: 50,
+                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'کل فروش: 1000',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 8),
+            Column(
+              children: [
+                _buildLegend('نام محصول 1', Colors.blue, 35),
+                _buildLegend('نام محصول 2', Colors.red, 73),
+                _buildLegend('نام محصول 3', Colors.pink, 27),
+                _buildLegend('نام محصول 4', Colors.green, 65),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget _buildLegend(String title, Color color, int value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 12,
+              height: 12,
+              color: color,
+            ),
+            SizedBox(width: 8),
+            Text(title),
+          ],
+        ),
+        Text('$value'),
+      ],
+    );
+  }
+
+  Widget _buildSalesInfoCard() {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'فروش',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                DropdownButton<String>(
+                  value: 'ماهانه',
+                  icon: Icon(Icons.arrow_drop_down),
+                  onChanged: (String? newValue) {},
+                  items: <String>['ماهانه', 'هفتگی', 'روزانه']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            Divider(),
+            _buildSalesInfoRow('تعداد فروش', '5000', Colors.black),
+            _buildSalesInfoRow('مجموع درآمد', '100,000,000 تومان', Colors.black),
+            _buildSalesInfoRow('مالیات کسر شده', '30,000,000 تومان', Colors.red),
+            _buildSalesInfoRow('سود خالص', '70,000,000 تومان', Colors.green),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSalesInfoRow(String label, String value, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            value,
+            style: TextStyle(fontSize: 16, color: color),
+          ),
+          Text(
+            label,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
