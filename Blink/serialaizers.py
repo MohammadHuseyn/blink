@@ -11,7 +11,7 @@ class UserSignupSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False, allow_blank=True)
     phone_number = serializers.CharField(required=False, allow_blank=True)
     user_type = serializers.ChoiceField(
-        choices=[('customer', 'Customer'), ('seller', 'Seller'), ('delivery', 'Delivery')])
+        choices=[('customer', 'Customer'), ('seller', 'Seller'), ('delivery', 'Delivery'), ('customer_support', 'Customer_Support')])
 
     store_name = serializers.CharField(max_length=100, required=False)
     category = serializers.CharField(max_length=25, required=False)
@@ -91,6 +91,16 @@ class UserSignupSerializer(serializers.Serializer):
                 vehicle_license_plate=validated_data.get('plate', ''),
                 driving_license_number=validated_data.get('license', ''),
                 image=validated_data.get('image', '')
+            )
+        if user_type == 'customer_support':
+            user = CustomerSupport.objects.create_user(
+                username=validated_data.get('username', ''),
+                email=validated_data.get('email', ''),
+                password=validated_data.get('password', ''),
+                first_name=validated_data.get('first_name', ''),
+                last_name=validated_data.get('last_name', ''),
+                phone_number=validated_data.get('phone_number', ''),
+                image=image
             )
         else:
             raise serializers.ValidationError("Invalid user type")
