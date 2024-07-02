@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&rtw8#vb^ph8-v^4ji0n8gdmm9t_74gq@*qy2g3^1h0dl3-q=1
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['192.168.1.3', '10.0.2.2', '127.0.0.1', '172.20.10.5', '192.168.124.45', '192.168.124.31']
+ALLOWED_HOSTS = ['192.168.1.3', '10.0.2.2', '127.0.0.1', '172.20.10.5', '192.168.124.45', '192.168.124.31', '62.60.205.58', 'hivagram.ir', '192.168.156.31', '172.20.10.3', '172.20.176.129']
 
 # Application definition
 
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
-
+    'chat_room',
 ]
 
 MIDDLEWARE = [
