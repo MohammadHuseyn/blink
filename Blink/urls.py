@@ -58,6 +58,7 @@ urlpatterns = [
     path('store-comments/', StoreCommentView.as_view(), name='store-comments'),
     path('products/', ProductListView.as_view(), name='product-list'),
     path('customer_orders/', CustomerOrdersView.as_view(), name='customer_orders'),
-    path('cancel_order/', CancelOrderView.as_view(), name='cancel_order')
-
+    path('cancel_order/', CancelOrderView.as_view(), name='cancel_order'),
+    path('chat/', include('chat_room.urls'), name='chat'),
+    path('seller/statistics/', SellerStatisticsView.as_view(), name='seller_statistics'),
 ]
