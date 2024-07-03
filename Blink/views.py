@@ -1211,7 +1211,6 @@ class SellerDiscountCodesView(APIView):
                     'code': openapi.Schema(type=openapi.TYPE_STRING),
                     'discount_value': openapi.Schema(type=openapi.TYPE_INTEGER),
                     'expiration_date': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME),
-                    'usage_limit': openapi.Schema(type=openapi.TYPE_INTEGER),
                 }
             )
         ))}
@@ -1228,7 +1227,7 @@ class SellerDiscountCodesView(APIView):
                 'code': discount.code,
                 'discount_value': discount.discount_value,
                 'expiration_date': discount.expiration_date,
-                'usage_limit': discount.usage_limit,
+
             }
             for discount in discount_codes
         ]
