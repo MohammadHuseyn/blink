@@ -124,26 +124,6 @@ class SalesReport(models.Model):
         return f"Sales Report for {self.store.name} on {self.date}"
 
 
-class Chat(models.Model):
-    customer_support = models.ForeignKey(CustomerSupport, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Chat between {self.customer_support.user.username} and {self.customer.username}"
-
-
-class Message(models.Model):
-    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
-    text = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    sender_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    sender_id = models.PositiveIntegerField()
-    sender = GenericForeignKey('sender_type', 'sender_id')
-
-    def __str__(self):
-        return f"Message in chat between {self.chat.customer_support.user.username} and {self.chat.customer.username}"
-
-
 class Order(models.Model):
     class OrderStatus(models.TextChoices):
         CREATED = 'CREATED', _('Created')

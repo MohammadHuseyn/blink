@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Customer , CustomerSupport
 
-# Register your models here.
+
+admin.site.register(CustomerSupport)
+
+
+
+admin.site.register(Customer)

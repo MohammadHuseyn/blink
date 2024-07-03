@@ -61,4 +61,7 @@ urlpatterns = [
     path('cancel_order/', CancelOrderView.as_view(), name='cancel_order'),
     path('chat/', include('chat_room.urls'), name='chat'),
     path('seller-statistics/', SellerStatisticsView.as_view(), name='seller_statistics'),
+    path('cancel_order/', CancelOrderView.as_view(), name='cancel_order'),
+    path('chat/', include('chat_room.urls'))
+
 ]
