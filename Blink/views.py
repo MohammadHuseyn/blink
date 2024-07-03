@@ -1148,5 +1148,5 @@ class SellerStatisticsView(APIView):
             'net_profit': net_profit,
             'product_sales': product_sales,
         }
-
+        t = 0
         return Response(orders_data, status=status.HTTP_200_OK)
