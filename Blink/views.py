@@ -1,4 +1,5 @@
 import math
+from types import NoneType
 
 from django.http import HttpResponseBadRequest
 from rest_framework.authentication import TokenAuthentication
@@ -7,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serialaizers import UserSignupSerializer, GeneralUserDetailSerializer, CustomerDetailSerializer, \
     SellerDetailSerializer, DeliveryDetailSerializer, StoreSerializer, CartItemSerializer, LocationSerializer, \
-    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer, OrderItemSerializer
+    ProductSerializer, OrderSerializer, ProductCommentSerializer, StoreCommentSerializer, OrderItemSerializer, \
+    DiscountCodeSerializer
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth import authenticate
 from .models import Customer, Seller, Delivery, Store, ShoppingCart, Product, CartItem, Location, Order, OrderItem, \
-    Category, ProductComment, StoreComment, SalesReport
+    Category, ProductComment, StoreComment, SalesReport, DiscountCode
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from django.utils import timezone
@@ -345,6 +347,17 @@ class OrderFromCartView(APIView):
             }
         )
     )
+    def check_discount_code(self, discount_code):
+        if len(discount_code) > 0:
+            try:
+                discount = get_object_or_404(DiscountCode, code=discount_code)
+                if discount.expiration_date < timezone.now():
+                    return False, "Discount code has expired"
+                return True, "Discount code is valid"
+            except DiscountCode.DoesNotExist:
+                return True, "Discount code is available"
+        return True, "Discount code is empty"
+
     def post(self, request):
         # Assuming the user is authenticated and retrieved from the token
         user = request.user
@@ -364,6 +377,13 @@ class OrderFromCartView(APIView):
         store = Store.objects.get(id=store_id)
         fast_delivery = request.data.get('fast_delivery')
         payment_method = request.data.get('payment_method')
+        discount_code = request.data.get('discount_code')
+        discount_is_valid, message = self.check_discount_code(discount_code)
+        if not discount_is_valid:
+            return Response({'error': message}, status=status.HTTP_400_BAD_REQUEST)
+        else :
+            discount = get_object_or_404(DiscountCode, code=discount_code)
+            total_price *= float(discount.discount_value) / 100.0
         if fast_delivery:
             delivery_price = 100000
         else:
@@ -778,7 +798,7 @@ class AcceptRejectOrderView(APIView):
                               'delivery_location': delivery_location, "status": order.status,
                               "total_price": order.total_price, "order_items": order_items_data,
                               "discount_value": order.discount_value, "discount_code": None,
-                              "fast_delivery": fast_delivery})
+                              "fast_delivery": fast_delivery, "description": order.description})
 
         return Response(json_data)
 
@@ -913,7 +933,7 @@ class DeliveryOrdersView(APIView):
                               "store_address": store_address, "fast_delivery": fast_delivery,
                               "store_name": store_name, "delivery_price": delivery_price,
                               "delivery_latitude": delivery_lat, "delivery_longitude": delivery_long,
-                              "store_latitude": store_lat, "store_longitude": store_long
+                              "store_latitude": store_lat, "store_longitude": store_long, "description": order.description
                               })
 
         return Response(json_data)
@@ -1150,3 +1170,125 @@ class SellerStatisticsView(APIView):
         }
 
         return Response(orders_data, status=status.HTTP_200_OK)
+class CreateDiscountCodeView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Create a new discount code",
+        request_body=DiscountCodeSerializer,
+        responses={
+            201: openapi.Response(description="Discount code created successfully", schema=DiscountCodeSerializer),
+            400: openapi.Response(description="Bad Request")
+        }
+    )
+    def post(self, request):
+        user = request.user
+        if not hasattr(user, 'seller'):
+            return Response({'error': 'Only sellers can create discount codes'}, status=status.HTTP_403_FORBIDDEN)
+
+        discount_code = DiscountCode.objects.create(
+            code=request.data.get('code'),
+            discount_value=request.data.get('discount_value'),
+            expiration_date=request.data.get('expiration_date'),
+            creator=user
+        )
+        discount_code.save()
+        return Response("Code Generated", status=status.HTTP_201_CREATED)
+
+
+class SellerDiscountCodesView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve discount codes created by the seller",
+        responses={200: openapi.Response('Success', openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'code': openapi.Schema(type=openapi.TYPE_STRING),
+                    'discount_value': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'expiration_date': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME),
+                    'usage_limit': openapi.Schema(type=openapi.TYPE_INTEGER),
+                }
+            )
+        ))}
+    )
+    def get(self, request):
+        user = request.user
+        if not hasattr(user, 'seller'):
+            return Response({'error': 'Only sellers can retrieve their discount codes'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        discount_codes = DiscountCode.objects.filter(creator=user)
+        discount_codes_data = [
+            {
+                'code': discount.code,
+                'discount_value': discount.discount_value,
+                'expiration_date': discount.expiration_date,
+                'usage_limit': discount.usage_limit,
+            }
+            for discount in discount_codes
+        ]
+
+        return Response(discount_codes_data, status=status.HTTP_200_OK)
+
+
+class UpdateDiscountCodeView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Update an existing discount code",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'code': openapi.Schema(type=openapi.TYPE_STRING, description='Discount code to be updated'),
+                'discount_value': openapi.Schema(type=openapi.TYPE_INTEGER,
+                                                 description='New discount value in percent'),
+                'expiration_date': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME,
+                                                  description='New expiration date of the discount code'),
+                'usage_limit': openapi.Schema(type=openapi.TYPE_INTEGER,
+                                              description='New usage limit for the discount code')
+            },
+            required=['code']
+        ),
+        responses={
+            200: openapi.Response('Discount code updated successfully'),
+            400: openapi.Response('Bad Request'),
+            404: openapi.Response('Discount code not found')
+        }
+    )
+    def put(self, request):
+        user = request.user
+        if not hasattr(user, 'seller'):
+            return Response({'error': 'Only sellers can update discount codes'}, status=status.HTTP_403_FORBIDDEN)
+
+        data = request.data
+        code = data.get('code')
+
+        if not code:
+            return Response({'error': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            discount_code = DiscountCode.objects.get(code=code, creator=user)
+
+            discount_value = data.get('discount_value')
+            expiration_date = data.get('expiration_date')
+            usage_limit = data.get('usage_limit')
+
+            if discount_value is not None:
+                discount_code.discount_value = discount_value
+
+            if expiration_date is not None:
+                discount_code.expiration_date = expiration_date
+
+            if usage_limit is not None:
+                discount_code.usage_limit = usage_limit
+
+            discount_code.save()
+            return Response({'message': 'Discount code updated successfully'}, status=status.HTTP_200_OK)
+        except DiscountCode.DoesNotExist:
+            return Response({'error': 'Discount code not found'}, status=status.HTTP_404_NOT_FOUND)

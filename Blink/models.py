@@ -55,10 +55,11 @@ class Seller(User):
 
 
 class DiscountCode(models.Model):
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20)
     discount_value = models.IntegerField(default=0, help_text="Discount value between 1 to 100 percent")
     creation_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField()
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_discount_codes')
 
     def __str__(self):
         return self.code
@@ -174,6 +175,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     fast_delivery = models.BooleanField(default=False)
     payment_method = models.BooleanField(default=False)
+    description = models.TextField(blank=True, max_length=100)
 
     def __str__(self):
         return f"Order #{self.id} by {self.customer.username} - Total: {self.total_price} - Status: {self.status}"
