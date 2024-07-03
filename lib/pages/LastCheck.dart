@@ -16,6 +16,7 @@ class _LastCheckState extends State<LastCheck> {
   bool fast = false;
   bool face2facePay = false;
   var desc = TextEditingController();
+  var discount = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,19 +27,24 @@ class _LastCheckState extends State<LastCheck> {
           child: ElevatedButton(
             onPressed: () async {
               // try {
-                var res = await gloabl.postRequest({
-                  "location_id" : gloabl.addresses[gloabl.addressIndex].id,
-                  "store_id" : gloabl.store_id,
-                  "fast_delivery" : fast,
-                  "description" : desc.text,
-                  "payment_method" : face2facePay
-                }, "/makeorder/");
-                Map<String, dynamic> data = await res;
-                gloabl.order_id = data["order_id"];
-              // } catch(e) {}
-              if (face2facePay) {gloabl.currentCardPayement = true;
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSubmitted()));} else Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(sum: "120000")));
+                try {
+                  var res = await gloabl.postRequest({
+                    "location_id" : gloabl.addresses[gloabl.addressIndex].id,
+                    "store_id" : gloabl.store_id,
+                    "fast_delivery" : fast,
+                    "description" : desc.text,
+                    "payment_method" : face2facePay,
+                    "discount_code" : discount.text
+                  }, "/makeorder/");
+                  Map<String, dynamic> data = await res;
+                  gloabl.order_id = data["order_id"];
+                  if (face2facePay) {gloabl.currentCardPayement = true;
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSubmitted()));} else Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(sum: "120000")));
+                } catch (e) {
+                  print("here!!");
+                  gloabl.toast(context, "کد تخفیف نامعتبر", Colors.red);
+                }
             },
             child: const Text(
               "  ادامه   ",
@@ -252,6 +258,32 @@ class _LastCheckState extends State<LastCheck> {
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
                             labelText: '  توضیحات خرید  ',
+                            floatingLabelStyle: TextStyle(fontSize: 25),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),
+                          ),
+                        ),
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10, right: 20, left: 20, bottom: 55),
+                  child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Theme(
+                        data: ThemeData(
+                          primaryColor: Colors.redAccent,
+                          primaryColorDark: Colors.red,
+                        ),
+                        child: TextField(
+                          controller: discount,
+                          maxLines: 1,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.teal),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                            labelText: '  کد تخفیف  ',
                             floatingLabelStyle: TextStyle(fontSize: 25),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelStyle: TextStyle(fontSize: 25, fontFamily: 'shabnam'),

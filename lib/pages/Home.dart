@@ -1734,7 +1734,7 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -1752,7 +1752,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   Expanded(child: Container()),
@@ -1765,7 +1765,7 @@ class _HomeState extends State<Home> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   IconButton(
@@ -1789,7 +1789,7 @@ class _HomeState extends State<Home> {
                                 "انقضاء تا n روز دیگر",
                                 textDirection: TextDirection.rtl,
                                 style:
-                                    TextStyle(fontSize: 18, color: Colors.red),
+                                TextStyle(fontSize: 18, color: Colors.red),
                               ),
                             )
                           ],
@@ -1799,7 +1799,7 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -1817,7 +1817,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   Expanded(child: Container()),
@@ -1830,7 +1830,7 @@ class _HomeState extends State<Home> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   IconButton(
@@ -1854,7 +1854,7 @@ class _HomeState extends State<Home> {
                                 "انقضاء تا n روز دیگر",
                                 textDirection: TextDirection.rtl,
                                 style:
-                                    TextStyle(fontSize: 18, color: Colors.red),
+                                TextStyle(fontSize: 18, color: Colors.red),
                               ),
                             )
                           ],
@@ -1864,7 +1864,7 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
@@ -1882,7 +1882,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   Expanded(child: Container()),
@@ -1895,7 +1895,7 @@ class _HomeState extends State<Home> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                              const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   IconButton(
@@ -1919,7 +1919,7 @@ class _HomeState extends State<Home> {
                                 "انقضاء تا n روز دیگر",
                                 textDirection: TextDirection.rtl,
                                 style:
-                                    TextStyle(fontSize: 18, color: Colors.red),
+                                TextStyle(fontSize: 18, color: Colors.red),
                               ),
                             )
                           ],
