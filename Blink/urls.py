@@ -60,5 +60,5 @@ urlpatterns = [
     path('customer_orders/', CustomerOrdersView.as_view(), name='customer_orders'),
     path('cancel_order/', CancelOrderView.as_view(), name='cancel_order'),
     path('chat/', include('chat_room.urls'), name='chat'),
-    path('seller/statistics/', SellerStatisticsView.as_view(), name='seller_statistics'),
+    path('seller-statistics/', SellerStatisticsView.as_view(), name='seller_statistics'),
 ]

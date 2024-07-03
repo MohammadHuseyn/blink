@@ -1123,11 +1123,11 @@ class SellerStatisticsView(APIView):
         responses={200: openapi.Response('Success')}
     )
     def get(self, request):
-        seller_id = request.GET.get('seller_id')
+        seller_id = request.user
         if not seller_id:
             return HttpResponseBadRequest("Missing 'seller_id' query parameter")
-
-        store = get_object_or_404(Store, seller_profile_id=seller_id)
+        user = get_object_or_404(Seller, user_ptr_id=seller_id)
+        store = get_object_or_404(Store, id=user.store_id)
 
         # Sales report
         sales_reports = SalesReport.objects.filter(store=store)
