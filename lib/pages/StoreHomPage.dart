@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../classes/item.dart';
 import '../classes/store.dart';
 import 'Chat.dart';
+import 'Home.dart';
 import 'Login.dart';
 import 'Orders.dart';
 import 'ProfileEdit.dart';
@@ -25,7 +26,7 @@ class StoreHomePage extends StatefulWidget {
 }
 
 var _currentIndex = 1;
-bool got_data = false;
+bool got_data = true;
 Store? store = null;
 var name = TextEditingController();
 var price = TextEditingController();
@@ -45,14 +46,14 @@ class _StoreHomePageState extends State<StoreHomePage> {
   void initState() {
 
     // TODO: implement initState
-    load_store();
+    // load_store();
     // wait();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // store = stores[0];
+    store = stores[0];
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color(0xFF256F46),
@@ -593,38 +594,19 @@ class _StoreHomePageState extends State<StoreHomePage> {
                           ),
                         ),
                     )
-                    : Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  _buildPieChartCard(),
-                  SizedBox(height: 16),
-                  _buildSalesInfoCard(),
-                ],
-              ),
+                    : SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildPieChartCard(),
+                SizedBox(height: 16),
+                _buildSalesInfoCard(),
+              ],
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart),
-                label: '',
-              ),
-            ],
-            selectedItemColor: Color(0xFF256F46),
-            backgroundColor: Colors.white,
-          ),
-        ));
+        ),
+        );
   }
 
   prodcut(double left, double right, Item item) {
@@ -1109,6 +1091,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
   Future<void> wait() async {
     await Future.delayed(const Duration(milliseconds: 500));
   }
+
   Widget _buildPieChartCard() {
     return Card(
       elevation: 4,
@@ -1124,38 +1107,41 @@ class _StoreHomePageState extends State<StoreHomePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(
-                    color: Colors.blue,
-                    value: 35,
-                    title: '35',
-                    radius: 50,
-                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  PieChartSectionData(
-                    color: Colors.red,
-                    value: 73,
-                    title: '73',
-                    radius: 50,
-                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  PieChartSectionData(
-                    color: Colors.pink,
-                    value: 27,
-                    title: '27',
-                    radius: 50,
-                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  PieChartSectionData(
-                    color: Colors.green,
-                    value: 65,
-                    title: '65',
-                    radius: 50,
-                    titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ],
+            AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    PieChartSectionData(
+                      color: Colors.blue,
+                      value: 35,
+                      title: '35',
+                      radius: 50,
+                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    PieChartSectionData(
+                      color: Colors.red,
+                      value: 73,
+                      title: '73',
+                      radius: 50,
+                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    PieChartSectionData(
+                      color: Colors.pink,
+                      value: 27,
+                      title: '27',
+                      radius: 50,
+                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    PieChartSectionData(
+                      color: Colors.green,
+                      value: 65,
+                      title: '65',
+                      radius: 50,
+                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 8),
@@ -1248,6 +1234,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
         children: [
           Text(
             value,
+            textDirection: TextDirection.rtl,
             style: TextStyle(fontSize: 16, color: color),
           ),
           Text(

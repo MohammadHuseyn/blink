@@ -79,9 +79,9 @@ file_selector_windows
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_windows-0.9.3+1/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_windows-0.9.3+1/lib/
 fl_chart
-3.0
-file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.65.0/
-file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.65.0/lib/
+2.12
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.36.4/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.36.4/lib/
 flutter_launcher_icons
 2.18
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.13.1/
@@ -202,6 +202,10 @@ path
 3.0
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0/lib/
+pedantic
+2.12
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/pedantic-1.11.1/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/pedantic-1.11.1/lib/
 petitparser
 3.0
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.0.1/
