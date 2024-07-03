@@ -67,6 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
     FlutterNativeSplash.remove();
     // global.addressIndex = 0;
     // global.s = stores[0];
-    return StoreHomePage();
+    return Login();
   }
 }

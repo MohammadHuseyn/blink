@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:blink/classes/ColorGenerator.dart';
 import 'package:blink/pages/ProductComment.dart';
 import 'package:blink/pages/StoreComment.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -25,8 +26,12 @@ class StoreHomePage extends StatefulWidget {
   State<StoreHomePage> createState() => _StoreHomePageState();
 }
 
+double total_income = 0, net_profit = 0;
+List<Widget> legends = [];
+int total_items_sold = 0;
+List<PieChartSectionData> pieCharts = [];
 var _currentIndex = 1;
-bool got_data = true;
+bool got_data = false;
 Store? store = null;
 var name = TextEditingController();
 var price = TextEditingController();
@@ -45,15 +50,16 @@ class _StoreHomePageState extends State<StoreHomePage> {
   @override
   void initState() {
 
-    // TODO: implement initState
-    // load_store();
+    // /TODO: implement initState
+    load_store();
+    _load_statistics();
     // wait();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    store = stores[0];
+    // store = stores[0];
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color(0xFF256F46),
@@ -155,6 +161,9 @@ class _StoreHomePageState extends State<StoreHomePage> {
             : Container(),
         appBar: AppBar(
           backgroundColor: const Color(0xFF256F46),
+          leading: _currentIndex == 2? IconButton(onPressed: (){
+            _load_statistics();
+          }, icon: Icon(Icons.refresh)) : Container(),
         ),
         body: store == null
             ? const Center(
@@ -599,8 +608,12 @@ class _StoreHomePageState extends State<StoreHomePage> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                _buildPieChartCard(),
-                SizedBox(height: 16),
+                Column(
+                  children: [
+                    _buildPieChartCard(),
+                  ],
+                ),
+                // izedBox(height: 16),
                 _buildSalesInfoCard(),
               ],
             ),
@@ -1108,55 +1121,51 @@ class _StoreHomePageState extends State<StoreHomePage> {
             ),
             SizedBox(height: 16),
             AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: 1.5,
               child: PieChart(
                 PieChartData(
-                  sections: [
-                    PieChartSectionData(
-                      color: Colors.blue,
-                      value: 35,
-                      title: '35',
-                      radius: 50,
-                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    PieChartSectionData(
-                      color: Colors.red,
-                      value: 73,
-                      title: '73',
-                      radius: 50,
-                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    PieChartSectionData(
-                      color: Colors.pink,
-                      value: 27,
-                      title: '27',
-                      radius: 50,
-                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    PieChartSectionData(
-                      color: Colors.green,
-                      value: 65,
-                      title: '65',
-                      radius: 50,
-                      titleStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
+                  sections: pieCharts
+                //   sections: [
+                //   PieChartSectionData(
+                //   color: Colors.blue,
+                //   value: 35,
+                //   title: '35',
+                //   radius: 50,
+                //   titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                // ),
+                // PieChartSectionData(
+                //   color: Colors.red,
+                //   value: 73,
+                //   title: '73',
+                //   radius: 50,
+                //   titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                // ),
+                // PieChartSectionData(
+                //   color: Colors.pink,
+                //   value: 27,
+                //   title: '27',
+                //   radius: 50,
+                //   titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                // ),
+                // PieChartSectionData(
+                //   color: Colors.green,
+                //   value: 65,
+                //   title: '65',
+                //   radius: 50,
+                //   titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+                // ),
+                // ],
                 ),
               ),
             ),
             SizedBox(height: 8),
             Text(
-              'کل فروش: 1000',
+              'کل فروش: ' + global.toPersianNumbers(total_items_sold),
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 8),
             Column(
-              children: [
-                _buildLegend('نام محصول 1', Colors.blue, 35),
-                _buildLegend('نام محصول 2', Colors.red, 73),
-                _buildLegend('نام محصول 3', Colors.pink, 27),
-                _buildLegend('نام محصول 4', Colors.green, 65),
-              ],
+              children: legends
             ),
           ],
         ),
@@ -1164,7 +1173,7 @@ class _StoreHomePageState extends State<StoreHomePage> {
     );
   }
 
-  Widget _buildLegend(String title, Color color, int value) {
+  Widget _buildLegend(String title, Color color) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -1179,7 +1188,6 @@ class _StoreHomePageState extends State<StoreHomePage> {
             Text(title),
           ],
         ),
-        Text('$value'),
       ],
     );
   }
@@ -1216,10 +1224,10 @@ class _StoreHomePageState extends State<StoreHomePage> {
               ],
             ),
             Divider(),
-            _buildSalesInfoRow('تعداد فروش', '5000', Colors.black),
-            _buildSalesInfoRow('مجموع درآمد', '100,000,000 تومان', Colors.black),
-            _buildSalesInfoRow('مالیات کسر شده', '30,000,000 تومان', Colors.red),
-            _buildSalesInfoRow('سود خالص', '70,000,000 تومان', Colors.green),
+            _buildSalesInfoRow('تعداد فروش', global.toPersianNumbers(total_items_sold), Colors.black),
+            _buildSalesInfoRow('مجموع درآمد', ' تومان${global.toPersianNumbers(total_income)}', Colors.black),
+            _buildSalesInfoRow('مالیات کسر شده', ' تومان${global.toPersianNumbers(0)}', Colors.red),
+            _buildSalesInfoRow('سود خالص', ' تومان${global.toPersianNumbers(net_profit)}', Colors.green),
           ],
         ),
       ),
@@ -1244,6 +1252,38 @@ class _StoreHomePageState extends State<StoreHomePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _load_statistics() async {
+    setState(() {
+      got_data = false;
+      legends.clear();
+      pieCharts.clear();
+    });
+    Map<String, dynamic>? product_sales;
+    var res = global.getRequestMap("/seller-statistics/");
+    Map<String, dynamic> data = await res;
+    setState(() {
+      total_items_sold = data["total_items_sold"];
+      total_income = data["total_income"];
+      net_profit = data["net_profit"];
+    });
+    product_sales = data["product_sales"].cast<String,dynamic>();
+   setState(() {
+     product_sales!.forEach((key, value) {
+       Color color = ColorGenerator.generateRandomDarkColor();
+       legends.add(_buildLegend(key, color));
+
+       pieCharts.add(PieChartSectionData(
+         color: color,
+         value: double.parse(value.toString()),
+         title: global.toPersianNumbers(value),
+         radius: 50,
+         titleStyle: TextStyle(color: Colors.white, fontSize: 16),
+       ));
+     });
+   });
+   
   }
 }
 
