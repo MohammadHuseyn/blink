@@ -9,11 +9,12 @@ class OrderStatus extends StatefulWidget {
 class _OrderStatusState extends State<OrderStatus> {
   double delivery_price = 0.0;
   bool fast = false;
+  bool face2facePay = false;
   String status = "";
   String? discount = "۰";
   double total_price = 0.0;
   bool got_data = false;
-
+  bool canceled = false;
   @override
   void initState() {
     _load_order_status(order_id: global.order_id);
@@ -24,16 +25,19 @@ class _OrderStatusState extends State<OrderStatus> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      bottomNavigationBar: canceled? Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.085,
+          width: MediaQuery.of(context).size.width * 0.4,
           child: ElevatedButton(
             onPressed: () async {
-              _load_order_status(order_id: global.order_id);
+              global.currentCardPayement = false;
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Icon(
-              Icons.refresh,
+              Icons.arrow_back,
               size: 50,
             ),
             style: ButtonStyle(
@@ -43,8 +47,89 @@ class _OrderStatusState extends State<OrderStatus> {
                   ),
                 ),
                 backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Color(0xFF256F46))),
+                        (states) => Colors.green)),
           ),
+        ),
+      ) : Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.085,
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text('مطمئن هستید می‌خواهید این سفارش را لغو کنید؟', textDirection: TextDirection.rtl,),
+                          actionsAlignment: MainAxisAlignment.start,
+                          actions: [
+                            TextButton(
+                              child: Text('بله'),
+                              onPressed: () {
+                                // Add your yes onPressed code here
+                                _remove_order(order_id: global.order_id);
+                                // Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('خیر'),
+                              onPressed: () {
+                                // Add your no onPressed code here
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Icon(
+                    Icons.delete,
+                    size: 50,
+                  ),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.redAccent)),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.085,
+                width: MediaQuery.of(context).size.width * 0.4,
+
+                child: ElevatedButton(
+                  onPressed: () async {
+                    _load_order_status(order_id: global.order_id);
+                  },
+                  child: Icon(
+                    Icons.refresh,
+                    size: 50,
+                  ),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => Color(0xFF256F46))),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       appBar: AppBar(
@@ -72,7 +157,9 @@ class _OrderStatusState extends State<OrderStatus> {
                 ],
               ),
             )
-          : Column(
+          : canceled? Center(child: Text("سفارش شما با موفقیت لغو شد", style: TextStyle(
+        fontSize: 20
+      ),),) : Column(
               children: [
                 Expanded(child: Container()),
                 Row(
@@ -220,6 +307,32 @@ class _OrderStatusState extends State<OrderStatus> {
                             Container(
                               height: 50,
                               child: Text(
+                                'نوع پرداخت',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              child: Text(
+                                face2facePay? "حضوری" : "آنلاین",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'shabnam',
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Container(
+                              height: 50,
+                              child: Text(
                                 'هزینه ارسال',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -343,6 +456,7 @@ class _OrderStatusState extends State<OrderStatus> {
       discount = data["order"]["discount_value"];
       total_price = double.parse(data["order"]["total_price"]);
       status = data["order"]["status"];
+      face2facePay = data["order"]["payment_method"];
       got_data = true;
     });
     if (data["order"]["status"] == "DELIVERED") {
@@ -351,5 +465,18 @@ class _OrderStatusState extends State<OrderStatus> {
       global.sum = 0.0;
       global.order_id = null;
     }
+  }
+
+  void _remove_order({required order_id}) {
+    setState(() {
+      got_data = false;
+    });
+    var res = global.postRequest({
+
+    }, "/cancel_order/?order_id=$order_id");
+    setState(() {
+      got_data = true;
+      canceled = true;
+    });
   }
 }

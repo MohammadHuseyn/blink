@@ -18,8 +18,9 @@ class Order {
   LatLng origin;
   LatLng goal;
   List<Item> items = [];
-
+  String description;
   Order({
+    required this.description,
     required this.address,
     required this.order_id,
     required this.customer,

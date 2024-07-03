@@ -1,98 +1,139 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import '../global.dart' as global;
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
-
+  ChatPage({super.key, required this.isAdmin});
+  bool isAdmin;
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState(isAdmin: isAdmin);
 }
 
+List<Widget> messages = [];
+var controller = TextEditingController();
+
 class _ChatPageState extends State<ChatPage> {
+  Timer? timer;
+  bool wait = true;
+  bool isAdmin;
+  _ChatPageState({required this.isAdmin});
+  @override
+  void initState() {
+    super.initState();
+    _initializeChat();
+  }
+
+  Future<void> _initializeChat() async {
+    if (!isAdmin) {
+      await global.postRequest({}, "/chat/start_room");
+      await global.wait(1000);
+    }
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _viewMessages());
+    _viewMessages();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // messages.add(chatBox(false, "شروع مکالمات"));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF256F46),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("images/chat_background.png"),
-                fit: BoxFit.cover)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  children: [
-                    chatBox(true, "پیام مشکل"),
-                    chatBox(false, "پیام پشتیبان"),
-                  ],
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("images/chat_background.png"),
+                    fit: BoxFit.cover)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Center(
+                child: Column(
+                  children: messages,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.6),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                      style: const TextStyle(
-                        fontSize: 25,
-                      ),
-                      textAlign: TextAlign.right,
-                      textDirection: TextDirection.rtl,
-// committing
-                      decoration:
-                          InputDecoration(hintText: "نوشتن پیام",
-                              hintStyle: const TextStyle(
-                                color: Colors.grey
+              ),
+            ),
+          ),
+      bottomNavigationBar: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.1,
+        child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.6),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: controller,
+                        style: const TextStyle(
+                          fontSize: 25,
+                        ),
+                        textAlign: TextAlign.right,
+                        textDirection: TextDirection.rtl,
+                        decoration: InputDecoration(
+                            hintText: "نوشتن پیام",
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            border: InputBorder.none,
+                            suffixIcon: IconButton(
+                              icon: const ImageIcon(
+                                AssetImage("images/send-message.png"),
                               ),
-                              border: InputBorder.none,
-                              suffixIcon: IconButton(
-                            icon: const ImageIcon(
-                              AssetImage("images/send-message.png"),
-                            ),
-                            iconSize: 40,
-                            color: const Color(0xFF256f46),
-                            onPressed: (){},
-                          )),
+                              iconSize: 40,
+                              color: const Color(0xFF256f46),
+                              onPressed: () {
+                                _sendMessage(controller.text);
+                                controller.clear();
+                              },
+                            )),
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF256F46),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(1),
+                        spreadRadius: 12,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 10,
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF256F46),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(1),
-              spreadRadius: 12,
-              blurRadius: 10,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: 10,
       ),
     );
   }
 
-  chatBox(bool support, String text) {
+  Widget chatBox(bool support, String text) {
     if (support) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -176,5 +217,23 @@ class _ChatPageState extends State<ChatPage> {
         ),
       );
     }
+  }
+
+  void _sendMessage(String text) {
+    global.postRequest({"message": text}, "/chat/send_message");
+    _viewMessages();
+  }
+
+  Future<void> _viewMessages() async {
+    var res = await global.getRequest("/chat/view_message");
+    List<Map<String, dynamic>> data = res;
+    List<Widget> newlist = [];
+    for (var element in data) {
+      newlist.add(chatBox(element["sender"] == global.username, element["message"]));
+    }
+    setState(() {
+      messages = newlist;
+      wait = false;
+    });
   }
 }

@@ -1,4 +1,6 @@
+import 'package:blink/pages/Chat.dart';
 import 'package:blink/pages/Login.dart';
+import 'package:blink/pages/StoreHomPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -65,6 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
     FlutterNativeSplash.remove();
     // global.addressIndex = 0;
     // global.s = stores[0];
-    return const Login();
+    return Login();
   }
 }
