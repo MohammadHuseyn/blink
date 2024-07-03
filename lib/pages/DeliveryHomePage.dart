@@ -613,152 +613,173 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     );
   }
 
-  void bottomsheed(context, Order order) {
+  void bottomsheed(BuildContext context, Order order) {
     showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        // isScrollControlled: true,
-        builder: (builder) {
-          return Scaffold(
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (builder) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return  Container(
+                decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                topRight: Radius.circular(25),
+            topLeft: Radius.circular(25),
+            ),
+            ),
+            child: Scaffold(
+              bottomNavigationBar: Container(
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
                     blurRadius: 7,
                     spreadRadius: 7,
                     offset: Offset(0, 0),
-                    color: Colors.grey)
-              ]),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.085,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if ((order.status == "WAITING" && !dispatching) ||
-                          (order.status == "DISPATCHED" && dispatching)) {
-                        global.postRequest({
-                          "order_id": order.order_id,
-                          "status": order.status == "WAITING"
-                              ? "Accepted"
-                              : "Delivered"
-                        }, "/delivery_orders/");
-                        if(order.status == "DISPATCHED")
-                          setState(() {
-                            dispatching = false;
-                          });
-                        else if (order.status == "WAITING")
-                          setState(() {
-                            dispatching = true;
-                          });
+                    color: Colors.grey,
+                  )
+                ]),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.085,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if ((order.status == "WAITING" && !dispatching) ||
+                            (order.status == "DISPATCHED" && dispatching)) {
+                          global.postRequest({
+                            "order_id": order.order_id,
+                            "status": order.status == "WAITING"
+                                ? "Accepted"
+                                : "Delivered"
+                          }, "/delivery_orders/");
+                          if (order.status == "DISPATCHED") {
+                            setState(() {
+                              dispatching = false;
+                            });
+                          } else if (order.status == "WAITING") {
+                            setState(() {
+                              dispatching = true;
+                            });
+                          }
                           await Future.delayed(const Duration(milliseconds: 500));
-                        _load_orders();
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text(
-                      order.status == "WAITING"?
-                      "  قبول سفارش   " : "  تحویل داده شد  ",
-                      style: const TextStyle(
-                        fontSize: 25,
+                          _load_orders();
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text(
+                        order.status == "WAITING"
+                            ? "  قبول سفارش   "
+                            : "  تحویل داده شد  ",
+                        style: const TextStyle(
+                          fontSize: 25,
+                        ),
                       ),
-                    ),
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => const Color(0xFF256F46))),
+                              (states) => const Color(0xFF256F46),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            backgroundColor: Colors.transparent,
-            body: Container(
-              // height: MediaQuery.of(context).size.height * 0.8,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(25),
-                      topLeft: Radius.circular(25))),
-              child: StatefulBuilder(builder: (BuildContext context,
-                  StateSetter setState /*You can rename this!*/) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              const Text(
-                                "موقعیت سفارش",
-                                style: TextStyle(fontSize: 25),
+              backgroundColor: Colors.transparent,
+              body:StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return SingleChildScrollView(
+                      controller: scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  const Text(
+                                    "موقعیت سفارش",
+                                    style: TextStyle(fontSize: 25),
+                                  ),
+                                  Expanded(child: Container()),
+                                ],
                               ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Text(
-                                order.store_name,
-                                style: const TextStyle(fontSize: 20),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text(
+                                    order.store_name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Image.asset(
+                                      "images/store.png",
+                                      width: 40,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Image.asset(
-                                  "images/store.png",
-                                  width: 40,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Text(
+                                    order.customer,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Image.asset(
+                                      "images/customer.png",
+                                      width: 40,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 0.3,
+                                child: map(),
+                              ),
+                            ),
+                            Divider(color:  Color(0xFF256F46)),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                order.description,
+                                style: TextStyle(
+                                  fontSize: 17
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Text(
-                                order.customer,
-                                style: const TextStyle(fontSize: 20),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Image.asset(
-                                  "images/customer.png",
-                                  width: 40,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: map(),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            ),
-          );
-        });
+                      ),
+                    );
+                  },
+                ),
+            ));
+          },
+        );
+      },
+    );
   }
-
   Future<void> _load_orders() async {
     setState(() {
       markers.clear();
@@ -785,6 +806,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
               total_price: 0.0,
               discount: element["discount_code"],
               discount_value: 0.0,
+              description: element["description"],
               status: element["status"],
               store_name: element["store_name"],
               fast: element["fast_delivery"],

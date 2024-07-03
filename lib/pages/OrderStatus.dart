@@ -74,7 +74,7 @@ class _OrderStatusState extends State<OrderStatus> {
                               onPressed: () {
                                 // Add your yes onPressed code here
                                 _remove_order(order_id: global.order_id);
-                                Navigator.of(context).pop();
+                                // Navigator.of(context).pop();
                               },
                             ),
                             TextButton(
