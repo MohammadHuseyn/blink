@@ -960,7 +960,20 @@ class DeliveryOrdersView(APIView):
                 order.delivery_person = None
             elif order_status == 'Delivered':
                 order.status = Order.OrderStatus.DELIVERED
+                store = order.store
+                today = timezone.now().date()
+                sales_report, created = SalesReport.objects.get_or_create(
+                    store=store,
+                    date=today,
+                    defaults={'total_items_sold': 0, 'total_income': 0}
+                )
 
+                # Update the sales report with order items and total income
+                order_items = OrderItem.objects.filter(order=order)
+                for item in order_items:
+                    sales_report.total_items_sold += item.quantity
+                    sales_report.total_income += item.product.price * item.quantity
+                sales_report.save()
             # Save changes
             order.updated_at = timezone.now()
             order.save()
@@ -1099,4 +1112,40 @@ class CustomerOrdersView(APIView):
                 'order_items': order_items_data
             }
             orders_data.append(order_data)
+        return Response(orders_data, status=status.HTTP_200_OK)
+class SellerStatisticsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Retrieve seller statistics",
+        responses={200: openapi.Response('Success')}
+    )
+    def get(self, request):
+        seller_id = request.user
+        if not seller_id:
+            return HttpResponseBadRequest("Missing 'seller_id' query parameter")
+        user = get_object_or_404(Seller, user_ptr_id=seller_id)
+        store = get_object_or_404(Store, id=user.store_id)
+
+        # Sales report
+        sales_reports = SalesReport.objects.filter(store=store)
+        total_items_sold = sum(report.total_items_sold for report in sales_reports)
+        total_income = sum(report.total_income for report in sales_reports)
+
+        # Product sales distribution
+        products = Product.objects.filter(store=store)
+        product_sales = {product.name: OrderItem.objects.filter(product=product).count() for product in products}
+
+        # Net profit (assuming net profit is total income)
+        net_profit = total_income
+
+        # Formatting response data
+        orders_data = {
+            'total_items_sold': total_items_sold,
+            'total_income': total_income,
+            'net_profit': net_profit,
+            'product_sales': product_sales,
+        }
+        t = 0
         return Response(orders_data, status=status.HTTP_200_OK)
