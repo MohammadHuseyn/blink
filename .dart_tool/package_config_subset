@@ -54,6 +54,10 @@ cupertino_icons
 3.1
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8/lib/
+equatable
+2.12
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.5/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.5/lib/
 fake_async
 2.12
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.1/
@@ -74,6 +78,10 @@ file_selector_windows
 2.19
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_windows-0.9.3+1/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_windows-0.9.3+1/lib/
+fl_chart
+2.12
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.36.4/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.36.4/lib/
 flutter_launcher_icons
 2.18
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.13.1/
@@ -194,6 +202,10 @@ path
 3.0
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0/lib/
+pedantic
+2.12
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/pedantic-1.11.1/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/pedantic-1.11.1/lib/
 petitparser
 3.0
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.0.1/
@@ -254,6 +266,10 @@ web
 3.1
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.1.4-beta/
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.1.4-beta/lib/
+web_socket_channel
+2.15
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/
+file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/lib/
 wkt_parser
 2.12
 file:///C:/Users/Mohammad%20Hosein/AppData/Local/Pub/Cache/hosted/pub.dev/wkt_parser-2.0.0/

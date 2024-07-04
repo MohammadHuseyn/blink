@@ -8,8 +8,8 @@ import 'classes/item.dart';
 // var url ='http://10.0.2.2:8000';
 // var url ='http://192.168.1.3:8000';
 // committing
-var url ='http://192.168.124.31:8000';
-// var url = 'https://62.60.205.58:8000';
+var url ='http://172.20.10.3:8000';
+// var url = 'http://62.60.205.58:8000';
 
 
 
@@ -48,7 +48,7 @@ var last_name = "";
 
 var email = "";
 
-var addressIndex = null;
+int addressIndex = -1;
 
 List<Item> card = [];
 
@@ -143,6 +143,7 @@ Future<void> wait(ms) async {
 Future<Map<String, dynamic>> postRequest(dynamic data, String endpoint) async {
   //encode Map to JSON
   var body = json.encode(data);
+  print(body.toString());
   var response = await http.post(Uri.parse(url + endpoint),
       headers: tokenbool ? headerA : header, body: body);
 

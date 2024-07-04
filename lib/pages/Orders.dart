@@ -144,6 +144,7 @@ class _OrdersState extends State<Orders> {
             origin: const LatLng(0, 0),
             goal: const LatLng(0, 0),
             store_address: "[not needed]",
+            description: element["description"],
             address: element["delivery_location"],
             order_id: element["order_id"],
             customer: element["customer_name"],
@@ -292,72 +293,85 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  void bottomsheed(context, Order order) {
+  void bottomsheed(BuildContext context, Order order) {
     showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (builder) {
-          return Container(
-            decoration: const BoxDecoration(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (builder) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30))),
-            child: StatefulBuilder(builder: (builder, StateSetter setState) {
-              return Scaffold(
-                  backgroundColor: Colors.transparent,
-                  bottomNavigationBar: Container(
-                    height: 200,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                order.discount_value == null
-                                    ? "۰ تومان"
-                                    : order.discount_value.toString(),
-                                textDirection: TextDirection.rtl,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              Expanded(child: Container()),
-                              const Text(
-                                "تخفیف",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: StatefulBuilder(
+                builder: (builder, StateSetter setState) {
+                  return Scaffold(
+                    backgroundColor: Colors.transparent,
+                    bottomNavigationBar: Container(
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            child: Text(order.description),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                order.total_price.toString(),
-                                textDirection: TextDirection.rtl,
-                                style: const TextStyle(fontSize: 25),
-                              ),
-                              Expanded(child: Container()),
-                              const Text(
-                                "مبلغ نهایی",
-                                style: TextStyle(
-                                  fontSize: 25,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            child: Row(
+                              children: [
+                                Text(
+                                  order.discount_value == null
+                                      ? "۰ تومان"
+                                      : global.toPersianNumbers(order.discount_value) + ' تومان',
+                                  textDirection: TextDirection.rtl,
+                                  style: const TextStyle(fontSize: 20),
                                 ),
-                              ),
-                            ],
+                                Expanded(child: Container()),
+                                const Text(
+                                  "تخفیف",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 100),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            child: Row(
+                              children: [
+                                Text(
+                                  global.toPersianNumbers(order.total_price) + ' تومان',
+                                  textDirection: TextDirection.rtl,
+                                  style: const TextStyle(fontSize: 25),
+                                ),
+                                Expanded(child: Container()),
+                                const Text(
+                                  "مبلغ نهایی",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 100, right: 100),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
                                   iconSize: 60,
                                   onPressed: () async {
                                     global.postRequest({
@@ -368,16 +382,16 @@ class _OrdersState extends State<Orders> {
                                     }, "/accept_reject_order/");
                                     await Future.delayed(
                                         const Duration(milliseconds: 500));
-                                    // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },
                                   icon: const ImageIcon(
                                     AssetImage("images/cross.png"),
                                     color: Colors.red,
-                                  )),
-                              Expanded(child: Container()),
-                              IconButton(
+                                  ),
+                                ),
+                                Expanded(child: Container()),
+                                IconButton(
                                   iconSize: 60,
                                   onPressed: () async {
                                     global.postRequest({
@@ -386,34 +400,41 @@ class _OrdersState extends State<Orders> {
                                     }, "/accept_reject_order/");
                                     await Future.delayed(
                                         const Duration(milliseconds: 500));
-                                    // _load_orders(store);
                                     _load_orders(store);
                                     Navigator.pop(context);
                                   },
                                   icon: const ImageIcon(
                                     AssetImage("images/tick.png"),
                                     color: Colors.green,
-                                  ))
-                            ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  body: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: ListView.builder(
+                    body: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      child: ListView.builder(
+                        // physics: NeverScrollableScrollPhysics(),
+                        controller: scrollController,
                         itemCount: order.items.length,
                         itemBuilder: (context, i) {
                           return sheetProduct(order.items[i]);
-                        }),
-                  ));
-            }),
-          );
-        });
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
-
   Widget sheetProduct(Item item) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
