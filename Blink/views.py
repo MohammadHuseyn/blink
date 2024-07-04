@@ -23,6 +23,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
+
 class SignupView(APIView):
     @swagger_auto_schema(
         operation_description="Users Signup",
@@ -47,6 +48,10 @@ class SignupView(APIView):
                 delivery = Delivery.objects.get(id=user.id)
             except:
                 delivery = None
+            try:
+                customer_support = CustomerSupport.objects.get(id=user.id)
+            except:
+                customer_support = None
 
             if customer:
                 user_serializer = CustomerDetailSerializer(user)
@@ -63,6 +68,11 @@ class SignupView(APIView):
                 phone_number = delivery.phone_number
                 image = delivery.image
                 user_type = 'Delivery'
+            elif customer_support:
+                user_serializer = CustomerDetailSerializer(user)
+                phone_number = customer_support.phone_number
+                image = customer_support.image
+                user_type = 'Customer_Support'
             else:
                 user_serializer = None
                 phone_number = None
@@ -124,6 +134,11 @@ class LoginView(APIView):
         except:
             delivery = None
 
+        try:
+            customer_support = CustomerSupport.objects.get(id=user.id)
+        except:
+            customer_support = None
+
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
@@ -142,7 +157,11 @@ class LoginView(APIView):
                 phone_number = delivery.phone_number
                 image = delivery.image
                 user_type = 'Delivery'
-
+            elif customer_support:
+                user_serializer = CustomerDetailSerializer(customer_support)
+                phone_number = customer_support.phone_number
+                image = customer_support.image
+                user_type = 'Customer_Support'
             else:
                 user_serializer = GeneralUserDetailSerializer(user)
 
